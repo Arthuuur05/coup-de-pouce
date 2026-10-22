@@ -11,35 +11,43 @@ export const metadata = { title: "Mon profil · Coup de Pouce" };
 export default async function Profil() {
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/profil");
-  const { prenom, filiere, annee, campus, email } = profil;
+  const { prenom, nom, filiere, annee, campus, email } = profil;
 
   return (
     <EcranConnecte titre="Mon profil" onglet="profil">
-      <div className="rangee" style={{ gap: 16, flexWrap: "nowrap" }}>
-        <Initiale prenom={prenom} grande />
-        <div style={{ minWidth: 0 }}>
-          <h3>{prenom || "Sans prénom"}</h3>
-          <div className="carte__date" style={{ overflowWrap: "anywhere" }}>
-            {email}
+      <div className="deux-colonnes">
+        <aside className="carte carte--ombre-rouge fiche-profil">
+          <Initiale prenom={prenom} grande />
+          <div style={{ minWidth: 0 }}>
+            <h3>{prenom || "Sans prénom"}</h3>
+            <div className="carte__date" style={{ overflowWrap: "anywhere" }}>
+              {email}
+            </div>
+            {(filiere || annee) && (
+              <div style={{ fontWeight: 700, fontSize: 14 }}>{[filiere, annee].filter(Boolean).join(" · ")}</div>
+            )}
+            {campus && <div style={{ fontSize: 14 }}>Campus {campus}</div>}
           </div>
-          {(filiere || annee) && (
-            <div style={{ fontWeight: 700, fontSize: 14 }}>{[filiere, annee].filter(Boolean).join(" · ")}</div>
-          )}
+          <form action={deconnecter} className="seulement-ordi">
+            <button type="submit" className="bouton bouton--danger" style={{ width: "100%" }}>
+              Me déconnecter
+            </button>
+          </form>
+        </aside>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <h2>Mes infos</h2>
+          <FormProfil profil={{ prenom, nom, filiere, annee, campus }} />
+          <EtatVide titre="Bientôt ici">
+            Photo de profil et mes annonces (lot 4), coordonnées privées (lot 5), compétences depuis le CV (lot 6).
+          </EtatVide>
+          <form action={deconnecter} className="seulement-telephone">
+            <button type="submit" className="bouton bouton--danger" style={{ width: "100%" }}>
+              Me déconnecter
+            </button>
+          </form>
         </div>
       </div>
-
-      <h2>Mes infos</h2>
-      <FormProfil profil={{ prenom, filiere, annee, campus }} />
-
-      <EtatVide titre="Bientôt ici">
-        Photo de profil et mes annonces (lot 4), coordonnées privées (lot 5), compétences depuis le CV (lot 6).
-      </EtatVide>
-
-      <form action={deconnecter}>
-        <button type="submit" className="bouton bouton--danger" style={{ width: "100%" }}>
-          Me déconnecter
-        </button>
-      </form>
     </EcranConnecte>
   );
 }

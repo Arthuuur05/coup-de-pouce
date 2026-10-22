@@ -15,9 +15,22 @@ export default function FormProfil({ profil }) {
     <form action={action} className="formulaire" noValidate>
       {etat.message && <Message>{etat.message}</Message>}
       {etat.ok && <Message type="ok">{etat.ok}</Message>}
-      <Champ id="prenom" name="prenom" label="Prénom" autoComplete="given-name" defaultValue={v.prenom} erreur={e.prenom} />
-      <Champ id="filiere" name="filiere" label="Filière" placeholder="ex. Communication digitale" defaultValue={v.filiere} erreur={e.filiere} />
-      <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />
+      <div className="champs-duo">
+        <Champ id="prenom" name="prenom" label="Prénom" autoComplete="given-name" defaultValue={v.prenom} erreur={e.prenom} />
+        <Champ
+          id="nom"
+          name="nom"
+          label="Nom"
+          autoComplete="family-name"
+          aide="Visible par toi uniquement."
+          defaultValue={v.nom}
+          erreur={e.nom}
+        />
+      </div>
+      <div className="champs-duo">
+        <Champ id="filiere" name="filiere" label="Filière" placeholder="ex. Communication digitale" defaultValue={v.filiere} erreur={e.filiere} />
+        <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />
+      </div>
       <Champ id="campus" name="campus" label="Campus" placeholder="ex. Paris" defaultValue={v.campus} erreur={e.campus} />
       <button type="submit" className="bouton bouton--principal" disabled={enCours}>
         {enCours ? "Enregistrement…" : "Enregistrer"}

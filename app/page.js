@@ -24,32 +24,41 @@ export default function Accueil() {
           </Link>
         </div>
 
-        <div style={{ position: "relative", paddingTop: 8 }}>
-          <h1>
-            Qui peut
-            <br />
-            t'aider
-            <br />
-            aujourd'hui ?
-          </h1>
-          <MotManuscrit style={{ position: "absolute", right: 0, top: 18 }}>
-            donner,
-            <br />
-            recevoir
-          </MotManuscrit>
-        </div>
+        <div className="accueil-hero">
+          <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+            <div style={{ position: "relative", paddingTop: 8 }}>
+              <h1>
+                Qui peut
+                <br />
+                t'aider
+                <br />
+                aujourd'hui ?
+              </h1>
+              <MotManuscrit style={{ position: "absolute", right: 0, top: 18 }}>
+                donner,
+                <br />
+                recevoir
+              </MotManuscrit>
+            </div>
 
-        <p style={{ margin: 0, fontSize: 17 }}>
-          Tu proposes ce que tu sais faire, tu trouves ce dont tu as besoin. Entre étudiants, sur ton campus.
-        </p>
+            <p style={{ margin: 0, fontSize: 17 }}>
+              Tu proposes ce que tu sais faire, tu trouves ce dont tu as besoin. Entre étudiants, sur ton campus.
+            </p>
 
-        <div className="rangee">
-          <Bouton href="/inscription" variante="accent">
-            Créer mon compte
-          </Bouton>
-          <Bouton href="/connexion" variante="secondaire">
-            J'ai déjà un compte
-          </Bouton>
+            <div className="rangee">
+              <Bouton href="/inscription" variante="accent">
+                Créer mon compte
+              </Bouton>
+              <Bouton href="/connexion" variante="secondaire">
+                J'ai déjà un compte
+              </Bouton>
+            </div>
+          </div>
+          <div className="accueil-exemples seulement-ordi" aria-hidden="true">
+            <CarteAnnonce index={0} type="propose" categorie="Photo" titre="Photos pour vos événements" auteur="Sam · M1" date="il y a 2 h" />
+            <CarteAnnonce index={1} type="cherche" categorie="Covoit" titre="Trajet vers Lyon vendredi soir" auteur="Inès · L2" date="hier" />
+            <CarteAnnonce index={2} type="propose" categorie="Cours et soutien" titre="Aide en stats avant les partiels" auteur="Léa · L3" date="lundi" />
+          </div>
         </div>
 
         <section style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -69,7 +78,7 @@ export default function Accueil() {
           </ol>
         </section>
 
-        <section style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <section className="seulement-telephone" style={{ flexDirection: "column", gap: 14 }}>
           <h2>Par exemple</h2>
           <CarteAnnonce
             index={1}
