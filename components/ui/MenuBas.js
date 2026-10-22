@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { IconeSoleil, IconeBulle, IconeProfil, IconePlus } from "./Icones";
+import { IconeSoleil, IconeBulle, IconeProfil, IconePlus, IconeMaison } from "./Icones";
 
 // actif : "annonces" | "meteo" | "publier" | "demandes" | "profil"
 export default function MenuBas({ actif = "annonces" }) {
   const lien = (nom) => `menu-bas__lien${actif === nom ? " menu-bas__lien--actif" : ""}`;
   return (
     <nav className="menu-bas" aria-label="Menu principal">
-      <Link href="/annonces" className={lien("annonces")} aria-current={actif === "annonces" ? "page" : undefined}>
-        Annonces
+      <Link href="/annonces" className={lien("annonces")} aria-label="Annonces">
+        {actif === "annonces" ? "Annonces" : <IconeMaison />}
       </Link>
       <Link href="/meteo" className={lien("meteo")} aria-label="Météo du campus">
         <IconeSoleil />
