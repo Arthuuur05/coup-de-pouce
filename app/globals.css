@@ -1,0 +1,232 @@
+/* Coup de Pouce — design system. Voir DESIGN_SYSTEM.md */
+
+:root {
+  --rouge: #c62828;
+  --rouge-clair: #ffb4b4;
+  --noir: #111111;
+  --creme: #f5f1ea;
+  --blanc: #ffffff;
+  --gris: #55524a;
+  --vert: #1f6b3a;
+  --vert-fond: #dcefd9;
+  --ambre: #7a4d00;
+  --ambre-fond: #fbe7c2;
+
+  --contour: 2px solid var(--noir);
+  --ombre-noire: 5px 5px 0 var(--noir);
+  --ombre-rouge: 5px 5px 0 var(--rouge);
+  --arrondi: 2px;
+  --marge: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--creme);
+  color: var(--noir);
+  font-family: var(--font-texte), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-titre), sans-serif;
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin: 0;
+}
+
+h1 {
+  font-size: 54px;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 800;
+}
+
+h3 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* Bouton */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: var(--contour);
+  border-radius: var(--arrondi);
+  font-family: var(--font-titre), sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+.bouton--principal { background: var(--noir); color: var(--blanc); }
+.bouton--secondaire { background: var(--blanc); color: var(--noir); }
+.bouton--accent { background: var(--rouge); border-color: var(--rouge); color: var(--blanc); }
+.bouton--danger { background: var(--blanc); border-color: var(--rouge); color: var(--rouge); }
+.bouton:focus-visible { outline: 3px solid var(--rouge); outline-offset: 2px; }
+
+/* Étiquette */
+.etiquette {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--arrondi);
+  font-family: var(--font-titre), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.etiquette--propose { background: var(--rouge); color: var(--blanc); }
+.etiquette--cherche { border: 1.5px solid var(--noir); }
+.etiquette--categorie { background: var(--blanc); border: 1.5px solid var(--noir); }
+.etiquette--attente { background: var(--ambre-fond); color: var(--ambre); }
+.etiquette--acceptee { background: var(--vert-fond); color: var(--vert); }
+.etiquette--refusee { background: var(--blanc); border: 1.5px solid var(--rouge); color: var(--rouge); }
+
+/* Carte d'annonce */
+.carte {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: var(--blanc);
+  border: var(--contour);
+  border-radius: var(--arrondi);
+}
+.carte--ombre-noire { box-shadow: var(--ombre-noire); }
+.carte--ombre-rouge { box-shadow: var(--ombre-rouge); }
+.carte--gauche { transform: rotate(-1deg); }
+.carte--droite { transform: rotate(0.8deg); }
+.carte__haut { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.carte__bas { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.carte__date { font-size: 12px; color: var(--gris); }
+.carte__auteur { font-size: 13px; font-weight: 700; }
+
+/* Champ */
+.champ { display: flex; flex-direction: column; gap: 6px; }
+.champ__label { font-size: 14px; font-weight: 700; }
+.champ__input {
+  min-height: 48px;
+  padding: 0 14px;
+  border: var(--contour);
+  border-radius: var(--arrondi);
+  background: var(--blanc);
+  font: inherit;
+  color: var(--noir);
+}
+.champ__input:focus { outline: 3px solid var(--rouge); outline-offset: 1px; }
+.champ--erreur .champ__input { border-color: var(--rouge); }
+.champ__erreur { font-size: 13px; font-weight: 700; color: var(--rouge); }
+
+/* Bandeau météo */
+.meteo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--noir);
+  color: var(--blanc);
+  box-shadow: 4px 4px 0 var(--rouge);
+}
+.meteo__titre {
+  font-family: var(--font-titre), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--rouge-clair);
+}
+.meteo__texte { font-size: 14px; font-weight: 700; }
+
+/* Bandeau du haut */
+.bandeau-haut {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px var(--marge);
+  background: var(--rouge);
+  color: var(--blanc);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* Mot manuscrit */
+.manuscrit {
+  display: inline-block;
+  font-family: var(--font-main), cursive;
+  font-size: 44px;
+  line-height: 1;
+  color: var(--rouge);
+  transform: rotate(-12deg);
+}
+
+/* Menu du bas */
+.menu-bas {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--noir);
+  z-index: 10;
+}
+.menu-bas__lien {
+  min-width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blanc);
+  text-decoration: none;
+}
+.menu-bas__lien--actif {
+  padding: 0 14px;
+  background: var(--rouge);
+  font-family: var(--font-titre), sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.menu-bas__publier {
+  width: 50px;
+  height: 50px;
+  background: var(--blanc);
+  color: var(--noir);
+}
+
+/* Mise en page */
+.page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 18px var(--marge) 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.rangee { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
