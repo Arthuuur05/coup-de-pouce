@@ -1,0 +1,39 @@
+import Link from "next/link";
+import Initiale from "./Initiale";
+import { IconePlus } from "./Icones";
+
+const ONGLETS = [
+  ["annonces", "/annonces", "Annonces"],
+  ["meteo", "/meteo", "Météo du campus"],
+  ["demandes", "/demandes", "Demandes"],
+  ["profil", "/profil", "Profil"],
+];
+
+// Menu des écrans connectés sur ordinateur (le téléphone garde le menu du bas).
+export default function MenuHaut({ actif, prenom }) {
+  return (
+    <header className="menu-haut">
+      <Link href="/annonces" className="logo">
+        Coup de Pouce<span>.</span>
+      </Link>
+      <nav className="menu-haut__liens" aria-label="Menu principal">
+        {ONGLETS.map(([nom, href, label]) => (
+          <Link
+            key={nom}
+            href={href}
+            className={`menu-haut__lien${actif === nom ? " menu-haut__lien--actif" : ""}`}
+            aria-current={actif === nom ? "page" : undefined}
+          >
+            {label}
+          </Link>
+        ))}
+      </nav>
+      <Link href="/publier" className="bouton bouton--accent">
+        <IconePlus width={18} height={18} /> Publier
+      </Link>
+      <Link href="/profil" aria-label="Mon profil" className="menu-haut__profil">
+        <Initiale prenom={prenom} />
+      </Link>
+    </header>
+  );
+}

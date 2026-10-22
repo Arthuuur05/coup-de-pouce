@@ -47,13 +47,24 @@ Tailles : titre d'écran 54 px · titre de carte 26 px · texte 15 px · légend
 | Carte d'annonce | `CarteAnnonce.js` | ombre noire ou rouge, inclinaison alternée |
 | Champ | `Champ.js` | texte, menu déroulant (`options`), avec aide ou erreur |
 | Bandeau météo | `BandeauMeteo.js` | fond noir, ombre rouge |
-| Menu du bas | `MenuBas.js` | 5 onglets : Annonces, Météo, Publier (centre), Demandes, Profil |
+| Menu du bas | `MenuBas.js` | téléphone : 5 onglets : Annonces, Météo, Publier (centre), Demandes, Profil |
+| Menu du haut | `MenuHaut.js` | ordinateur : barre noire, onglets en toutes lettres, bouton rouge « Publier », initiale |
 | Bandeau du haut | `BandeauHaut.js` | rouge, texte en majuscules |
 | Mot manuscrit | `MotManuscrit.js` | un par écran maximum |
 | Message | `Message.js` | `erreur` (contour et ombre rouges), `ok` (vert) |
 | Initiale | `Initiale.js` | carré noir 40 px (en-tête), grand 72 px avec ombre rouge (profil) |
 
 La page `/design` montre tous les composants : c'est la référence visuelle.
+
+## Téléphone et ordinateur
+
+Le téléphone passe en premier : chaque écran est d'abord pensé à 375 px. À partir de 960 px de large :
+
+- le menu passe en haut (`MenuHaut`), le menu du bas disparaît ;
+- le contenu s'élargit jusqu'à 1120 px, titres d'écran à 96 px ;
+- les formulaires mettent deux champs côte à côte (`champs-duo`) ;
+- Inscription et Connexion deviennent une affiche : panneau noir à gauche, formulaire à droite ;
+- classes utiles : `seulement-telephone`, `seulement-ordi`, `deux-colonnes`.
 
 ## Ton
 

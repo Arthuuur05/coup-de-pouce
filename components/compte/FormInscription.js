@@ -30,7 +30,18 @@ export default function FormInscription() {
   return (
     <form action={action} className="formulaire" noValidate>
       {etat.message && <Message>{etat.message}</Message>}
-      <Champ id="prenom" name="prenom" label="Prénom" autoComplete="given-name" defaultValue={v.prenom} erreur={e.prenom} />
+      <div className="champs-duo">
+        <Champ id="prenom" name="prenom" label="Prénom" autoComplete="given-name" defaultValue={v.prenom} erreur={e.prenom} />
+        <Champ
+          id="nom"
+          name="nom"
+          label="Nom"
+          autoComplete="family-name"
+          aide="Jamais affiché aux autres."
+          defaultValue={v.nom}
+          erreur={e.nom}
+        />
+      </div>
       <Champ id="email" name="email" type="email" label="E-mail" autoComplete="email" defaultValue={v.email} erreur={e.email} />
       <Champ
         id="motDePasse"
@@ -41,8 +52,10 @@ export default function FormInscription() {
         aide={`Au moins ${MOT_DE_PASSE_MIN} caractères.`}
         erreur={e.motDePasse}
       />
-      <Champ id="filiere" name="filiere" label="Filière" placeholder="ex. Communication digitale" defaultValue={v.filiere} erreur={e.filiere} />
-      <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />
+      <div className="champs-duo">
+        <Champ id="filiere" name="filiere" label="Filière" placeholder="ex. Communication digitale" defaultValue={v.filiere} erreur={e.filiere} />
+        <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />
+      </div>
       <button type="submit" className="bouton bouton--accent" disabled={enCours}>
         {enCours ? "Création…" : "Créer mon compte"}
       </button>

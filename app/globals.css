@@ -123,7 +123,7 @@ h3 {
 .carte__auteur { font-size: 13px; font-weight: 700; }
 
 /* Champ */
-.champ { display: flex; flex-direction: column; gap: 6px; }
+.champ { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .champ__label { font-size: 14px; font-weight: 700; }
 .champ__input {
   min-height: 48px;
@@ -344,3 +344,105 @@ select.champ__input {
   text-decoration: none;
 }
 .initiale--grande { width: 72px; height: 72px; font-size: 40px; box-shadow: var(--ombre-rouge); }
+
+/* Deux champs côte à côte (sur ordinateur) */
+.champs-duo { display: flex; flex-direction: column; gap: 16px; }
+.titre-ecran { display: flex; flex-direction: column; gap: 8px; }
+.deux-colonnes { display: flex; flex-direction: column; gap: 28px; }
+
+/* Bloc d'identité du profil */
+.fiche-profil { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 16px; padding: 18px; }
+
+/* Inscription / Connexion */
+.ecran-affiche { max-width: 480px; margin: 0 auto; padding: 18px var(--marge) 40px; display: flex; flex-direction: column; gap: 16px; }
+.ecran-affiche__affiche { display: flex; flex-direction: column; gap: 16px; }
+.ecran-affiche__titre { position: relative; }
+.ecran-affiche__titre .manuscrit { position: absolute; right: -4px; top: -18px; font-size: 38px; }
+.ecran-affiche__contenu { display: flex; flex-direction: column; gap: 16px; }
+.ecran-affiche__exemples { flex-direction: column; gap: 22px; max-width: 420px; }
+
+/* Menu du haut : caché sur téléphone */
+.menu-haut { display: none; }
+.seulement-ordi { display: none; }
+.seulement-telephone { display: flex; }
+
+/* ——— Ordinateur ——— */
+@media (min-width: 960px) {
+  .seulement-telephone { display: none; }
+  .seulement-ordi { display: flex; }
+  h1 { font-size: 96px; }
+  h2 { font-size: 40px; }
+
+  .menu-haut {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 72px;
+    padding: 0 40px;
+    background: var(--noir);
+    color: var(--blanc);
+  }
+  .menu-haut .logo { color: var(--blanc); }
+  .menu-haut__liens { flex: 1; display: flex; gap: 4px; margin-left: 24px; }
+  .menu-haut__lien {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    color: var(--blanc);
+    font-family: var(--font-titre), sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .menu-haut__lien:hover { color: var(--rouge-clair); }
+  .menu-haut__lien--actif,
+  .menu-haut__lien--actif:hover { background: var(--rouge); color: var(--blanc); }
+  .menu-haut__profil { text-decoration: none; }
+  .menu-haut__profil .initiale { background: var(--blanc); color: var(--noir); }
+  .menu-bas { display: none; }
+
+  .page { max-width: 1120px; padding: 48px 40px 80px; gap: 24px; }
+  .etat-vide { max-width: 720px; }
+  .page > .bouton { align-self: flex-start; }
+
+  .champs-duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .deux-colonnes { display: grid; grid-template-columns: 340px 1fr; gap: 56px; align-items: start; }
+  .deux-colonnes > aside { position: sticky; top: 104px; }
+  .fiche-profil { flex-direction: column; align-items: flex-start; padding: 24px; }
+  .formulaire .bouton { width: auto; align-self: flex-start; padding: 0 32px; }
+
+  /* Inscription / Connexion : affiche noire à gauche, formulaire à droite */
+  .ecran-affiche {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: calc(100vh - 30px);
+  }
+  .ecran-affiche__affiche {
+    padding: 48px 64px;
+    gap: 28px;
+    background: var(--noir);
+    color: var(--blanc);
+  }
+  .ecran-affiche__affiche .logo { color: var(--blanc); }
+  .ecran-affiche__affiche h1 { font-size: 112px; }
+  .ecran-affiche__affiche .sous-titre { color: var(--creme); font-size: 18px; max-width: 380px; }
+  .ecran-affiche__titre { max-width: 560px; margin-bottom: 52px; }
+  .ecran-affiche__titre .manuscrit { top: auto; bottom: -52px; right: 0; font-size: 52px; color: var(--rouge-clair); }
+  .ecran-affiche__exemples { margin-top: auto; color: var(--noir); }
+  .ecran-affiche__exemples .carte--ombre-noire { box-shadow: 5px 5px 0 var(--rouge); }
+  .ecran-affiche__contenu { justify-content: center; width: 100%; max-width: 600px; margin: 0 auto; padding: 48px 64px; }
+
+  /* Accueil public */
+  .accueil-hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: center; }
+  .accueil-exemples { display: flex; flex-direction: column; gap: 28px; }
+  .etapes { display: grid; grid-template-columns: repeat(3, 1fr); }
+}
