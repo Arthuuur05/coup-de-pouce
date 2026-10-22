@@ -1,14 +1,45 @@
+import { redirect } from "next/navigation";
 import EcranConnecte from "../../components/ui/EcranConnecte";
 import EtatVide from "../../components/ui/EtatVide";
+import Initiale from "../../components/ui/Initiale";
+import FormProfil from "../../components/compte/FormProfil";
+import { profilConnecte } from "../../lib/profil";
+import { deconnecter } from "../../lib/actions/compte";
 
 export const metadata = { title: "Mon profil · Coup de Pouce" };
 
-export default function Profil() {
+export default async function Profil() {
+  const profil = await profilConnecte();
+  if (!profil) redirect("/connexion?suite=/profil");
+  const { prenom, filiere, annee, campus, email } = profil;
+
   return (
     <EcranConnecte titre="Mon profil" onglet="profil">
+      <div className="rangee" style={{ gap: 16, flexWrap: "nowrap" }}>
+        <Initiale prenom={prenom} grande />
+        <div style={{ minWidth: 0 }}>
+          <h3>{prenom || "Sans prénom"}</h3>
+          <div className="carte__date" style={{ overflowWrap: "anywhere" }}>
+            {email}
+          </div>
+          {(filiere || annee) && (
+            <div style={{ fontWeight: 700, fontSize: 14 }}>{[filiere, annee].filter(Boolean).join(" · ")}</div>
+          )}
+        </div>
+      </div>
+
+      <h2>Mes infos</h2>
+      <FormProfil profil={{ prenom, filiere, annee, campus }} />
+
       <EtatVide titre="Bientôt ici">
-        Prénom, filière, compétences, CV, coordonnées privées, mes annonces et déconnexion (lots 3 et 6).
+        Photo de profil et mes annonces (lot 4), coordonnées privées (lot 5), compétences depuis le CV (lot 6).
       </EtatVide>
+
+      <form action={deconnecter}>
+        <button type="submit" className="bouton bouton--danger" style={{ width: "100%" }}>
+          Me déconnecter
+        </button>
+      </form>
     </EcranConnecte>
   );
 }

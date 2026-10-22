@@ -45,11 +45,13 @@ Tailles : titre d'écran 54 px · titre de carte 26 px · texte 15 px · légend
 | Bouton | `Bouton.js` | `principal` (noir), `secondaire` (blanc contouré), `accent` (rouge), `danger` |
 | Étiquette | `Etiquette.js` | `propose` (rouge), `cherche` (contour), `categorie`, `attente`, `acceptee`, `refusee` |
 | Carte d'annonce | `CarteAnnonce.js` | ombre noire ou rouge, inclinaison alternée |
-| Champ | `Champ.js` | normal, avec erreur |
+| Champ | `Champ.js` | texte, menu déroulant (`options`), avec aide ou erreur |
 | Bandeau météo | `BandeauMeteo.js` | fond noir, ombre rouge |
 | Menu du bas | `MenuBas.js` | 5 onglets : Annonces, Météo, Publier (centre), Demandes, Profil |
 | Bandeau du haut | `BandeauHaut.js` | rouge, texte en majuscules |
 | Mot manuscrit | `MotManuscrit.js` | un par écran maximum |
+| Message | `Message.js` | `erreur` (contour et ombre rouges), `ok` (vert) |
+| Initiale | `Initiale.js` | carré noir 40 px (en-tête), grand 72 px avec ombre rouge (profil) |
 
 La page `/design` montre tous les composants : c'est la référence visuelle.
 
