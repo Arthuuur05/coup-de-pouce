@@ -5,7 +5,7 @@ import Link from "next/link";
 import Champ from "../ui/Champ";
 import Message from "../ui/Message";
 import { inscrire } from "../../lib/actions/compte";
-import { ANNEES, MOT_DE_PASSE_MIN } from "../../lib/compte";
+import { ANNEES, CAMPUS, MOT_DE_PASSE_MIN } from "../../lib/compte";
 
 export default function FormInscription() {
   const [etat, action, enCours] = useActionState(inscrire, {});
@@ -56,9 +56,14 @@ export default function FormInscription() {
         <Champ id="filiere" name="filiere" label="Filière" placeholder="ex. Communication digitale" defaultValue={v.filiere} erreur={e.filiere} />
         <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />
       </div>
+      <Champ id="campus" name="campus" label="Campus" options={CAMPUS} defaultValue={v.campus ?? ""} erreur={e.campus} />
       <button type="submit" className="bouton bouton--accent" disabled={enCours}>
         {enCours ? "Création…" : "Créer mon compte"}
       </button>
+      <p className="champ__aide" style={{ margin: 0 }}>
+        En créant ton compte, tu acceptes notre façon de traiter tes{" "}
+        <Link href="/donnees-personnelles">données personnelles</Link>.
+      </p>
     </form>
   );
 }

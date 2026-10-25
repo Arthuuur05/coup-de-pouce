@@ -2,7 +2,10 @@ import { redirect } from "next/navigation";
 import EcranConnecte from "../../components/ui/EcranConnecte";
 import EtatVide from "../../components/ui/EtatVide";
 import Initiale from "../../components/ui/Initiale";
+import Link from "next/link";
 import FormProfil from "../../components/compte/FormProfil";
+import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
+import FormSupprimerCompte from "../../components/compte/FormSupprimerCompte";
 import { profilConnecte } from "../../lib/profil";
 import { deconnecter } from "../../lib/actions/compte";
 
@@ -41,11 +44,21 @@ export default async function Profil() {
           <EtatVide titre="Bientôt ici">
             Photo de profil et mes annonces (lot 4), coordonnées privées (lot 5), compétences depuis le CV (lot 6).
           </EtatVide>
+
+          <h2 style={{ marginTop: 16 }}>Sécurité</h2>
+          <FormMotDePasse />
+          <FormEmail emailActuel={email} />
+
           <form action={deconnecter} className="seulement-telephone">
             <button type="submit" className="bouton bouton--danger" style={{ width: "100%" }}>
               Me déconnecter
             </button>
           </form>
+
+          <FormSupprimerCompte />
+          <p className="champ__aide" style={{ margin: 0 }}>
+            <Link href="/donnees-personnelles">Ce qu'on fait de tes données personnelles</Link>
+          </p>
         </div>
       </div>
     </EcranConnecte>

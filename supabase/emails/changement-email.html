@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Confirme ta nouvelle adresse</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Caveat+Brush&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0; padding:0; background:#F5F1EA;">
+<!-- Objet conseillé : Confirme ta nouvelle adresse -->
+<div style="display:none; max-height:0; overflow:hidden;">Un clic pour confirmer le changement d'adresse e-mail.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F5F1EA;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
+
+        <!-- Bandeau rouge -->
+        <tr>
+          <td style="background:#C62828; color:#FFFFFF; padding:8px 20px; text-align:center; font-family:'DM Sans', Arial, sans-serif; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">
+            Changement d'adresse
+          </td>
+        </tr>
+
+        <!-- En-tête noir -->
+        <tr>
+          <td style="background:#111111; padding:22px 28px;">
+            <span style="font-family:'Barlow Condensed', 'Arial Narrow', Arial, sans-serif; font-size:24px; font-weight:800; letter-spacing:0.5px; color:#FFFFFF; text-transform:uppercase;">Coup de Pouce<span style="color:#C62828;">.</span></span>
+          </td>
+        </tr>
+
+        <!-- Carte blanche -->
+        <tr>
+          <td style="background:#FFFFFF; border:2px solid #111111; border-top:0; padding:32px 28px 36px;">
+            <div style="font-family:'Caveat Brush', 'Comic Sans MS', cursive; font-size:30px; line-height:1; color:#C62828; margin:0 0 6px;">presque fini</div>
+            <h1 style="margin:0 0 18px; font-family:'Barlow Condensed', 'Arial Narrow', Arial, sans-serif; font-size:44px; line-height:0.95; font-weight:800; color:#111111; text-transform:uppercase;">Confirme ta nouvelle adresse</h1>
+            <p style="margin:0 0 26px; font-family:'DM Sans', Arial, sans-serif; font-size:16px; line-height:1.5; color:#111111;">Tu as demandé à remplacer {{ .Email }} par {{ .NewEmail }} sur Coup de Pouce. Clique sur le bouton pour confirmer.</p>
+
+            <!-- Bouton noir à ombre rouge -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background:#C62828; padding:0 5px 5px 0;">
+                  <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email_change&amp;suite=/profil" style="display:inline-block; background:#111111; color:#FFFFFF; padding:15px 26px; font-family:'Barlow Condensed', 'Arial Narrow', Arial, sans-serif; font-size:18px; font-weight:700; letter-spacing:1px; text-transform:uppercase; text-decoration:none;">Confirmer le changement &rarr;</a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:28px 0 0; font-family:'DM Sans', Arial, sans-serif; font-size:13px; line-height:1.5; color:#55524A;">Ce n'est pas toi ? Ne clique pas, et change ton mot de passe depuis ton profil.</p>
+          </td>
+        </tr>
+
+        <!-- Pied -->
+        <tr>
+          <td style="padding:18px 8px; text-align:center; font-family:'DM Sans', Arial, sans-serif; font-size:12px; line-height:1.5; color:#55524A;">
+            Coup de Pouce &middot; l'entraide entre étudiants du campus<br>
+            Le lien ne marche pas ? Copie-le dans ton navigateur :<br>
+            <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email_change&amp;suite=/profil" style="color:#55524A; word-break:break-all;">{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email_change&amp;suite=/profil</a>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

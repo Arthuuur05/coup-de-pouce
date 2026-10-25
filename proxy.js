@@ -2,9 +2,9 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 // Écrans réservés aux personnes connectées.
-const PROTEGES = ["/annonces", "/publier", "/demandes", "/meteo", "/profil", "/admin"];
-// Écrans inutiles quand on est déjà connecté.
-const INVITES = ["/connexion", "/inscription"];
+const PROTEGES = ["/annonces", "/publier", "/demandes", "/meteo", "/profil", "/admin", "/nouveau-mot-de-passe"];
+// Écrans inutiles quand on est déjà connecté (l'accueil compris).
+const INVITES = ["/connexion", "/inscription", "/mot-de-passe-oublie"];
 
 const commencePar = (chemin, liste) => liste.some((p) => chemin === p || chemin.startsWith(`${p}/`));
 
@@ -42,7 +42,7 @@ export async function proxy(request) {
   };
 
   if (!connecte && commencePar(pathname, PROTEGES)) return versAutrePage("/connexion");
-  if (connecte && commencePar(pathname, INVITES)) return versAutrePage("/annonces");
+  if (connecte && (pathname === "/" || commencePar(pathname, INVITES))) return versAutrePage("/annonces");
   return reponse;
 }
 

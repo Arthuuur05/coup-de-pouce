@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import Champ from "../ui/Champ";
 import Message from "../ui/Message";
 import { connecter } from "../../lib/actions/compte";
@@ -23,6 +24,9 @@ export default function FormConnexion({ suite, erreurLien }) {
         autoComplete="current-password"
         erreur={e.motDePasse}
       />
+      <Link href="/mot-de-passe-oublie" className="champ__aide" style={{ marginTop: -8 }}>
+        Mot de passe oublié ?
+      </Link>
       <button type="submit" className="bouton bouton--principal" disabled={enCours}>
         {enCours ? "Connexion…" : "Me connecter"}
       </button>
