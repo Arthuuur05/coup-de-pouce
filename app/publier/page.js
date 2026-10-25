@@ -1,12 +1,30 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import EcranConnecte from "../../components/ui/EcranConnecte";
-import EtatVide from "../../components/ui/EtatVide";
+import Message from "../../components/ui/Message";
+import FormAnnonce from "../../components/annonces/FormAnnonce";
+import { profilConnecte } from "../../lib/profil";
+import { chargerMesAnnonces } from "../../lib/donnees-annonces";
+import { publierAnnonce } from "../../lib/actions/annonces";
+import { estEnLigne, signature, MAX_EN_LIGNE } from "../../lib/annonces";
 
 export const metadata = { title: "Publier · Coup de Pouce" };
 
-export default function Publier() {
+export default async function Publier() {
+  const profil = await profilConnecte();
+  if (!profil) redirect("/connexion?suite=/publier");
+  const enLigne = (await chargerMesAnnonces(profil.id)).filter(estEnLigne).length;
+
   return (
-    <EcranConnecte titre="Publier une annonce" sousTitre="Tu proposes ou tu cherches ?" onglet="publier">
-      <EtatVide titre="Bientôt ici">Le formulaire : type, catégorie, titre, description, disponibilités (lot 4).</EtatVide>
+    <EcranConnecte titre="Publier une annonce" sousTitre="Tu proposes ou tu cherches ? En ligne pendant 30 jours." onglet="publier">
+      {enLigne >= MAX_EN_LIGNE ? (
+        <Message>
+          Tu as déjà {MAX_EN_LIGNE} annonces en ligne, c'est le maximum. Marque-en une « C'est réglé » ou supprime-la depuis{" "}
+          <Link href="/profil#mes-annonces">ton profil</Link>.
+        </Message>
+      ) : (
+        <FormAnnonce action={publierAnnonce} signature={signature(profil)} />
+      )}
     </EcranConnecte>
   );
 }

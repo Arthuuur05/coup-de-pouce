@@ -44,14 +44,16 @@ Tailles : titre d'écran 54 px · titre de carte 26 px · texte 15 px · légend
 | --- | --- | --- |
 | Bouton | `Bouton.js` | `principal` (noir), `secondaire` (blanc contouré), `accent` (rouge), `danger` |
 | Étiquette | `Etiquette.js` | `propose` (rouge), `cherche` (contour), `categorie`, `attente`, `acceptee`, `refusee` |
-| Carte d'annonce | `CarteAnnonce.js` | ombre noire ou rouge, inclinaison alternée |
-| Champ | `Champ.js` | texte, menu déroulant (`options`), avec aide ou erreur |
+| Carte d'annonce | `CarteAnnonce.js` | ombre noire ou rouge, inclinaison alternée ; `href` rend toute la carte cliquable, `extrait` ajoute le début de la description, `etat` remplace la date par « En ligne » (vert), « C'est réglé » (neutre) ou « Expirée » (rouge) |
+| Champ | `Champ.js` | texte, menu déroulant (`options`), zone de texte (`multiligne`), compteur « 12/60 » (`compteur`), avec aide ou erreur |
 | Bandeau météo | `BandeauMeteo.js` | fond noir, ombre rouge |
 | Menu du bas | `MenuBas.js` | téléphone : 5 onglets : Annonces, Météo, Publier (centre), Demandes, Profil |
 | Menu du haut | `MenuHaut.js` | ordinateur : barre noire, onglets en toutes lettres, bouton rouge « Publier », initiale |
 | Bandeau du haut | `BandeauHaut.js` | rouge, texte en majuscules |
 | Mot manuscrit | `MotManuscrit.js` | un par écran maximum |
 | Message | `Message.js` | `erreur` (contour et ombre rouges), `ok` (vert) |
+| Puce de filtre | classe `.puce` (dans `components/annonces/Filtres.js`) | blanche contourée, noire quand elle est active |
+| Choix du type | classe `.choix-type` (dans `FormAnnonce.js`) | deux gros boutons, le choisi passe en rouge avec une ombre noire |
 | Initiale | `Initiale.js` | carré noir 40 px (en-tête), grand 72 px avec ombre rouge (profil) |
 
 La page `/design` montre tous les composants : c'est la référence visuelle.
@@ -64,6 +66,9 @@ Le téléphone passe en premier : chaque écran est d'abord pensé à 375 px. À
 - le contenu s'élargit jusqu'à 1120 px, titres d'écran à 96 px ;
 - les formulaires mettent deux champs côte à côte (`champs-duo`) ;
 - Inscription et Connexion deviennent une affiche : panneau noir à gauche, formulaire à droite ;
+- le fil d'annonces passe sur 3 colonnes (2 dans le profil) ;
+- Publier : formulaire à gauche, aperçu de la carte à droite qui suit le défilement ;
+- détail d'une annonce : texte à gauche, auteur et boutons à droite (`deux-colonnes--annonce`) ;
 - classes utiles : `seulement-telephone`, `seulement-ordi`, `deux-colonnes`.
 
 ## Ton

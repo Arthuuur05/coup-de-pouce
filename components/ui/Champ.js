@@ -1,17 +1,20 @@
-// options : liste de choix → menu déroulant au lieu d'une case de texte.
-export default function Champ({ id, label, erreur, options, aide, ...props }) {
+// options : liste de choix → menu déroulant. multiligne : zone de texte. compteur : « 12/60 » à droite du label.
+export default function Champ({ id, label, erreur, options, aide, multiligne, compteur, ...props }) {
   const commun = {
     id,
-    className: "champ__input",
+    className: `champ__input${multiligne ? " champ__input--multiligne" : ""}`,
     "aria-invalid": erreur ? "true" : undefined,
     "aria-describedby": erreur ? `${id}-erreur` : aide ? `${id}-aide` : undefined,
     ...props,
   };
   return (
     <div className={`champ${erreur ? " champ--erreur" : ""}`}>
-      <label htmlFor={id} className="champ__label">
-        {label}
-      </label>
+      <div className="champ__entete">
+        <label htmlFor={id} className="champ__label">
+          {label}
+        </label>
+        {compteur && <span className="champ__compteur">{compteur}</span>}
+      </div>
       {options ? (
         <select {...commun}>
           <option value="">Choisir…</option>
@@ -21,6 +24,8 @@ export default function Champ({ id, label, erreur, options, aide, ...props }) {
             </option>
           ))}
         </select>
+      ) : multiligne ? (
+        <textarea {...commun} />
       ) : (
         <input {...commun} />
       )}
