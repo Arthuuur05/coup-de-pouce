@@ -1,9 +1,7 @@
 -- Clôture du lot 3 : campus dans une liste fixe, et suppression de son propre compte.
 
 -- Campus : une des villes de l'école, « Autre », ou vide (anciens comptes).
-update public.profils set campus = '' where campus not in ('Bordeaux', 'Lille', 'Lyon', 'Nantes', 'Paris', 'Toulouse', 'Autre');
-alter table public.profils drop constraint profils_campus_check;
-alter table public.profils add constraint profils_campus_check
+alter table public.profils add constraint profils_campus_liste
   check (campus in ('', 'Bordeaux', 'Lille', 'Lyon', 'Nantes', 'Paris', 'Toulouse', 'Autre'));
 
 create or replace function public.creer_profil()
