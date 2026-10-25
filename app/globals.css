@@ -453,3 +453,144 @@ select.champ__input {
 
 /* Page de texte (données personnelles) */
 .page--texte { max-width: 720px; }
+
+/* ——— Annonces (lot 4) ——— */
+.visuellement-cache {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.bouton:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Champ : compteur de caractères et zone de texte */
+.champ__entete { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.champ__compteur { font-size: 12px; color: var(--gris); font-variant-numeric: tabular-nums; }
+.champ__input--multiligne { min-height: 140px; padding: 12px 14px; line-height: 1.5; resize: vertical; }
+
+/* Carte cliquable */
+.carte--lien { position: relative; transition: transform 0.12s ease; }
+.carte--lien:hover { transform: rotate(0deg) translate(-2px, -2px); }
+.carte--lien:focus-within { outline: 3px solid var(--rouge); outline-offset: 3px; }
+.carte__titre a { text-decoration: none; }
+.carte__titre a:focus { outline: none; }
+.carte__titre a::after { content: ""; position: absolute; inset: 0; }
+.carte__extrait { margin: 0; font-size: 14px; color: var(--gris); overflow-wrap: anywhere; }
+.carte__titre { overflow-wrap: anywhere; }
+.carte__voir {
+  font-family: var(--font-titre), sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--rouge);
+  white-space: nowrap;
+}
+
+/* Fil */
+.fil { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+.fil__compte { margin: 0; font-size: 13px; font-weight: 700; color: var(--gris); }
+
+/* Filtres */
+.filtres { display: flex; flex-direction: column; gap: 12px; }
+.filtres__puces { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filtres__separateur { display: none; width: 2px; height: 24px; background: var(--noir); opacity: 0.2; }
+.puce {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: var(--contour);
+  border-radius: var(--arrondi);
+  background: var(--blanc);
+  font-family: var(--font-titre), sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.puce--active { background: var(--noir); color: var(--blanc); }
+.puce:focus-visible { outline: 3px solid var(--rouge); outline-offset: 2px; }
+.filtres__formulaire { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.filtres__formulaire > * { min-width: 0; }
+.filtres__formulaire .champ__input { width: 100%; }
+.filtres__recherche,
+.filtres__formulaire .bouton { grid-column: 1 / -1; }
+.filtres__effacer { align-self: flex-start; font-size: 14px; font-weight: 700; }
+
+/* Publier : choix du type et aperçu */
+.publier { display: flex; flex-direction: column; gap: 28px; }
+.publier__apercu { display: flex; flex-direction: column; gap: 12px; }
+.choix-type legend { padding: 0; margin-bottom: 6px; }
+.choix-type { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.choix-type__options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.choix-type__option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  border: var(--contour);
+  border-radius: var(--arrondi);
+  background: var(--blanc);
+  font-family: var(--font-titre), sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.choix-type__option input { position: absolute; opacity: 0; pointer-events: none; }
+.choix-type__option--choisi { background: var(--rouge); border-color: var(--rouge); color: var(--blanc); box-shadow: var(--ombre-noire); }
+.choix-type__option:focus-within { outline: 3px solid var(--rouge); outline-offset: 2px; }
+.choix-type__option--choisi:focus-within { outline-color: var(--noir); }
+
+/* Détail d'une annonce */
+.fiche-annonce { gap: 16px; padding: 20px; }
+.fiche-annonce__titre { font-size: 40px; overflow-wrap: anywhere; }
+.fiche-annonce__description { margin: 0; font-size: 16px; white-space: pre-line; overflow-wrap: anywhere; }
+.fiche-annonce__infos { margin: 0; display: flex; flex-wrap: wrap; gap: 12px 32px; }
+.fiche-annonce__infos dt {
+  font-family: var(--font-titre), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--rouge);
+}
+.fiche-annonce__infos dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.fiche-annonce__cote { display: flex; flex-direction: column; gap: 16px; }
+.fiche-annonce__actions { display: flex; flex-direction: column; gap: 10px; }
+.fiche-annonce__actions .bouton,
+.fiche-annonce__cote > .bouton { width: 100%; }
+.fiche-auteur { flex-direction: row; align-items: center; gap: 12px; }
+.fiche-auteur__nom {
+  font-family: var(--font-titre), sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.confirmer-suppression { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+.confirmer-suppression .bouton { width: auto; flex: 1; }
+
+/* Profil : titre de section avec un compteur */
+.titre-section { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 16px; }
+
+@media (min-width: 960px) {
+  .fil { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; align-items: start; }
+  .fil--profil { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filtres__formulaire { grid-template-columns: minmax(0, 1fr) 230px 200px auto; }
+  .filtres__recherche,
+  .filtres__formulaire .bouton { grid-column: auto; }
+  .publier { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 28px 56px; align-items: start; }
+  .publier__apercu { position: sticky; top: 104px; grid-column: 2; grid-row: 1 / span 2; }
+  .publier__envoyer { grid-column: 1; grid-row: 2; justify-self: start; padding: 0 32px; }
+  .filtres__separateur { display: block; }
+  .deux-colonnes--annonce { grid-template-columns: minmax(0, 1fr) 340px; }
+  .fiche-annonce { padding: 32px; }
+  .fiche-annonce__titre { font-size: 64px; }
+}
