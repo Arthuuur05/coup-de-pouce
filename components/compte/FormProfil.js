@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import Champ from "../ui/Champ";
 import Message from "../ui/Message";
 import { modifierProfil } from "../../lib/actions/compte";
-import { ANNEES } from "../../lib/compte";
+import { ANNEES, CAMPUS } from "../../lib/compte";
 
 export default function FormProfil({ profil }) {
   const [etat, action, enCours] = useActionState(modifierProfil, { valeurs: profil });
@@ -31,7 +31,7 @@ export default function FormProfil({ profil }) {
         <Champ id="filiere" name="filiere" label="Filière" placeholder="ex. Communication digitale" defaultValue={v.filiere} erreur={e.filiere} />
         <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />
       </div>
-      <Champ id="campus" name="campus" label="Campus" placeholder="ex. Paris" defaultValue={v.campus} erreur={e.campus} />
+      <Champ id="campus" name="campus" label="Campus" options={CAMPUS} defaultValue={v.campus ?? ""} erreur={e.campus} />
       <button type="submit" className="bouton bouton--principal" disabled={enCours}>
         {enCours ? "Enregistrement…" : "Enregistrer"}
       </button>

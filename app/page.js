@@ -3,6 +3,7 @@ import BandeauHaut from "../components/ui/BandeauHaut";
 import MotManuscrit from "../components/ui/MotManuscrit";
 import Bouton from "../components/ui/Bouton";
 import CarteAnnonce from "../components/ui/CarteAnnonce";
+import Message from "../components/ui/Message";
 
 const etapes = [
   ["Je publie", "Ce que je sais faire, ou ce que je cherche : photo, vidéo, cours, coloc, covoit…"],
@@ -10,7 +11,8 @@ const etapes = [
   ["J'accepte", "Mes coordonnées ne s'affichent qu'après mon accord. Jamais avant."],
 ];
 
-export default function Accueil() {
+export default async function Accueil({ searchParams }) {
+  const { compte } = await searchParams;
   return (
     <>
       <BandeauHaut>L'entraide entre étudiants du campus</BandeauHaut>
@@ -23,6 +25,8 @@ export default function Accueil() {
             Connexion
           </Link>
         </div>
+
+        {compte === "supprime" && <Message type="ok">Ton compte a bien été supprimé. À bientôt peut-être !</Message>}
 
         <div className="accueil-hero">
           <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
@@ -95,7 +99,7 @@ export default function Accueil() {
         </Bouton>
       </main>
       <footer className="pied">
-        Coup de Pouce · projet étudiant · <Link href="/design">design system</Link>
+        Coup de Pouce · projet étudiant · <Link href="/donnees-personnelles">données personnelles</Link> · <Link href="/design">design system</Link>
       </footer>
     </>
   );

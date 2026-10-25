@@ -356,8 +356,8 @@ select.champ__input {
 /* Inscription / Connexion */
 .ecran-affiche { max-width: 480px; margin: 0 auto; padding: 18px var(--marge) 40px; display: flex; flex-direction: column; gap: 16px; }
 .ecran-affiche__affiche { display: flex; flex-direction: column; gap: 16px; }
-.ecran-affiche__titre { position: relative; }
-.ecran-affiche__titre .manuscrit { position: absolute; right: -4px; top: -18px; font-size: 38px; }
+.ecran-affiche__titre { position: relative; margin-bottom: 32px; }
+.ecran-affiche__titre .manuscrit { position: absolute; right: 0; bottom: -30px; font-size: 34px; }
 .ecran-affiche__contenu { display: flex; flex-direction: column; gap: 16px; }
 .ecran-affiche__exemples { flex-direction: column; gap: 22px; max-width: 420px; }
 
@@ -446,3 +446,10 @@ select.champ__input {
   .accueil-exemples { display: flex; flex-direction: column; gap: 28px; }
   .etapes { display: grid; grid-template-columns: repeat(3, 1fr); }
 }
+
+/* Zone de suppression du compte */
+.zone-danger { padding: 18px; border: 2px dashed var(--rouge); background: var(--blanc); }
+.zone-danger h3 { color: var(--rouge); }
+
+/* Page de texte (données personnelles) */
+.page--texte { max-width: 720px; }
