@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TYPES, CATEGORIES } from "../../lib/annonces";
 import { CAMPUS } from "../../lib/compte";
+import { creerAlerte } from "../../lib/actions/alertes";
 
 // Adresse du fil avec un filtre changé et les autres gardés (on revient à la page 1, sauf « Voir plus »).
 export function lienFil(filtres, changement) {
@@ -102,11 +103,24 @@ export default function Filtres({ filtres }) {
           Chercher
         </button>
       </form>
-      {actifs && (
-        <Link href="/annonces" className="filtres__effacer">
-          Effacer les filtres
-        </Link>
-      )}
+      <div className="rangee">
+        {Boolean(q || type || categorie || campus) && (
+          <form action={creerAlerte}>
+            {q && <input type="hidden" name="q" value={q} />}
+            {type && <input type="hidden" name="type" value={type} />}
+            {categorie && <input type="hidden" name="categorie" value={categorie} />}
+            {campus && <input type="hidden" name="campus" value={campus} />}
+            <button type="submit" className="bouton bouton--secondaire">
+              🔔 Me prévenir
+            </button>
+          </form>
+        )}
+        {actifs && (
+          <Link href="/annonces" className="filtres__effacer">
+            Effacer les filtres
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
