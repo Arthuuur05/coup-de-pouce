@@ -95,3 +95,20 @@ On tutoie, phrases courtes, verbes d'action : « Contacter », « Je peux aider 
 - Pas de nom ni de logo de l'école.
 - Pas d'emoji dans l'interface, des icônes à trait.
 - Pas de nouvelle couleur sans mettre à jour ce fichier et `globals.css`.
+
+## Lot 6 : compétences, avis, CV
+
+| Composant | Fichier | Rôle |
+| --- | --- | --- |
+| Compétences | `components/competences/ListeCompetences.js`, `FormCompetences.js` | pastilles ; vert avec « ✓ n » quand n étudiants l'ont confirmée dans un avis |
+| Étoiles | `Etoiles.js` | note affichée (rouge) ; `FormAvis.js` : choix de 1 à 5 étoiles |
+| Avis | `ListeAvis.js`, `FormAvis.js` | moyenne, liste, formulaire sur une demande acceptée |
+| CV | `FormCv.js` | PDF 5 Mo, visible de soi et des contacts acceptés |
+
+## Animations
+
+Toutes dans la fin de `app/globals.css`, sous `prefers-reduced-motion: no-preference` : rien ne bouge pour qui a désactivé les animations.
+- On anime `translate`, `scale`, `rotate` et `opacity`, jamais `transform` (qui porte l'inclinaison des cartes).
+- Entrée des écrans (`monte`), cartes qui se collent une à une (`affiche`), mot manuscrit tamponné (`colle`), message qui tombe (`tombe`).
+- Survol : bouton et puce se soulèvent avec une ombre pleine, carte cliquable qui s'agrandit, « Voir → » qui avance, cœur qui bat (`bat`), pastille qui ondule (`ondule`).
+- Durées de 0,12 s à 0,5 s. Pas de boucle sauf la pastille.

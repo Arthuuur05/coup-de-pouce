@@ -5,7 +5,7 @@ import { creerClient } from "../../../lib/supabase/server";
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const suite = searchParams.get("suite") ?? "/annonces";
-  const destination = suite.startsWith("/") && !suite.startsWith("//") ? suite : "/annonces";
+  const destination = /^\/(?![/\\])/.test(suite) ? suite : "/annonces";
 
   const supabase = await creerClient();
   const code = searchParams.get("code");
