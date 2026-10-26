@@ -12,6 +12,12 @@ export function lienFil(filtres, changement) {
   return texte ? `/annonces?${texte}` : "/annonces";
 }
 
+const PERIODES = [
+  [1, "Aujourd'hui"],
+  [7, "7 jours"],
+  [30, "30 jours"],
+];
+
 function Puce({ href, actif, children }) {
   return (
     <Link href={href} className={`puce${actif ? " puce--active" : ""}`} aria-current={actif ? "true" : undefined}>
@@ -22,8 +28,8 @@ function Puce({ href, actif, children }) {
 
 // Filtres du fil. Tout passe par l'adresse (?q=…&type=…) : la page marche sans JavaScript et se partage.
 export default function Filtres({ filtres }) {
-  const { q, type, categorie, campus, vue } = filtres;
-  const actifs = Boolean(q || type || categorie || campus || vue);
+  const { q, type, categorie, campus, vue, tri, photo, periode } = filtres;
+  const actifs = Boolean(q || type || categorie || campus || vue || tri || photo || periode);
   return (
     <div className="filtres">
       <div className="filtres__puces">
@@ -44,9 +50,28 @@ export default function Filtres({ filtres }) {
         ))}
       </div>
 
+      <div className="filtres__ligne">
+        <span className="filtres__etiquette">Publiées</span>
+        {PERIODES.map(([jours, label]) => (
+          <Puce key={jours} href={lienFil(filtres, { periode: periode === jours ? "" : jours })} actif={periode === jours}>
+            {label}
+          </Puce>
+        ))}
+        <span className="filtres__separateur" aria-hidden="true" />
+        <Puce href={lienFil(filtres, { photo: photo ? "" : "1" })} actif={Boolean(photo)}>
+          Avec photo
+        </Puce>
+        <Puce href={lienFil(filtres, { tri: tri ? "" : "bientot" })} actif={tri === "bientot"}>
+          Bientôt expirées
+        </Puce>
+      </div>
+
       <form action="/annonces" className="filtres__formulaire" role="search">
         {type && <input type="hidden" name="type" value={type} />}
         {vue && <input type="hidden" name="vue" value={vue} />}
+        {tri && <input type="hidden" name="tri" value={tri} />}
+        {photo && <input type="hidden" name="photo" value={photo} />}
+        {periode ? <input type="hidden" name="periode" value={periode} /> : null}
         <label className="filtres__recherche">
           <span className="visuellement-cache">Rechercher un mot</span>
           <input type="search" name="q" defaultValue={q} placeholder="Rechercher : montage, stats, Lyon…" className="champ__input" maxLength={60} />

@@ -5,7 +5,7 @@ export const metadata = { title: "Introuvable · Coup de Pouce" };
 
 export default function Introuvable() {
   return (
-    <main className="page page--texte">
+    <main id="contenu" className="page page--texte">
       <div className="entete">
         <Link href="/annonces" className="logo">
           Coup de Pouce<span>.</span>

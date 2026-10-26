@@ -29,7 +29,7 @@ export default function DonneesPersonnelles() {
   return (
     <>
       <BandeauHaut>Tes données, en clair</BandeauHaut>
-      <main className="page page--texte">
+      <main id="contenu" className="page page--texte">
         <Link href="/" className="logo">
           Coup de Pouce<span>.</span>
         </Link>

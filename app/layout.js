@@ -10,10 +10,17 @@ export const metadata = {
   description: "L'entraide entre étudiants du campus",
 };
 
+export const viewport = { themeColor: "#111111" };
+
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${titre.variable} ${texte.variable} ${main.variable}`}>
-      <body>{children}</body>
+      <body>
+        <a href="#contenu" className="lien-evitement">
+          Aller au contenu
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

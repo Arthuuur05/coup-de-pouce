@@ -4,6 +4,7 @@ import EcranConnecte from "../../components/ui/EcranConnecte";
 import EtatVide from "../../components/ui/EtatVide";
 import Message from "../../components/ui/Message";
 import Bouton from "../../components/ui/Bouton";
+import PucesFiltre from "../../components/ui/PucesFiltre";
 import CarteDemande from "../../components/demandes/CarteDemande";
 import { profilConnecte } from "../../lib/profil";
 import { chargerMesDemandes, chargerMesCoordonnees } from "../../lib/donnees-demandes";
@@ -16,6 +17,13 @@ const MESSAGES = {
   acceptee: ["ok", "C'est fait ! Vous voyez maintenant les coordonnées l'un de l'autre."],
   refusee: ["ok", "Demande refusée. Cette personne ne verra pas tes coordonnées."],
   retiree: ["ok", "Accord retiré : vos coordonnées sont de nouveau cachées."],
+};
+
+// Filtre par état (?statut=…) : les demandes à traiter, les accords, les refus.
+const FILTRES = {
+  attente: ["En attente", ["en_attente"]],
+  acceptees: ["Acceptées", ["acceptee"]],
+  terminees: ["Refusées ou retirées", ["refusee", "retiree"]],
 };
 
 // Les en attente d'abord, puis les plus récentes.
@@ -37,7 +45,10 @@ export default async function Demandes({ searchParams }) {
   const onglet = retour.onglet === "envoyees" ? "envoyees" : "recues";
   const recues = demandes.filter((d) => d.sens === "recue").sort(ordre);
   const envoyees = demandes.filter((d) => d.sens === "envoyee").sort(ordre);
-  const liste = onglet === "recues" ? recues : envoyees;
+  const parOnglet = onglet === "recues" ? recues : envoyees;
+  const statut = FILTRES[retour.statut] ? retour.statut : "";
+  const liste = statut ? parOnglet.filter((d) => FILTRES[statut][1].includes(d.statut)) : parOnglet;
+  const lienStatut = (v) => `/demandes?${new URLSearchParams({ ...(onglet === "envoyees" && { onglet }), ...(v && { statut: v }) })}`.replace(/\?$/, "");
   const enAttente = recues.filter((d) => d.statut === "en_attente").length;
   const message = MESSAGES[retour.reponse];
 
@@ -56,6 +67,20 @@ export default async function Demandes({ searchParams }) {
         </Link>
       </nav>
 
+      {parOnglet.length > 0 && (
+        <div className="filtres filtres--compact">
+          <PucesFiltre
+            nom="Filtrer les demandes par état"
+            actif={statut}
+            lien={lienStatut}
+            options={[
+              ["", "Toutes", parOnglet.length],
+              ...Object.entries(FILTRES).map(([cle, [label, statuts]]) => [cle, label, parOnglet.filter((d) => statuts.includes(d.statut)).length]),
+            ]}
+          />
+        </div>
+      )}
+
       {message && <Message type={message[0]}>{message[1]}</Message>}
       {retour.erreur && <Message>Cette demande a déjà reçu une réponse ou n'existe plus.</Message>}
       {retour.annulee && <Message type="ok">Ta demande est annulée.</Message>}
@@ -67,7 +92,11 @@ export default async function Demandes({ searchParams }) {
       )}
 
       {liste.length === 0 ? (
-        onglet === "recues" ? (
+        statut ? (
+          <EtatVide titre="Aucune demande dans cet état">
+            <Link href={lienStatut("")}>Voir toutes les demandes</Link>
+          </EtatVide>
+        ) : onglet === "recues" ? (
           <EtatVide titre="Aucune demande reçue">
             Quand quelqu'un demandera ton contact sur une de tes annonces, ça arrivera ici.
           </EtatVide>

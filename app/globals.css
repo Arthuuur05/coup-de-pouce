@@ -1059,3 +1059,48 @@ a.demande__titre:hover { color: var(--rouge); }
   /* Boutons d'envoi : ils se creusent quand le formulaire part */
   button[type="submit"]:disabled { animation: flotte 0.9s ease-in-out infinite; }
 }
+
+/* ——— Lot 8 : notifications ——— */
+.cloche { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; color: inherit; text-decoration: none; }
+.cloche .pastille { position: absolute; top: 2px; right: 0; border: 2px solid var(--creme); height: 22px; }
+.cloche--active { color: var(--rouge); }
+.menu-haut .cloche { color: var(--blanc); }
+.menu-haut .cloche .pastille { border-color: var(--noir); }
+.notifications { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+.notification {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  background: var(--blanc); border: 2px solid var(--noir); border-radius: 12px;
+  color: inherit; text-decoration: none;
+}
+.notification--nouvelle { border-left: 8px solid var(--rouge); }
+.notification__texte { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+/* ——— Lot 9 : filtres partout ——— */
+.puce__nombre { margin-left: 8px; font-family: var(--font-texte), system-ui, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0; opacity: 0.7; }
+.filtres--compact { gap: 8px; }
+.filtres__ligne { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filtres__etiquette { font-size: 13px; font-weight: 700; color: var(--gris); }
+
+/* ——— Check-up : accessibilité et chargement ——— */
+.lien-evitement {
+  position: absolute; left: 8px; top: -60px; z-index: 100;
+  padding: 12px 16px; background: var(--noir); color: var(--blanc);
+  font-weight: 700; text-decoration: none;
+}
+.lien-evitement:focus { top: 8px; outline: 3px solid var(--rouge); }
+.bouton[aria-busy="true"] { cursor: progress; }
+.squelette { background: #e4e1da; border: 2px solid transparent; }
+.squelette--titre { height: 56px; width: 60%; }
+.squelette--ligne { height: 18px; width: 40%; }
+.squelette--carte { height: 150px; }
+@media (prefers-reduced-motion: no-preference) {
+  .squelette { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: 0.5; } }
+}
+
+/* ——— Lot 10 : signalement ——— */
+.signaler { font-size: 14px; }
+.signaler summary { cursor: pointer; color: var(--gris); font-weight: 700; min-height: 44px; display: inline-flex; align-items: center; }
+.signaler summary:focus-visible { outline: 3px solid var(--rouge); outline-offset: 2px; }
+.signaler__formulaire { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-width: 480px; }
+.fiche-profil__admin { display: flex; flex-direction: column; gap: 8px; width: 100%; }

@@ -16,7 +16,7 @@ export default async function Accueil({ searchParams }) {
   return (
     <>
       <BandeauHaut>L'entraide entre étudiants du campus</BandeauHaut>
-      <main className="page" style={{ gap: 28, paddingBottom: 32 }}>
+      <main id="contenu" className="page" style={{ gap: 28, paddingBottom: 32 }}>
         <div className="entete">
           <Link href="/" className="logo">
             Coup de Pouce<span>.</span>
