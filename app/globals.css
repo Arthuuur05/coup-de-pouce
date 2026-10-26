@@ -990,3 +990,18 @@ a.demande__titre:hover { color: var(--rouge); }
   .besoin:nth-child(3) { animation-delay: 0.2s; }
   .besoin__rang { animation: colle 0.5s 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
 }
+
+/* ——— Lot 8 : notifications ——— */
+.cloche { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; color: inherit; text-decoration: none; }
+.cloche .pastille { position: absolute; top: 2px; right: 0; border: 2px solid var(--creme); height: 22px; }
+.cloche--active { color: var(--rouge); }
+.menu-haut .cloche { color: var(--blanc); }
+.menu-haut .cloche .pastille { border-color: var(--noir); }
+.notifications { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+.notification {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  background: var(--blanc); border: 2px solid var(--noir); border-radius: 12px;
+  color: inherit; text-decoration: none;
+}
+.notification--nouvelle { border-left: 8px solid var(--rouge); }
+.notification__texte { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
