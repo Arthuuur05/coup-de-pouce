@@ -9,6 +9,7 @@ import { chargerFil, chargerIdsFavoris } from "../../lib/donnees-annonces";
 import { basculerFavori } from "../../lib/actions/annonces";
 import { TYPES, CATEGORIES, signature, dateRelative } from "../../lib/annonces";
 import { CAMPUS } from "../../lib/compte";
+import { ALERTES_MAX } from "../../lib/alertes";
 
 export const metadata = { title: "Annonces · Coup de Pouce" };
 
@@ -39,8 +40,18 @@ const VIDES = {
   favoris: ["Pas encore de favori", "Touche le cœur d'une annonce pour la retrouver ici."],
 };
 
+const ALERTE = {
+  creee: ["ok", "C'est noté : tu seras prévenu des nouvelles annonces qui correspondent. Tu retrouves tes alertes dans Notifications."],
+  existe: ["ok", "Tu as déjà cette alerte."],
+  limite: ["erreur", `Tu as déjà ${ALERTES_MAX} alertes. Supprime-en une dans Notifications pour en ajouter une.`],
+  vide: ["erreur", "Choisis au moins un filtre ou un mot avant de créer une alerte."],
+  erreur: ["erreur", "L'alerte n'a pas pu être créée. Réessaie dans un instant."],
+};
+
 export default async function Annonces({ searchParams }) {
-  const filtres = lireFiltres(await searchParams);
+  const brut = await searchParams;
+  const filtres = lireFiltres(brut);
+  const alerte = ALERTE[brut.alerte];
   const profil = await profilConnecte();
   const idsFavoris = await chargerIdsFavoris();
   const { annonces, encore, erreur } = await chargerFil(filtres, profil, idsFavoris);
@@ -51,6 +62,7 @@ export default async function Annonces({ searchParams }) {
 
   return (
     <EcranConnecte titre="Annonces" sousTitre="Ce que le campus propose et cherche." onglet="annonces">
+      {alerte && <Message type={alerte[0]}>{alerte[1]}</Message>}
       <Filtres filtres={filtres} />
       {erreur && <Message>Les annonces n'ont pas pu être chargées. Recharge la page dans un instant.</Message>}
       {!erreur && annonces.length > 0 && (

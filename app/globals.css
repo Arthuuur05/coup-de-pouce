@@ -1120,3 +1120,6 @@ a.demande__titre:hover { color: var(--rouge); }
 .bulle--moi .carte__date { color: var(--rouge-clair); }
 .bulle__texte { margin: 0 0 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .notification .pastille { margin-left: auto; flex-shrink: 0; }
+
+/* ——— Lot 13 : alertes ——— */
+.alerte { justify-content: space-between; }
