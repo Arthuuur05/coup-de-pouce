@@ -31,7 +31,14 @@ export default async function Publier({ searchParams }) {
           <Link href="/profil#mes-annonces">ton profil</Link>.
         </Message>
       ) : (
-        <FormAnnonce action={publierAnnonce} annonce={prereglage(reglages)} signature={signature(profil)} auteur={{ prenom: profil.prenom, photoUrl: photo }} />
+        <FormAnnonce
+          action={publierAnnonce}
+          annonce={prereglage(reglages)}
+          signature={signature(profil)}
+          auteur={{ prenom: profil.prenom, photoUrl: photo }}
+          aideRedaction
+          campusMoi={profil.campus}
+        />
       )}
     </EcranConnecte>
   );
