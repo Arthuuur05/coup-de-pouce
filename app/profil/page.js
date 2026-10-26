@@ -11,11 +11,15 @@ import FormPhotoProfil from "../../components/compte/FormPhotoProfil";
 import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
 import FormSupprimerCompte from "../../components/compte/FormSupprimerCompte";
 import FormCoordonnees from "../../components/demandes/FormCoordonnees";
+import FormCompetences from "../../components/competences/FormCompetences";
+import FormCv from "../../components/competences/FormCv";
+import ListeAvis from "../../components/competences/ListeAvis";
 import { profilConnecte } from "../../lib/profil";
 import { deconnecter } from "../../lib/actions/compte";
 import { remettreEnLigne, basculerFavori } from "../../lib/actions/annonces";
 import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib/donnees-annonces";
 import { chargerMesCoordonnees } from "../../lib/donnees-demandes";
+import { chargerCompetences, chargerAvis, chargerCv } from "../../lib/donnees-competences";
 import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE } from "../../lib/annonces";
 
 export const metadata = { title: "Mon profil · Coup de Pouce" };
@@ -31,11 +35,14 @@ export default async function Profil({ searchParams }) {
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/profil");
   const { prenom, nom, filiere, annee, campus, email } = profil;
-  const [mesAnnonces, mesFavoris, photo, mesCoordonnees] = await Promise.all([
+  const [mesAnnonces, mesFavoris, photo, mesCoordonnees, mesCompetences, mesAvis, monCv] = await Promise.all([
     chargerMesAnnonces(profil.id),
     chargerMesFavoris(),
     adresseMaPhoto(profil.photo),
     chargerMesCoordonnees(profil.id),
+    chargerCompetences(profil.id),
+    chargerAvis(profil.id),
+    chargerCv(profil.id),
   ]);
   const enLigne = mesAnnonces.filter(estEnLigne).length;
   const message = MESSAGES[retour.annonce];
@@ -139,7 +146,29 @@ export default async function Profil({ searchParams }) {
             <span className="carte__date">Après accord seulement</span>
           </div>
           <FormCoordonnees coordonnees={mesCoordonnees} />
-          <EtatVide titre="Bientôt ici">Tes compétences depuis ton CV (lot 6).</EtatVide>
+
+          <div className="titre-section" id="mes-competences">
+            <h2>Mes compétences</h2>
+            <span className="carte__date">Visibles par les étudiants</span>
+          </div>
+          <FormCompetences competences={mesCompetences} />
+
+          <div className="titre-section" id="mon-cv">
+            <h2>Mon CV</h2>
+            <span className="carte__date">Après accord seulement</span>
+          </div>
+          <FormCv cv={monCv} />
+
+          <div className="titre-section" id="mes-avis">
+            <h2>Mes avis reçus</h2>
+            {mesAvis.total > 0 && <span className="carte__date">{mesAvis.total}</span>}
+          </div>
+          <ListeAvis
+            resume={mesAvis}
+            moiId={profil.id}
+            suite="/profil#mes-avis"
+            vide="Pas encore d'avis. Après un coup de main accepté, l'autre personne pourra en laisser un."
+          />
 
           <h2 className="profil__titre">Sécurité</h2>
           <FormMotDePasse />

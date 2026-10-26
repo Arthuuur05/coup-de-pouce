@@ -841,3 +841,138 @@ a.demande__titre:hover { color: var(--rouge); }
   .demande__boutons { display: flex; }
   .demande__petit { align-self: flex-start; }
 }
+
+/* ——— Animations : petites, rapides, jamais bloquantes. Désactivées si la personne le demande. ——— */
+/* On anime `translate`, `scale` et `opacity` (pas `transform`) pour ne pas écraser l'inclinaison des cartes. */
+@keyframes monte {
+  from { opacity: 0; translate: 0 14px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes affiche {
+  from { opacity: 0; translate: 0 18px; scale: 0.96; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+@keyframes tombe {
+  from { opacity: 0; translate: 0 -10px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes colle {
+  0% { opacity: 0; scale: 2.2; }
+  60% { opacity: 1; scale: 0.9; }
+  100% { opacity: 1; scale: 1; }
+}
+@keyframes bat {
+  0% { scale: 1; }
+  25% { scale: 1.4; }
+  50% { scale: 0.9; }
+  100% { scale: 1; }
+}
+@keyframes ondule {
+  0% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.55); }
+  70%, 100% { box-shadow: 0 0 0 9px rgba(198, 40, 40, 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Entrée des écrans : titre, puis le reste en cascade */
+  .page > :not(.fil):not(.demandes):not(.deux-colonnes):not(.entete) { animation: monte 0.4s ease-out both; }
+  .page > :nth-child(2) { animation-delay: 0.04s; }
+  .page > :nth-child(3) { animation-delay: 0.1s; }
+  .page > :nth-child(4) { animation-delay: 0.16s; }
+  .page > :nth-child(n + 5) { animation-delay: 0.22s; }
+  .profil__contenu > *, .fiche-profil, .fiche-annonce, .fiche-annonce__cote { animation: monte 0.4s ease-out both; }
+  .profil__contenu > :nth-child(2) { animation-delay: 0.05s; }
+  .profil__contenu > :nth-child(3) { animation-delay: 0.1s; }
+  .profil__contenu > :nth-child(n + 4) { animation-delay: 0.15s; }
+
+  /* Cartes : elles se collent une à une comme des affiches */
+  .fil > *, .demandes > * { animation: affiche 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .fil > :nth-child(2), .demandes > :nth-child(2) { animation-delay: 0.06s; }
+  .fil > :nth-child(3), .demandes > :nth-child(3) { animation-delay: 0.12s; }
+  .fil > :nth-child(4), .demandes > :nth-child(4) { animation-delay: 0.18s; }
+  .fil > :nth-child(5), .demandes > :nth-child(5) { animation-delay: 0.24s; }
+  .fil > :nth-child(n + 6), .demandes > :nth-child(n + 6) { animation-delay: 0.3s; }
+
+  /* Mot manuscrit : il se tamponne sur l'affiche */
+  .manuscrit { animation: colle 0.5s 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+
+  /* Messages (succès / erreur) */
+  .message { animation: tombe 0.3s ease-out both; }
+
+  /* Survols et appuis : un petit relief, comme une affiche qu'on soulève */
+  .bouton, .puce, .menu-bas__lien, .menu-haut__lien, .initiale, .coeur {
+    transition: translate 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease, color 0.12s ease, scale 0.12s ease;
+  }
+  .bouton:hover, .puce:hover { translate: 0 -2px; box-shadow: 3px 3px 0 var(--noir); }
+  .bouton--accent:hover { box-shadow: 3px 3px 0 var(--noir); }
+  .bouton:active, .puce:active { translate: 1px 1px; box-shadow: none; }
+  .carte--lien { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .carte--lien:hover { box-shadow: 8px 8px 0 var(--noir); }
+  .carte--droite.carte--lien:hover { box-shadow: 8px 8px 0 var(--rouge); }
+  .carte--lien:active { transform: rotate(0deg) translate(1px, 1px); box-shadow: 2px 2px 0 var(--noir); }
+  .carte__voir { transition: translate 0.15s ease; display: inline-block; }
+  .carte--lien:hover .carte__voir { translate: 4px 0; }
+  .menu-bas__lien:active, .menu-haut__lien:active { scale: 0.92; }
+  a.initiale:hover, a:hover > .initiale { scale: 1.08; }
+
+  /* Cœur : il bat quand on le remplit */
+  .coeur:hover { scale: 1.15; }
+  .coeur:active { scale: 0.85; }
+  .coeur--plein svg { animation: bat 0.45s ease-out; }
+
+  /* Pastille : une onde discrète pour attirer l'œil */
+  .pastille { animation: ondule 2s ease-out infinite; }
+
+  /* Le bouton Publier du menu */
+  .menu-bas__publier { transition: scale 0.15s ease, rotate 0.15s ease; }
+  .menu-bas__publier:hover { scale: 1.08; rotate: 90deg; }
+}
+
+/* ——— Lot 6 : compétences, avis, CV ——— */
+.competences { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.competence {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 2px 10px;
+  border: var(--contour); border-radius: var(--arrondi); background: var(--blanc);
+  font-family: var(--font-titre), sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.competence--validee { background: var(--vert-fond); border-color: var(--vert); color: var(--vert); }
+.competence__valid { font-size: 13px; }
+.competence form { display: inline-flex; }
+.competence__retirer {
+  width: 28px; height: 28px; margin-right: -6px; padding: 0; border: 0; background: none;
+  color: inherit; font-size: 20px; line-height: 1; cursor: pointer;
+}
+.competence__retirer:hover { color: var(--rouge); }
+.competence__retirer:focus-visible { outline: 3px solid var(--rouge); outline-offset: 0; }
+.carte-privee--ouverte { border-style: solid; }
+
+.etoiles { display: inline-flex; gap: 2px; color: var(--rouge); vertical-align: middle; }
+.avis { display: flex; flex-direction: column; gap: 16px; }
+.avis__resume { display: flex; align-items: center; gap: 14px; }
+.avis__moyenne { font-family: var(--font-titre), sans-serif; font-size: 54px; font-weight: 800; line-height: 0.9; }
+.avis__liste { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.avis__item { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; background: var(--blanc); border: var(--contour); }
+.avis__haut { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.avis__texte { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
+.avis__competence { color: var(--vert); }
+.avis__retirer { align-self: flex-start; padding: 0; border: 0; background: none; color: var(--rouge); font-size: 13px; font-weight: 700; text-decoration: underline; cursor: pointer; }
+
+.avis-form { display: flex; flex-direction: column; gap: 12px; padding: 14px; border: 2px dashed var(--noir); background: var(--creme); }
+.avis-form__titre { margin: 0; font-family: var(--font-titre), sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; }
+/* Étoiles rangées de 5 à 1 dans le HTML et affichées à l'envers : « ~ » remplit toutes celles à gauche de la choisie */
+.note-choix { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 2px; margin: 0; padding: 0; border: 0; }
+.note-choix__etoile { position: relative; display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; color: var(--rouge); cursor: pointer; }
+.note-choix__etoile input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.note-choix__etoile svg { opacity: 0.3; }
+.note-choix__etoile:has(input:checked) svg,
+.note-choix__etoile:has(input:checked) ~ .note-choix__etoile svg,
+.note-choix__etoile:hover svg,
+.note-choix__etoile:hover ~ .note-choix__etoile svg { opacity: 1; }
+.note-choix__etoile:has(input:focus-visible) { outline: 3px solid var(--rouge); }
+.demande__avis { display: flex; flex-direction: column; gap: 10px; }
+.fiche-profil__note { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 14px; font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  .note-choix__etoile svg { transition: scale 0.12s ease, opacity 0.12s ease; }
+  .note-choix__etoile:hover svg { scale: 1.2; }
+  .note-choix__etoile:has(input:checked) svg { animation: bat 0.4s ease-out; }
+  .competence { animation: colle 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+}

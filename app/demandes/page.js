@@ -8,6 +8,7 @@ import CarteDemande from "../../components/demandes/CarteDemande";
 import { profilConnecte } from "../../lib/profil";
 import { chargerMesDemandes, chargerMesCoordonnees } from "../../lib/donnees-demandes";
 import { aDesCoordonnees } from "../../lib/demandes";
+import { chargerDemandesNotees, chargerCompetencesDe } from "../../lib/donnees-competences";
 
 export const metadata = { title: "Demandes · Coup de Pouce" };
 
@@ -25,7 +26,13 @@ export default async function Demandes({ searchParams }) {
   const retour = await searchParams;
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/demandes");
-  const [demandes, mesCoordonnees] = await Promise.all([chargerMesDemandes(), chargerMesCoordonnees(profil.id)]);
+  const [demandes, mesCoordonnees, notees] = await Promise.all([
+    chargerMesDemandes(),
+    chargerMesCoordonnees(profil.id),
+    chargerDemandesNotees(profil.id),
+  ]);
+  // Pour un avis : les compétences de l'autre personne, à confirmer.
+  const competences = await chargerCompetencesDe(demandes.filter((d) => ["acceptee", "retiree"].includes(d.statut)).map((d) => d.autre));
 
   const onglet = retour.onglet === "envoyees" ? "envoyees" : "recues";
   const recues = demandes.filter((d) => d.sens === "recue").sort(ordre);
@@ -75,7 +82,7 @@ export default async function Demandes({ searchParams }) {
       ) : (
         <div className="demandes">
           {liste.map((d) => (
-            <CarteDemande key={d.id} demande={d} />
+            <CarteDemande key={d.id} demande={d} avisDonne={notees.has(d.id)} competences={competences[d.autre] ?? []} />
           ))}
         </div>
       )}

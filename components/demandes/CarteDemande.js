@@ -2,13 +2,14 @@ import Link from "next/link";
 import Etiquette from "../ui/Etiquette";
 import Initiale from "../ui/Initiale";
 import Coordonnees from "./Coordonnees";
+import FormAvis from "../competences/FormAvis";
 import { repondreDemande, annulerDemande } from "../../lib/actions/demandes";
 import { statutAffiche } from "../../lib/demandes";
 import { TYPES, CLASSE_CATEGORIE, dateRelative } from "../../lib/annonces";
 
 // Une demande, reçue ou envoyée. Les boutons dépendent du sens et du statut ;
 // les coordonnées de l'autre n'apparaissent qu'après l'accord.
-export default function CarteDemande({ demande: d }) {
+export default function CarteDemande({ demande: d, avisDonne = false, competences = [] }) {
   const recue = d.sens === "recue";
   const autre = d.autreProfil ?? {};
   const prenom = autre.prenom || "Un étudiant";
@@ -56,6 +57,15 @@ export default function CarteDemande({ demande: d }) {
       </p>
 
       {d.statut === "acceptee" && <Coordonnees prenom={autre.prenom} coordonnees={d.coordonnees} />}
+
+      {["acceptee", "retiree"].includes(d.statut) &&
+        (avisDonne ? (
+          <p className="champ__aide" style={{ margin: 0 }}>
+            Tu as donné ton avis sur {prenom}. <Link href={`/etudiants/${d.autre}`}>Le voir sur son profil</Link>
+          </p>
+        ) : (
+          <FormAvis demandeId={d.id} prenom={autre.prenom} competences={competences} />
+        ))}
 
       {recue && d.statut === "en_attente" && (
         <div className="demande__boutons">
