@@ -49,8 +49,9 @@ Tailles : titre d'écran 54 px · titre de carte 26 px · texte 15 px · légend
 | Carte d'annonce | `CarteAnnonce.js` | ombre noire ou rouge, inclinaison alternée ; `href` rend toute la carte cliquable, `extrait` ajoute le début de la description, `etat` remplace la date par « En ligne » (vert), « Expire dans 2 j » (ambre), « C'est réglé » (neutre) ou « Expirée » (rouge) ; `photo` en haut de la carte ; `avatar` (photo ou initiale de 24 px) ; `favori` + `actionFavori` pour le cœur ; `eteinte` grise une annonce plus disponible |
 | Champ | `Champ.js` | texte, menu déroulant (`options`), zone de texte (`multiligne`), compteur « 12/60 » (`compteur`), avec aide ou erreur |
 | Bandeau météo | `BandeauMeteo.js` | fond noir, ombre rouge |
-| Menu du bas | `MenuBas.js` | téléphone : 5 onglets : Annonces, Météo, Publier (centre), Demandes, Profil |
-| Menu du haut | `MenuHaut.js` | ordinateur : barre noire, onglets en toutes lettres, bouton rouge « Publier », initiale |
+| Menu du bas | `MenuBas.js` | téléphone : 5 onglets : Annonces, Météo, Publier (centre), Demandes, Profil ; `enAttente` ajoute la pastille |
+| Menu du haut | `MenuHaut.js` | ordinateur : barre noire, onglets en toutes lettres, bouton rouge « Publier », initiale ; `enAttente` ajoute la pastille |
+| Pastille | classe `.pastille` | rond rouge avec un chiffre blanc : demandes reçues en attente (menu, onglet Reçues) ; s'inverse en blanc sur un fond rouge |
 | Bandeau du haut | `BandeauHaut.js` | rouge, texte en majuscules |
 | Mot manuscrit | `MotManuscrit.js` | un par écran maximum |
 | Message | `Message.js` | `erreur` (contour et ombre rouges), `ok` (vert) |
@@ -59,6 +60,15 @@ Tailles : titre d'écran 54 px · titre de carte 26 px · texte 15 px · légend
 | Initiale | `Initiale.js` | photo de profil carrée, ou carré noir avec l'initiale ; 40 px (en-tête), grand 72 px avec ombre rouge (profil), petit 24 px (cartes) |
 | Choix de photo | `ChampPhoto.js` | aperçu, « Choisir / Changer / Retirer » ; réduit la photo dans le navigateur (1 600 px, ou carré 512 px pour le profil) |
 | Cœur | classe `.coeur` (dans `CarteAnnonce.js`) | contour noir, plein rouge quand l'annonce est en favori |
+
+### Mise en relation (`components/demandes/`)
+
+| Composant | Fichier | Variantes |
+| --- | --- | --- |
+| Carte de demande | `CarteDemande.js` | l'autre personne (photo, prénom, filière), statut en étiquette, annonce dans un cadre pointillé, message en citation à filet rouge ; ombre rouge quand elle attend une réponse, sans ombre une fois refusée |
+| Coordonnées | `Coordonnees.js` | encadré vert (la seule surface verte pleine) : e-mail, téléphone, Instagram en liens cliquables, visible seulement après un accord |
+| Demander le contact | `FormDemande.js` | message facultatif de 300 caractères avec compteur, bouton rouge |
+| Mes coordonnées | `FormCoordonnees.js` | carte blanche à bord pointillé (« privé »), trois champs facultatifs |
 
 La page `/design` montre tous les composants : c'est la référence visuelle.
 
@@ -73,6 +83,7 @@ Le téléphone passe en premier : chaque écran est d'abord pensé à 375 px. À
 - le fil d'annonces passe sur 3 colonnes (2 dans le profil) ;
 - Publier : formulaire à gauche, aperçu de la carte à droite qui suit le défilement ;
 - détail d'une annonce : texte à gauche, auteur et boutons à droite (`deux-colonnes--annonce`) ;
+- Demandes : les cartes passent sur 2 colonnes, Accepter et Refuser côte à côte à leur taille ;
 - classes utiles : `seulement-telephone`, `seulement-ordi`, `deux-colonnes`.
 
 ## Ton

@@ -10,10 +10,12 @@ import FormProfil from "../../components/compte/FormProfil";
 import FormPhotoProfil from "../../components/compte/FormPhotoProfil";
 import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
 import FormSupprimerCompte from "../../components/compte/FormSupprimerCompte";
+import FormCoordonnees from "../../components/demandes/FormCoordonnees";
 import { profilConnecte } from "../../lib/profil";
 import { deconnecter } from "../../lib/actions/compte";
 import { remettreEnLigne, basculerFavori } from "../../lib/actions/annonces";
 import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib/donnees-annonces";
+import { chargerMesCoordonnees } from "../../lib/donnees-demandes";
 import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE } from "../../lib/annonces";
 
 export const metadata = { title: "Mon profil · Coup de Pouce" };
@@ -29,10 +31,11 @@ export default async function Profil({ searchParams }) {
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/profil");
   const { prenom, nom, filiere, annee, campus, email } = profil;
-  const [mesAnnonces, mesFavoris, photo] = await Promise.all([
+  const [mesAnnonces, mesFavoris, photo, mesCoordonnees] = await Promise.all([
     chargerMesAnnonces(profil.id),
     chargerMesFavoris(),
     adresseMaPhoto(profil.photo),
+    chargerMesCoordonnees(profil.id),
   ]);
   const enLigne = mesAnnonces.filter(estEnLigne).length;
   const message = MESSAGES[retour.annonce];
@@ -130,7 +133,13 @@ export default async function Profil({ searchParams }) {
           <h2 className="profil__titre">Mes infos</h2>
           <FormProfil profil={{ prenom, nom, filiere, annee, campus }} />
           <FormPhotoProfil photo={photo} />
-          <EtatVide titre="Bientôt ici">Coordonnées privées (lot 5), compétences depuis le CV (lot 6).</EtatVide>
+
+          <div className="titre-section" id="mes-coordonnees">
+            <h2>Mes coordonnées privées</h2>
+            <span className="carte__date">Après accord seulement</span>
+          </div>
+          <FormCoordonnees coordonnees={mesCoordonnees} />
+          <EtatVide titre="Bientôt ici">Tes compétences depuis ton CV (lot 6).</EtatVide>
 
           <h2 className="profil__titre">Sécurité</h2>
           <FormMotDePasse />

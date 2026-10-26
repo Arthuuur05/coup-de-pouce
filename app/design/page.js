@@ -6,6 +6,7 @@ import BandeauMeteo from "../../components/ui/BandeauMeteo";
 import BandeauHaut from "../../components/ui/BandeauHaut";
 import MotManuscrit from "../../components/ui/MotManuscrit";
 import MenuBas from "../../components/ui/MenuBas";
+import Coordonnees from "../../components/demandes/Coordonnees";
 
 export const metadata = { title: "Design system · Coup de Pouce" };
 
@@ -110,11 +111,18 @@ export default function Design() {
           <Champ id="mail" label="E-mail" defaultValue="lea.campus" erreur="Il manque le @ dans ton adresse." />
         </Section>
 
+        <Section titre="Coordonnées après accord">
+          <Coordonnees prenom="Léa" coordonnees={{ email: "lea@exemple.fr", instagram: "lea.data" }} />
+        </Section>
+
         <Section titre="Menu du bas">
-          <p style={{ margin: 0 }}>Fixé en bas de l'écran, visible ici en dessous.</p>
+          <p style={{ margin: 0 }}>
+            Fixé en bas de l'écran, visible ici en dessous. La pastille <span className="pastille">2</span> compte les demandes
+            reçues en attente.
+          </p>
         </Section>
       </main>
-      <MenuBas actif="annonces" />
+      <MenuBas actif="annonces" enAttente={2} />
     </>
   );
 }
