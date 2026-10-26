@@ -1105,6 +1105,12 @@ a.demande__titre:hover { color: var(--rouge); }
 .signaler__formulaire { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-width: 480px; }
 .fiche-profil__admin { display: flex; flex-direction: column; gap: 8px; width: 100%; }
 
+/* ——— Lot 12 : profil public enrichi ——— */
+.fiche-profil__coups { margin-top: 6px; font-size: 14px; font-weight: 700; }
+.competence__lien { color: inherit; text-decoration: none; }
+.competence__lien:hover { text-decoration: underline; }
+.competence__lien:focus-visible { outline: 3px solid var(--rouge); outline-offset: 2px; }
+.competence--choisie { background: var(--noir); border-color: var(--noir); color: var(--blanc); }
 /* ——— Lot 11 : messagerie ——— */
 .messagerie { display: flex; flex-direction: column; gap: 10px; max-width: 720px; }
 .messagerie__profil { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
