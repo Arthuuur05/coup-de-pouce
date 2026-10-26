@@ -30,15 +30,15 @@ export default function FormBulletin({ bulletin }) {
       />
       <div className="demande__boutons">
         <button type="submit" name="intent" value="enregistrer" className="bouton bouton--secondaire" disabled={enCours}>
-          Enregistrer
+          {enCours ? "Enregistrement…" : "Enregistrer"}
         </button>
         {publie ? (
           <button type="submit" name="intent" value="depublier" className="bouton bouton--danger" disabled={enCours}>
-            Dépublier
+            {enCours ? "…" : "Dépublier"}
           </button>
         ) : (
           <button type="submit" name="intent" value="publier" className="bouton bouton--accent" disabled={enCours}>
-            Publier
+            {enCours ? "Publication…" : "Publier"}
           </button>
         )}
       </div>
