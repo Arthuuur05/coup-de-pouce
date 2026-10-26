@@ -13,6 +13,7 @@ import { CAMPUS } from "../../lib/compte";
 export const metadata = { title: "Annonces · Coup de Pouce" };
 
 const VUES = ["pour-toi", "favoris"];
+const PERIODES = [1, 7, 30];
 
 // Ne garde que les valeurs connues : une adresse bricolée ne casse pas la page.
 function lireFiltres(p) {
@@ -24,6 +25,9 @@ function lireFiltres(p) {
     categorie: CATEGORIES.includes(un(p.categorie)) ? un(p.categorie) : "",
     campus: CAMPUS.includes(un(p.campus)) ? un(p.campus) : "",
     vue: VUES.includes(un(p.vue)) ? un(p.vue) : "",
+    tri: un(p.tri) === "bientot" ? "bientot" : "",
+    photo: un(p.photo) === "1" ? "1" : "",
+    periode: PERIODES.includes(Number(un(p.periode))) ? Number(un(p.periode)) : 0,
     page: page > 1 && page < 50 ? page : 1,
   };
 }
@@ -40,7 +44,7 @@ export default async function Annonces({ searchParams }) {
   const profil = await profilConnecte();
   const idsFavoris = await chargerIdsFavoris();
   const { annonces, encore, erreur } = await chargerFil(filtres, profil, idsFavoris);
-  const filtre = Boolean(filtres.q || filtres.type || filtres.categorie || filtres.campus);
+  const filtre = Boolean(filtres.q || filtres.type || filtres.categorie || filtres.campus || filtres.photo || filtres.periode);
   const [titreVide, texteVide] = filtre
     ? ["Rien ne correspond", "Essaie un autre mot ou enlève un filtre."]
     : VIDES[filtres.vue] ?? ["Aucune annonce pour l'instant", "Lance-toi : la première annonce du campus, c'est peut-être la tienne."];

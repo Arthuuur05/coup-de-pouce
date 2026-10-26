@@ -6,6 +6,7 @@ import Initiale from "../../components/ui/Initiale";
 import CarteAnnonce from "../../components/ui/CarteAnnonce";
 import Bouton from "../../components/ui/Bouton";
 import Message from "../../components/ui/Message";
+import PucesFiltre from "../../components/ui/PucesFiltre";
 import FormProfil from "../../components/compte/FormProfil";
 import FormPhotoProfil from "../../components/compte/FormPhotoProfil";
 import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
@@ -20,7 +21,7 @@ import { remettreEnLigne, basculerFavori } from "../../lib/actions/annonces";
 import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib/donnees-annonces";
 import { chargerMesCoordonnees } from "../../lib/donnees-demandes";
 import { chargerCompetences, chargerAvis, chargerCv } from "../../lib/donnees-competences";
-import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE } from "../../lib/annonces";
+import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE, CATEGORIES, TYPES } from "../../lib/annonces";
 
 export const metadata = { title: "Mon profil · Coup de Pouce" };
 
@@ -29,6 +30,21 @@ const MESSAGES = {
   prolongee: ["ok", "Ton annonce est prolongée de 30 jours."],
   limite: ["erreur", `Tu as déjà ${MAX_EN_LIGNE} annonces en ligne : marque-en une « C'est réglé » d'abord.`],
 };
+
+// Filtres de « Mes annonces » : l'état, le type et la catégorie, dans l'adresse (?etat=…&type=…&categorie=…).
+const ETATS = {
+  "en-ligne": ["En ligne", (a) => estEnLigne(a)],
+  reglees: ["Réglées", (a) => a.statut === "reglee"],
+  expirees: ["Expirées", (a) => a.statut !== "reglee" && !estEnLigne(a)],
+};
+
+function lienAnnonces(f, changement) {
+  const suite = { ...f, ...changement };
+  const params = new URLSearchParams();
+  for (const [cle, valeur] of Object.entries(suite)) if (valeur) params.set(cle, valeur);
+  const texte = params.toString();
+  return `/profil${texte ? `?${texte}` : ""}#mes-annonces`;
+}
 
 export default async function Profil({ searchParams }) {
   const retour = await searchParams;
@@ -46,6 +62,16 @@ export default async function Profil({ searchParams }) {
   ]);
   const enLigne = mesAnnonces.filter(estEnLigne).length;
   const message = MESSAGES[retour.annonce];
+  const un = (v) => (Array.isArray(v) ? v[0] : v) ?? "";
+  const f = {
+    etat: ETATS[un(retour.etat)] ? un(retour.etat) : "",
+    type: TYPES[un(retour.type)] ? un(retour.type) : "",
+    categorie: CATEGORIES.includes(un(retour.categorie)) ? un(retour.categorie) : "",
+  };
+  const annoncesAffichees = mesAnnonces.filter(
+    (a) => (!f.etat || ETATS[f.etat][1](a)) && (!f.type || a.type === f.type) && (!f.categorie || a.categorie === f.categorie),
+  );
+  const categoriesPresentes = CATEGORIES.filter((c) => mesAnnonces.some((a) => a.categorie === c));
 
   return (
     <EcranConnecte titre="Mon profil" onglet="profil">
@@ -88,8 +114,39 @@ export default async function Profil({ searchParams }) {
               </Bouton>
             </EtatVide>
           ) : (
+            <>
+              <div className="filtres filtres--compact">
+                <PucesFiltre
+                  nom="Filtrer mes annonces par état"
+                  actif={f.etat}
+                  lien={(v) => lienAnnonces(f, { etat: v })}
+                  options={[
+                    ["", "Toutes", mesAnnonces.length],
+                    ...Object.entries(ETATS).map(([cle, [label, test]]) => [cle, label, mesAnnonces.filter(test).length]),
+                  ]}
+                />
+                <PucesFiltre
+                  nom="Filtrer mes annonces par type"
+                  actif={f.type}
+                  lien={(v) => lienAnnonces(f, { type: v })}
+                  options={[["", "Tous types"], ...Object.entries(TYPES)]}
+                />
+                {categoriesPresentes.length > 1 && (
+                  <PucesFiltre
+                    nom="Filtrer mes annonces par catégorie"
+                    actif={f.categorie}
+                    lien={(v) => lienAnnonces(f, { categorie: v })}
+                    options={[["", "Toutes catégories"], ...categoriesPresentes.map((c) => [c, c])]}
+                  />
+                )}
+              </div>
+              {annoncesAffichees.length === 0 && (
+                <EtatVide titre="Aucune annonce ne correspond">
+                  <Link href="/profil#mes-annonces">Effacer les filtres</Link>
+                </EtatVide>
+              )}
             <div className="fil fil--profil">
-              {mesAnnonces.map((a, i) => (
+              {annoncesAffichees.map((a, i) => (
                 <div key={a.id} className="fil__case">
                   <CarteAnnonce
                     index={i}
@@ -110,6 +167,7 @@ export default async function Profil({ searchParams }) {
                 </div>
               ))}
             </div>
+            </>
           )}
 
           <div className="titre-section" id="mes-favoris">
