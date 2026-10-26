@@ -13,6 +13,7 @@ import FormPhotoProfil from "../../components/compte/FormPhotoProfil";
 import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
 import FormSupprimerCompte from "../../components/compte/FormSupprimerCompte";
 import FormCoordonnees from "../../components/demandes/FormCoordonnees";
+import FormClassement from "../../components/compte/FormClassement";
 import FormCompetences from "../../components/competences/FormCompetences";
 import FormCv from "../../components/competences/FormCv";
 import ListeAvis from "../../components/competences/ListeAvis";
@@ -26,6 +27,7 @@ import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib
 import { chargerMesCoordonnees } from "../../lib/donnees-demandes";
 import { compterSignalementsOuverts } from "../../lib/donnees-signalements";
 import { chargerCompetences, chargerAvis, chargerCv } from "../../lib/donnees-competences";
+import { chargerReglageClassement } from "../../lib/donnees-classement";
 import { chargerBadges, chargerBadgesAFeter } from "../../lib/donnees-badges";
 import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE, CATEGORIES, TYPES } from "../../lib/annonces";
 
@@ -57,7 +59,7 @@ export default async function Profil({ searchParams }) {
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/profil");
   const { prenom, nom, filiere, annee, campus, email } = profil;
-  const [mesAnnonces, mesFavoris, photo, mesCoordonnees, mesCompetences, mesAvis, monCv, mesBadges] = await Promise.all([
+  const [mesAnnonces, mesFavoris, photo, mesCoordonnees, mesCompetences, mesAvis, monCv, reglageClassement, mesBadges] = await Promise.all([
     chargerMesAnnonces(profil.id),
     chargerMesFavoris(),
     adresseMaPhoto(profil.photo),
@@ -65,6 +67,7 @@ export default async function Profil({ searchParams }) {
     chargerCompetences(profil.id),
     chargerAvis(profil.id),
     chargerCv(profil.id),
+    chargerReglageClassement(profil.id),
     chargerBadges(profil.id),
   ]);
   const badgesAFeter = mesBadges ? await chargerBadgesAFeter(mesBadges.gagnes) : [];
@@ -98,6 +101,9 @@ export default async function Profil({ searchParams }) {
             {campus && <div style={{ fontSize: 14 }}>Campus {campus}</div>}
             <Link href={`/etudiants/${profil.id}`} className="fiche-profil__public">
               Voir mon profil public →
+            </Link>
+            <Link href="/classement" className="fiche-profil__public">
+              Classement du campus →
             </Link>
           </div>
           {profil.est_admin && (
@@ -232,9 +238,12 @@ export default async function Profil({ searchParams }) {
             </>
           )}
 
-          <h2 className="profil__titre">Mes infos</h2>
+          <h2 className="profil__titre" id="mes-infos">
+            Mes infos
+          </h2>
           <FormProfil profil={{ prenom, nom, filiere, annee, campus }} />
           <FormPhotoProfil photo={photo} />
+          {reglageClassement !== null && <FormClassement visible={reglageClassement} />}
 
           <div className="titre-section" id="mes-coordonnees">
             <h2>Mes coordonnées privées</h2>
