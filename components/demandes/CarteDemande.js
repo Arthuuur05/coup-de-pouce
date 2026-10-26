@@ -2,6 +2,7 @@ import Link from "next/link";
 import Etiquette from "../ui/Etiquette";
 import BoutonAction from "../ui/BoutonAction";
 import Initiale from "../ui/Initiale";
+import Confettis from "../ui/Confettis";
 import Coordonnees from "./Coordonnees";
 import FormAvis from "../competences/FormAvis";
 import { repondreDemande, annulerDemande } from "../../lib/actions/demandes";
@@ -16,6 +17,8 @@ export default function CarteDemande({ demande: d, avisDonne = false, competence
   const prenom = autre.prenom || "Un étudiant";
   const statut = statutAffiche(d.statut, d.sens);
   const couleur = CLASSE_CATEGORIE[d.categorie] ?? "autre";
+  // Fête seulement une réponse toute fraîche, pas à chaque visite.
+  const fete = d.statut === "acceptee" && d.repondu_le && Date.now() - new Date(d.repondu_le).getTime() < 10 * 60 * 1000;
   const detail = [autre.filiere, autre.annee].filter(Boolean).join(" · ");
   return (
     <article id={`demande-${d.id}`} className={`carte carte--ombre-noire demande demande--${d.statut}`}>
@@ -57,6 +60,7 @@ export default function CarteDemande({ demande: d, avisDonne = false, competence
         {d.repondu_le && d.statut !== "en_attente" ? ` · réponse ${dateRelative(d.repondu_le)}` : ""}
       </p>
 
+      {fete && <Confettis />}
       {d.statut === "acceptee" && <Coordonnees prenom={autre.prenom} coordonnees={d.coordonnees} />}
 
       {["acceptee", "retiree"].includes(d.statut) &&
