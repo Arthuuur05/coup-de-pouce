@@ -1137,6 +1137,7 @@ a.demande__titre:hover { color: var(--rouge); }
 @media (min-width: 960px) {
   .chiffres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .deux-barres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; align-items: start; }
+}
 
 /* ——— Lot 13 : alertes ——— */
 .alerte { justify-content: space-between; }
@@ -1244,3 +1245,87 @@ a.demande__titre:hover { color: var(--rouge); }
   .aide-proposition:nth-child(2) { animation-delay: 0.08s; }
   .aide-proposition:nth-child(3) { animation-delay: 0.16s; }
 }
+
+/* ——— Lot 19 : calendrier et rendez-vous ——— */
+.rdv { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: var(--contour); background: var(--creme); }
+.rdv__titre { margin: 0; font-size: 16px; }
+.rdv__quand, .rdv__lieu { margin: 0; }
+.rdv__champs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.rdv__changer summary { cursor: pointer; font-weight: 700; }
+.rdv__changer[open] summary { margin-bottom: 8px; }
+
+.agenda { display: flex; flex-direction: column; gap: 20px; }
+.agenda__titre { margin: 0 0 8px; font-size: 18px; text-transform: capitalize; }
+.agenda__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.agenda__rdv { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 12px; background: var(--blanc); border: var(--contour); box-shadow: 3px 3px 0 var(--noir); }
+.agenda__heure { font-weight: 800; min-width: 62px; }
+.agenda__texte { flex: 1; min-width: 160px; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.agenda__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rdv { animation: affiche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .agenda__jour { animation: affiche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .agenda__jour:nth-child(2) { animation-delay: 0.06s; }
+  .agenda__jour:nth-child(n + 3) { animation-delay: 0.12s; }
+  .agenda__rdv { transition: translate 0.12s ease, box-shadow 0.12s ease; }
+  .agenda__rdv:hover { translate: 0 -2px; box-shadow: 4px 4px 0 var(--noir); }
+}
+
+/* ——— Lot 18 : classement amical du campus ——— */
+.case { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; cursor: pointer; }
+.case input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--rouge); flex: none; }
+
+.classement { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.classement__ligne { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: var(--blanc); border: var(--contour); }
+.classement__ligne--podium { box-shadow: 4px 4px 0 var(--noir); }
+.classement__ligne--moi { background: var(--ambre-fond); }
+.classement__rang { min-width: 34px; text-align: center; font-size: 24px; font-weight: 800; }
+.classement__nom { flex: 1; min-width: 0; font-weight: 800; color: var(--noir); text-decoration: none; overflow-wrap: anywhere; }
+.classement__nom:hover { text-decoration: underline; }
+.classement__coups { font-weight: 800; text-align: right; white-space: nowrap; }
+.classement__ma-place { margin: 0; padding: 10px 12px; border: var(--contour); background: var(--ambre-fond); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .classement__ligne { animation: glisse-gauche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; transition: translate 0.12s ease; }
+  .classement__ligne:nth-child(2) { animation-delay: 0.06s; }
+  .classement__ligne:nth-child(3) { animation-delay: 0.12s; }
+  .classement__ligne:nth-child(n + 4) { animation-delay: 0.18s; }
+  .classement__ligne:hover { translate: 4px 0; }
+  .classement__ligne--podium .classement__rang { display: inline-block; animation: saute 0.7s 0.4s ease-out both; }
+}
+
+/* ——— Lot 17 : badges et niveaux ——— */
+.niveau { display: flex; flex-direction: column; gap: 6px; }
+.niveau__ligne { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.niveau__nom { font-size: 17px; }
+.niveau__barre { height: 14px; border: var(--contour); background: var(--blanc); overflow: hidden; }
+.niveau__rempli { display: block; height: 100%; background: var(--rouge); }
+
+.badges { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.badge { display: flex; gap: 10px; align-items: center; padding: 10px 12px; background: var(--blanc); border: var(--contour); box-shadow: 3px 3px 0 var(--noir); }
+.badge__emoji { font-size: 28px; line-height: 1; }
+.badge__titre { display: block; font-size: 15px; }
+.badge__texte { display: block; font-size: 13px; color: var(--gris); }
+.badge--verrouille { background: var(--creme); border-style: dashed; box-shadow: none; }
+.badge--verrouille .badge__emoji { filter: grayscale(1); opacity: 0.45; }
+.badge--verrouille .badge__titre { color: var(--gris); }
+
+.fete-badges { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.fete-badges__titre { margin: 0; }
+.fete-badges__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.fete-badges__badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--ambre-fond); border: var(--contour); }
+.fete-badges__emoji { font-size: 30px; line-height: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fete-badges { animation: affiche 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .fete-badges__badge { animation: tampon 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+  .fete-badges__badge:nth-child(2) { animation-delay: 0.15s; }
+  .fete-badges__badge:nth-child(n + 3) { animation-delay: 0.3s; }
+  .fete-badges__emoji { display: inline-block; animation: saute 0.8s 0.5s ease-in-out 2; }
+  .niveau__rempli { animation: remplit 0.8s 0.2s ease-out both; transform-origin: left center; }
+  .badge:not(.badge--verrouille) { animation: affiche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .badge:nth-child(2) { animation-delay: 0.05s; }
+  .badge:nth-child(3) { animation-delay: 0.1s; }
+  .badge:nth-child(n + 4) { animation-delay: 0.15s; }
+}
+@keyframes remplit { from { scale: 0 1; } to { scale: 1 1; } }

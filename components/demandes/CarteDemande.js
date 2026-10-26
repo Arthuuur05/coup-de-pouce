@@ -5,6 +5,7 @@ import Initiale from "../ui/Initiale";
 import Confettis from "../ui/Confettis";
 import Coordonnees from "./Coordonnees";
 import FormAvis from "../competences/FormAvis";
+import RendezVous from "../calendrier/RendezVous";
 import { repondreDemande, annulerDemande } from "../../lib/actions/demandes";
 import { statutAffiche } from "../../lib/demandes";
 import { TYPES, CLASSE_CATEGORIE, dateRelative } from "../../lib/annonces";
@@ -62,6 +63,7 @@ export default function CarteDemande({ demande: d, avisDonne = false, competence
 
       {fete && <Confettis />}
       {d.statut === "acceptee" && <Coordonnees prenom={autre.prenom} coordonnees={d.coordonnees} />}
+      {d.statut === "acceptee" && d.rdv !== undefined && <RendezVous demandeId={d.id} rdv={d.rdv} />}
       {d.statut === "acceptee" && (
         <Link href={`/messages/${d.id}`} className="bouton bouton--secondaire demande__petit">
           Écrire un message

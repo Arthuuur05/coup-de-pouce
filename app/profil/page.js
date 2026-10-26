@@ -13,9 +13,13 @@ import FormPhotoProfil from "../../components/compte/FormPhotoProfil";
 import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
 import FormSupprimerCompte from "../../components/compte/FormSupprimerCompte";
 import FormCoordonnees from "../../components/demandes/FormCoordonnees";
+import FormClassement from "../../components/compte/FormClassement";
 import FormCompetences from "../../components/competences/FormCompetences";
 import FormCv from "../../components/competences/FormCv";
 import ListeAvis from "../../components/competences/ListeAvis";
+import Niveau from "../../components/badges/Niveau";
+import ListeBadges from "../../components/badges/ListeBadges";
+import FeteBadges from "../../components/badges/FeteBadges";
 import { profilConnecte } from "../../lib/profil";
 import { deconnecter } from "../../lib/actions/compte";
 import { remettreEnLigne, basculerFavori } from "../../lib/actions/annonces";
@@ -23,6 +27,8 @@ import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib
 import { chargerMesCoordonnees } from "../../lib/donnees-demandes";
 import { compterSignalementsOuverts } from "../../lib/donnees-signalements";
 import { chargerCompetences, chargerAvis, chargerCv } from "../../lib/donnees-competences";
+import { chargerReglageClassement } from "../../lib/donnees-classement";
+import { chargerBadges, chargerBadgesAFeter } from "../../lib/donnees-badges";
 import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE, CATEGORIES, TYPES } from "../../lib/annonces";
 
 export const metadata = { title: "Mon profil · Coup de Pouce" };
@@ -53,7 +59,7 @@ export default async function Profil({ searchParams }) {
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/profil");
   const { prenom, nom, filiere, annee, campus, email } = profil;
-  const [mesAnnonces, mesFavoris, photo, mesCoordonnees, mesCompetences, mesAvis, monCv] = await Promise.all([
+  const [mesAnnonces, mesFavoris, photo, mesCoordonnees, mesCompetences, mesAvis, monCv, reglageClassement, mesBadges] = await Promise.all([
     chargerMesAnnonces(profil.id),
     chargerMesFavoris(),
     adresseMaPhoto(profil.photo),
@@ -61,7 +67,10 @@ export default async function Profil({ searchParams }) {
     chargerCompetences(profil.id),
     chargerAvis(profil.id),
     chargerCv(profil.id),
+    chargerReglageClassement(profil.id),
+    chargerBadges(profil.id),
   ]);
+  const badgesAFeter = mesBadges ? await chargerBadgesAFeter(mesBadges.gagnes) : [];
   const enLigne = mesAnnonces.filter(estEnLigne).length;
   const signalementsOuverts = profil.est_admin ? await compterSignalementsOuverts() : 0;
   const message = MESSAGES[retour.annonce];
@@ -93,6 +102,9 @@ export default async function Profil({ searchParams }) {
             <Link href={`/etudiants/${profil.id}`} className="fiche-profil__public">
               Voir mon profil public →
             </Link>
+            <Link href="/classement" className="fiche-profil__public">
+              Classement du campus →
+            </Link>
           </div>
           {profil.est_admin && (
             <div className="fiche-profil__admin">
@@ -116,6 +128,7 @@ export default async function Profil({ searchParams }) {
         </aside>
 
         <div className="profil__contenu">
+          {mesBadges && <FeteBadges nouveaux={badgesAFeter} niveau={mesBadges.niveau} />}
           <div className="titre-section" id="mes-annonces">
             <h2>Mes annonces</h2>
             <span className="carte__date">
@@ -212,9 +225,25 @@ export default async function Profil({ searchParams }) {
             </div>
           )}
 
-          <h2 className="profil__titre">Mes infos</h2>
+          {mesBadges && (
+            <>
+              <div className="titre-section" id="mes-badges">
+                <h2>Mes badges</h2>
+                <span className="carte__date">
+                  {mesBadges.gagnes.length}/{mesBadges.gagnes.length + mesBadges.restants.length}
+                </span>
+              </div>
+              <Niveau niveau={mesBadges.niveau} />
+              <ListeBadges gagnes={mesBadges.gagnes} montrerRestants />
+            </>
+          )}
+
+          <h2 className="profil__titre" id="mes-infos">
+            Mes infos
+          </h2>
           <FormProfil profil={{ prenom, nom, filiere, annee, campus }} />
           <FormPhotoProfil photo={photo} />
+          {reglageClassement !== null && <FormClassement visible={reglageClassement} />}
 
           <div className="titre-section" id="mes-coordonnees">
             <h2>Mes coordonnées privées</h2>

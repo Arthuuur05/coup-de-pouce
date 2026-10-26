@@ -6,11 +6,14 @@ import CarteAnnonce from "../../../components/ui/CarteAnnonce";
 import Etoiles from "../../../components/competences/Etoiles";
 import ListeCompetences from "../../../components/competences/ListeCompetences";
 import ListeAvis from "../../../components/competences/ListeAvis";
+import Niveau from "../../../components/badges/Niveau";
+import ListeBadges from "../../../components/badges/ListeBadges";
 import Signaler from "../../../components/signalements/Signaler";
 import { profilConnecte } from "../../../lib/profil";
 import { chargerProfilPublic, chargerIdsFavoris } from "../../../lib/donnees-annonces";
 import { basculerFavori } from "../../../lib/actions/annonces";
 import { chargerCompetences, chargerAvis, chargerCv, chargerCoupsDePouce } from "../../../lib/donnees-competences";
+import { chargerBadges } from "../../../lib/donnees-badges";
 import { dateRelative } from "../../../lib/annonces";
 
 export const metadata = { title: "Profil · Coup de Pouce" };
@@ -22,12 +25,13 @@ export default async function ProfilPublic({ params, searchParams }) {
   const retour = await searchParams;
   const moi = await profilConnecte();
   if (!moi) redirect(`/connexion?suite=/etudiants/${id}`);
-  const [donnees, favoris, competences, coups, cv] = await Promise.all([
+  const [donnees, favoris, competences, coups, cv, badges] = await Promise.all([
     chargerProfilPublic(id),
     chargerIdsFavoris(),
     chargerCompetences(id),
     chargerCoupsDePouce(id),
     chargerCv(id),
+    chargerBadges(id),
   ]);
   const competenceChoisie = competences.find((c) => c.id === retour.competence);
   const [avis, tousLesAvis] = await Promise.all([chargerAvis(id, competenceChoisie?.id), competenceChoisie ? chargerAvis(id) : null]);
@@ -73,6 +77,15 @@ export default async function ProfilPublic({ params, searchParams }) {
             actif={competenceChoisie?.id}
           />
           {competences.length > 0 && <p className="champ__aide" style={{ margin: 0 }}>Touche une compétence pour voir les avis qui la confirment.</p>}
+          {badges && badges.gagnes.length > 0 && (
+            <>
+              <div className="titre-section">
+                <h2>{cEstMoi ? "Mes badges" : "Ses badges"}</h2>
+              </div>
+              <Niveau niveau={badges.niveau} />
+              <ListeBadges gagnes={badges.gagnes} />
+            </>
+          )}
           {cv && (
             <a href={cv.adresse} target="_blank" rel="noreferrer" className="bouton bouton--secondaire" style={{ alignSelf: "flex-start" }}>
               {cEstMoi ? "Mon CV" : `Télécharger son CV`} (PDF)
