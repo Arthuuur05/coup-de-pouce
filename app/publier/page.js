@@ -4,7 +4,7 @@ import EcranConnecte from "../../components/ui/EcranConnecte";
 import Message from "../../components/ui/Message";
 import FormAnnonce from "../../components/annonces/FormAnnonce";
 import { profilConnecte } from "../../lib/profil";
-import { chargerMesAnnonces } from "../../lib/donnees-annonces";
+import { chargerMesAnnonces, adresseMaPhoto } from "../../lib/donnees-annonces";
 import { publierAnnonce } from "../../lib/actions/annonces";
 import { estEnLigne, signature, MAX_EN_LIGNE } from "../../lib/annonces";
 
@@ -14,6 +14,7 @@ export default async function Publier() {
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/publier");
   const enLigne = (await chargerMesAnnonces(profil.id)).filter(estEnLigne).length;
+  const photo = await adresseMaPhoto(profil.photo);
 
   return (
     <EcranConnecte titre="Publier une annonce" sousTitre="Tu proposes ou tu cherches ? En ligne pendant 30 jours." onglet="publier">
@@ -23,7 +24,7 @@ export default async function Publier() {
           <Link href="/profil#mes-annonces">ton profil</Link>.
         </Message>
       ) : (
-        <FormAnnonce action={publierAnnonce} signature={signature(profil)} />
+        <FormAnnonce action={publierAnnonce} signature={signature(profil)} auteur={{ prenom: profil.prenom, photoUrl: photo }} />
       )}
     </EcranConnecte>
   );

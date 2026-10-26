@@ -12,6 +12,18 @@
   --ambre: #7a4d00;
   --ambre-fond: #fbe7c2;
 
+  /* Couleurs des catégories : teintes douces « papier d'affiche », seulement sur l'étiquette et le liseré */
+  --cat-photo: #fbd8b0;
+  --cat-video: #e5d0f2;
+  --cat-dev: #c8e2f6;
+  --cat-design: #f7cfdf;
+  --cat-reseaux: #f7ea9e;
+  --cat-cours: #dcebb8;
+  --cat-logement: #e8d8c0;
+  --cat-covoit: #c3ebdd;
+  --cat-evenementiel: #d3d6f7;
+  --cat-autre: #e4e1da;
+
   --contour: 2px solid var(--noir);
   --ombre-noire: 5px 5px 0 var(--noir);
   --ombre-rouge: 5px 5px 0 var(--rouge);
@@ -344,6 +356,8 @@ select.champ__input {
   text-decoration: none;
 }
 .initiale--grande { width: 72px; height: 72px; font-size: 40px; box-shadow: var(--ombre-rouge); }
+.initiale--petite { width: 24px; height: 24px; font-size: 14px; }
+.initiale--photo { object-fit: cover; border: 2px solid var(--noir); background: var(--blanc); }
 
 /* Deux champs côte à côte (sur ordinateur) */
 .champs-duo { display: flex; flex-direction: column; gap: 16px; }
@@ -594,3 +608,118 @@ select.champ__input {
   .fiche-annonce { padding: 32px; }
   .fiche-annonce__titre { font-size: 64px; }
 }
+
+/* ——— Clôture du lot 4 : couleurs, photos, favoris, profil public ——— */
+.carte--photo { --cat: var(--cat-photo); }
+.carte--video { --cat: var(--cat-video); }
+.carte--dev { --cat: var(--cat-dev); }
+.carte--design { --cat: var(--cat-design); }
+.carte--reseaux { --cat: var(--cat-reseaux); }
+.carte--cours { --cat: var(--cat-cours); }
+.carte--logement { --cat: var(--cat-logement); }
+.carte--covoit { --cat: var(--cat-covoit); }
+.carte--evenementiel { --cat: var(--cat-evenementiel); }
+.carte--autre { --cat: var(--cat-autre); }
+.carte--categorie { border-top: 8px solid var(--cat, var(--cat-autre)); }
+.etiquette--photo { background: var(--cat-photo); }
+.etiquette--video { background: var(--cat-video); }
+.etiquette--dev { background: var(--cat-dev); }
+.etiquette--design { background: var(--cat-design); }
+.etiquette--reseaux { background: var(--cat-reseaux); }
+.etiquette--cours { background: var(--cat-cours); }
+.etiquette--logement { background: var(--cat-logement); }
+.etiquette--covoit { background: var(--cat-covoit); }
+.etiquette--evenementiel { background: var(--cat-evenementiel); }
+.etiquette--autre { background: var(--cat-autre); }
+
+/* Carte : étiquettes, photo, auteur, cœur */
+.carte__haut { align-items: flex-start; }
+.carte__etiquettes { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.carte__date { white-space: nowrap; }
+.carte__photo {
+  display: block;
+  width: calc(100% + 28px);
+  margin: -14px -14px 4px;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-bottom: var(--contour);
+  background: var(--creme);
+}
+.carte__auteur { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.carte__favori { position: relative; z-index: 1; margin: -6px -6px -6px 0; }
+.coeur {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--noir);
+  cursor: pointer;
+}
+.coeur--plein { color: var(--rouge); }
+.coeur:hover { color: var(--rouge); }
+.coeur:focus-visible { outline: 3px solid var(--rouge); outline-offset: -4px; }
+.carte--eteinte { opacity: 0.55; filter: grayscale(1); transform: none; }
+.bouton--favori { color: var(--rouge); border-color: var(--rouge); }
+
+/* Fil : « Voir plus », prolonger depuis le profil */
+.fil + .bouton { align-self: center; }
+.fil__case { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.fil__prolonger { width: 100%; }
+
+/* Choix d'une photo */
+.champ-photo__corps { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.champ-photo__apercu,
+.champ-photo__vide {
+  width: 160px;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: var(--contour);
+  background: var(--blanc);
+}
+.champ-photo__vide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--gris);
+  border-style: dashed;
+}
+.champ-photo__apercu--carre { width: 96px; aspect-ratio: 1; }
+.champ-photo__boutons { display: flex; flex-wrap: wrap; gap: 8px; }
+.formulaire .champ-photo__boutons .bouton { width: auto; }
+.champ-photo:focus-within label.bouton { outline: 3px solid var(--rouge); outline-offset: 2px; }
+
+/* Fiche : grande photo, auteur cliquable */
+.fiche-annonce__photo {
+  display: block;
+  width: calc(100% + 40px);
+  margin: -20px -20px 0;
+  max-height: 420px;
+  object-fit: cover;
+  border-bottom: var(--contour);
+}
+.fiche-auteur--lien { text-decoration: none; transition: transform 0.12s ease; }
+.fiche-auteur--lien:hover { transform: translate(-2px, -2px); }
+.fiche-auteur__voir {
+  margin-top: 4px;
+  font-family: var(--font-titre), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--rouge);
+}
+
+/* Profil */
+.profil__contenu { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.profil__titre { margin-top: 16px; }
+.fiche-profil__public { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 700; }
+
+@media (min-width: 960px) {
+  .fiche-annonce__photo { width: calc(100% + 64px); margin: -32px -32px 0; }
+}
+.etiquette { white-space: nowrap; }

@@ -1,34 +1,47 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import EcranConnecte from "../../components/ui/EcranConnecte";
 import EtatVide from "../../components/ui/EtatVide";
 import Initiale from "../../components/ui/Initiale";
-import Link from "next/link";
+import CarteAnnonce from "../../components/ui/CarteAnnonce";
+import Bouton from "../../components/ui/Bouton";
+import Message from "../../components/ui/Message";
 import FormProfil from "../../components/compte/FormProfil";
+import FormPhotoProfil from "../../components/compte/FormPhotoProfil";
 import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
 import FormSupprimerCompte from "../../components/compte/FormSupprimerCompte";
 import { profilConnecte } from "../../lib/profil";
 import { deconnecter } from "../../lib/actions/compte";
-import CarteAnnonce from "../../components/ui/CarteAnnonce";
-import Bouton from "../../components/ui/Bouton";
-import Message from "../../components/ui/Message";
-import { chargerMesAnnonces } from "../../lib/donnees-annonces";
-import { etatAnnonce, dateRelative, estEnLigne, MAX_EN_LIGNE } from "../../lib/annonces";
+import { remettreEnLigne, basculerFavori } from "../../lib/actions/annonces";
+import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib/donnees-annonces";
+import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE } from "../../lib/annonces";
 
 export const metadata = { title: "Mon profil · Coup de Pouce" };
+
+const MESSAGES = {
+  supprimee: ["ok", "Ton annonce est supprimée."],
+  prolongee: ["ok", "Ton annonce est prolongée de 30 jours."],
+  limite: ["erreur", `Tu as déjà ${MAX_EN_LIGNE} annonces en ligne : marque-en une « C'est réglé » d'abord.`],
+};
 
 export default async function Profil({ searchParams }) {
   const retour = await searchParams;
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/profil");
   const { prenom, nom, filiere, annee, campus, email } = profil;
-  const mesAnnonces = await chargerMesAnnonces(profil.id);
+  const [mesAnnonces, mesFavoris, photo] = await Promise.all([
+    chargerMesAnnonces(profil.id),
+    chargerMesFavoris(),
+    adresseMaPhoto(profil.photo),
+  ]);
   const enLigne = mesAnnonces.filter(estEnLigne).length;
+  const message = MESSAGES[retour.annonce];
 
   return (
     <EcranConnecte titre="Mon profil" onglet="profil">
       <div className="deux-colonnes">
         <aside className="carte carte--ombre-rouge fiche-profil">
-          <Initiale prenom={prenom} grande />
+          <Initiale prenom={prenom} photo={photo} grande />
           <div style={{ minWidth: 0 }}>
             <h3>{prenom || "Sans prénom"}</h3>
             <div className="carte__date" style={{ overflowWrap: "anywhere" }}>
@@ -38,6 +51,9 @@ export default async function Profil({ searchParams }) {
               <div style={{ fontWeight: 700, fontSize: 14 }}>{[filiere, annee].filter(Boolean).join(" · ")}</div>
             )}
             {campus && <div style={{ fontSize: 14 }}>Campus {campus}</div>}
+            <Link href={`/etudiants/${profil.id}`} className="fiche-profil__public">
+              Voir mon profil public →
+            </Link>
           </div>
           <form action={deconnecter} className="seulement-ordi">
             <button type="submit" className="bouton bouton--danger" style={{ width: "100%" }}>
@@ -46,17 +62,14 @@ export default async function Profil({ searchParams }) {
           </form>
         </aside>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <h2>Mes infos</h2>
-          <FormProfil profil={{ prenom, nom, filiere, annee, campus }} />
-
+        <div className="profil__contenu">
           <div className="titre-section" id="mes-annonces">
             <h2>Mes annonces</h2>
             <span className="carte__date">
               {enLigne}/{MAX_EN_LIGNE} en ligne
             </span>
           </div>
-          {retour.annonce === "supprimee" && <Message type="ok">Ton annonce est supprimée.</Message>}
+          {message && <Message type={message[0]}>{message[1]}</Message>}
           {mesAnnonces.length === 0 ? (
             <EtatVide titre="Pas encore d'annonce">
               <p style={{ margin: "0 0 12px" }}>Propose un coup de main ou demande-en un.</p>
@@ -67,24 +80,59 @@ export default async function Profil({ searchParams }) {
           ) : (
             <div className="fil fil--profil">
               {mesAnnonces.map((a, i) => (
+                <div key={a.id} className="fil__case">
+                  <CarteAnnonce
+                    index={i}
+                    type={a.type}
+                    categorie={a.categorie}
+                    titre={a.titre}
+                    auteur={`Publiée ${dateRelative(a.cree_le)}`}
+                    etat={etatAnnonce(a)}
+                    href={`/annonces/${a.id}`}
+                  />
+                  {expireBientot(a) && (
+                    <form action={remettreEnLigne.bind(null, a.id, "profil")}>
+                      <button type="submit" className="bouton bouton--accent fil__prolonger">
+                        Prolonger de 30 jours
+                      </button>
+                    </form>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="titre-section" id="mes-favoris">
+            <h2>Mes favoris</h2>
+            {mesFavoris.length > 0 && <span className="carte__date">{mesFavoris.length}</span>}
+          </div>
+          {mesFavoris.length === 0 ? (
+            <EtatVide titre="Pas encore de favori">Touche le cœur d'une annonce pour la retrouver ici.</EtatVide>
+          ) : (
+            <div className="fil fil--profil">
+              {mesFavoris.map((f, i) => (
                 <CarteAnnonce
-                  key={a.id}
+                  key={f.id}
                   index={i}
-                  type={a.type}
-                  categorie={a.categorie}
-                  titre={a.titre}
-                  auteur={`Publiée ${dateRelative(a.cree_le)}`}
-                  etat={etatAnnonce(a)}
-                  href={`/annonces/${a.id}`}
+                  type={f.type}
+                  categorie={f.categorie}
+                  titre={f.titre}
+                  auteur={f.disponible ? `En favori ${dateRelative(f.ajoute_le)}` : "Plus disponible"}
+                  href={f.disponible ? `/annonces/${f.id}` : undefined}
+                  eteinte={!f.disponible}
+                  favori
+                  actionFavori={basculerFavori.bind(null, f.id, true)}
                 />
               ))}
             </div>
           )}
-          <EtatVide titre="Bientôt ici">
-            Photo de profil (lot 4), coordonnées privées (lot 5), compétences depuis le CV (lot 6).
-          </EtatVide>
 
-          <h2 style={{ marginTop: 16 }}>Sécurité</h2>
+          <h2 className="profil__titre">Mes infos</h2>
+          <FormProfil profil={{ prenom, nom, filiere, annee, campus }} />
+          <FormPhotoProfil photo={photo} />
+          <EtatVide titre="Bientôt ici">Coordonnées privées (lot 5), compétences depuis le CV (lot 6).</EtatVide>
+
+          <h2 className="profil__titre">Sécurité</h2>
           <FormMotDePasse />
           <FormEmail emailActuel={email} />
 

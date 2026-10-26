@@ -1,22 +1,31 @@
+import Link from "next/link";
 import Etiquette from "../ui/Etiquette";
 import Initiale from "../ui/Initiale";
 import Bouton from "../ui/Bouton";
+import { IconeCoeur } from "../ui/Icones";
 import SupprimerAnnonce from "./SupprimerAnnonce";
-import { marquerReglee, remettreEnLigne, supprimerAnnonce } from "../../lib/actions/annonces";
-import { TYPES, estEnLigne, etatAnnonce, dateRelative, joursRestants } from "../../lib/annonces";
+import CopierLien from "./CopierLien";
+import { marquerReglee, remettreEnLigne, supprimerAnnonce, basculerFavori } from "../../lib/actions/annonces";
+import { TYPES, CLASSE_CATEGORIE, estEnLigne, etatAnnonce, dateRelative, joursRestants } from "../../lib/annonces";
 
 // La fiche d'une annonce : le texte à gauche, l'auteur et les actions à droite (en dessous sur téléphone).
-// moi : la personne connectée est l'auteur → Modifier, C'est réglé, Supprimer.
-export default function FicheAnnonce({ annonce, moi }) {
+// moi : la personne connectée est l'auteur → Modifier, C'est réglé, Supprimer. Sinon : favori et contact.
+export default function FicheAnnonce({ annonce, moi, favori = false }) {
   const enLigne = estEnLigne(annonce);
   const etat = etatAnnonce(annonce);
   const auteur = annonce.auteurProfil ?? {};
+  const couleur = CLASSE_CATEGORIE[annonce.categorie] ?? "autre";
+  const detailAuteur = [auteur.filiere, auteur.annee, auteur.campus && `campus ${auteur.campus}`].filter(Boolean).join(" · ");
   return (
     <div className="deux-colonnes deux-colonnes--annonce">
-      <article className="carte carte--ombre-noire fiche-annonce">
+      <article className={`carte carte--ombre-noire fiche-annonce carte--categorie carte--${couleur}`}>
+        {annonce.photoUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={annonce.photoUrl} alt="" className="fiche-annonce__photo" />
+        )}
         <div className="rangee">
           <Etiquette variante={annonce.type}>{TYPES[annonce.type]}</Etiquette>
-          <Etiquette>{annonce.categorie}</Etiquette>
+          <Etiquette couleur={couleur}>{annonce.categorie}</Etiquette>
           {moi && <Etiquette variante={etat.variante}>{etat.texte}</Etiquette>}
         </div>
         <h2 className="fiche-annonce__titre">{annonce.titre}</h2>
@@ -45,15 +54,24 @@ export default function FicheAnnonce({ annonce, moi }) {
       </article>
 
       <aside className="fiche-annonce__cote">
-        <div className="carte carte--ombre-rouge fiche-auteur">
-          <Initiale prenom={auteur.prenom} />
-          <div style={{ minWidth: 0 }}>
-            <div className="fiche-auteur__nom">{moi ? "C'est ton annonce" : auteur.prenom || "Un étudiant"}</div>
-            <div className="carte__date">
-              {[auteur.filiere, auteur.annee, auteur.campus && `campus ${auteur.campus}`].filter(Boolean).join(" · ")}
+        {moi ? (
+          <div className="carte carte--ombre-rouge fiche-auteur">
+            <Initiale prenom={auteur.prenom} photo={auteur.photoUrl} />
+            <div style={{ minWidth: 0 }}>
+              <div className="fiche-auteur__nom">C'est ton annonce</div>
+              <div className="carte__date">{detailAuteur}</div>
             </div>
           </div>
-        </div>
+        ) : (
+          <Link href={`/etudiants/${annonce.auteur}`} className="carte carte--ombre-rouge fiche-auteur fiche-auteur--lien">
+            <Initiale prenom={auteur.prenom} photo={auteur.photoUrl} />
+            <div style={{ minWidth: 0 }}>
+              <div className="fiche-auteur__nom">{auteur.prenom || "Un étudiant"}</div>
+              <div className="carte__date">{detailAuteur}</div>
+              <div className="fiche-auteur__voir">Voir son profil →</div>
+            </div>
+          </Link>
+        )}
 
         {moi ? (
           <div className="fiche-annonce__actions">
@@ -67,12 +85,13 @@ export default function FicheAnnonce({ annonce, moi }) {
                 </button>
               </form>
             ) : (
-              <form action={remettreEnLigne.bind(null, annonce.id)}>
+              <form action={remettreEnLigne.bind(null, annonce.id, "annonce")}>
                 <button type="submit" className="bouton bouton--accent">
                   Remettre en ligne 30 jours
                 </button>
               </form>
             )}
+            <CopierLien />
             <SupprimerAnnonce action={supprimerAnnonce.bind(null, annonce.id)} />
           </div>
         ) : (
@@ -83,6 +102,12 @@ export default function FicheAnnonce({ annonce, moi }) {
             <p id="contact-bientot" className="champ__aide" style={{ margin: 0 }}>
               Bientôt : {auteur.prenom || "l'auteur"} recevra ta demande et choisira de te montrer ses coordonnées.
             </p>
+            <form action={basculerFavori.bind(null, annonce.id, favori)}>
+              <button type="submit" className={`bouton bouton--secondaire${favori ? " bouton--favori" : ""}`} aria-pressed={favori}>
+                <IconeCoeur plein={favori} width={18} height={18} /> {favori ? "Dans mes favoris" : "Ajouter aux favoris"}
+              </button>
+            </form>
+            <CopierLien />
           </div>
         )}
         <Bouton href="/annonces" variante="secondaire">

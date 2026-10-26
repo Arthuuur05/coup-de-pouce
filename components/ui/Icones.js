@@ -52,3 +52,21 @@ export function IconeMaison(props) {
     </svg>
   );
 }
+
+// plein : cœur rempli (annonce en favori).
+export function IconeCoeur({ plein = false, ...props }) {
+  return (
+    <svg {...base} fill={plein ? "currentColor" : "none"} {...props}>
+      <path d="M12 20s-7-4.4-9.2-8.6C1.3 8.5 3 5 6.4 5c2 0 3.3 1.1 4 2.3h3.2C14.3 6.1 15.6 5 17.6 5 21 5 22.7 8.5 21.2 11.4 19 15.6 12 20 12 20z" />
+    </svg>
+  );
+}
+
+export function IconeLien(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />
+      <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />
+    </svg>
+  );
+}

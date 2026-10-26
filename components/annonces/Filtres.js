@@ -2,9 +2,10 @@ import Link from "next/link";
 import { TYPES, CATEGORIES } from "../../lib/annonces";
 import { CAMPUS } from "../../lib/compte";
 
-// Adresse du fil avec un filtre changé et les autres gardés.
-function lien(filtres, changement) {
-  const suite = { ...filtres, ...changement };
+// Adresse du fil avec un filtre changé et les autres gardés (on revient à la page 1, sauf « Voir plus »).
+export function lienFil(filtres, changement) {
+  const suite = { ...filtres, page: 1, ...changement };
+  if (suite.page === 1) delete suite.page;
   const params = new URLSearchParams();
   for (const [cle, valeur] of Object.entries(suite)) if (valeur) params.set(cle, valeur);
   const texte = params.toString();
@@ -26,15 +27,18 @@ export default function Filtres({ filtres }) {
   return (
     <div className="filtres">
       <div className="filtres__puces">
-        <Puce href={lien(filtres, { vue: "" })} actif={!vue}>
+        <Puce href={lienFil(filtres, { vue: "" })} actif={!vue}>
           Tout le campus
         </Puce>
-        <Puce href={lien(filtres, { vue: "pour-toi" })} actif={vue === "pour-toi"}>
+        <Puce href={lienFil(filtres, { vue: "pour-toi" })} actif={vue === "pour-toi"}>
           Pour toi
+        </Puce>
+        <Puce href={lienFil(filtres, { vue: "favoris" })} actif={vue === "favoris"}>
+          Mes favoris
         </Puce>
         <span className="filtres__separateur" aria-hidden="true" />
         {Object.entries(TYPES).map(([valeur, label]) => (
-          <Puce key={valeur} href={lien(filtres, { type: type === valeur ? "" : valeur })} actif={type === valeur}>
+          <Puce key={valeur} href={lienFil(filtres, { type: type === valeur ? "" : valeur })} actif={type === valeur}>
             {label}
           </Puce>
         ))}

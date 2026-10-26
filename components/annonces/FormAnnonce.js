@@ -1,25 +1,34 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, startTransition } from "react";
 import Champ from "../ui/Champ";
 import Message from "../ui/Message";
 import CarteAnnonce from "../ui/CarteAnnonce";
+import ChampPhoto from "../ui/ChampPhoto";
 import { TYPES, CATEGORIES, LIMITES } from "../../lib/annonces";
 
 const VIDE = { type: "", categorie: "", titre: "", description: "", contrepartie: "", quand: "" };
 
 // Publier ou modifier une annonce, avec l'aperçu de la carte qui se met à jour en direct.
 // action : publierAnnonce, ou modifierAnnonce.bind(null, id). signature : « Léa · Design M1 ».
-export default function FormAnnonce({ action, annonce, signature, boutonTexte = "Publier mon annonce" }) {
+// photo : adresse de la photo déjà enregistrée (modification). auteur : { prenom, photoUrl } pour l'aperçu.
+export default function FormAnnonce({ action, annonce, photo, auteur, signature, boutonTexte = "Publier mon annonce" }) {
   const [etat, envoyer, enCours] = useActionState(action, { valeurs: { ...VIDE, ...annonce } });
   const [v, setV] = useState(etat.valeurs);
+  const [apercuPhoto, setApercuPhoto] = useState(photo ?? null);
+  // Envoi à la main (et non action={…}) : en cas d'erreur, le formulaire n'est pas vidé et la photo choisie reste.
+  const soumettre = (evt) => {
+    evt.preventDefault();
+    const donnees = new FormData(evt.currentTarget);
+    startTransition(() => envoyer(donnees));
+  };
   const e = etat.erreurs ?? {};
   const changer = (champ) => (evt) => setV((avant) => ({ ...avant, [champ]: evt.target.value }));
   const compteur = (champ) => `${v[champ].length}/${LIMITES[champ]}`;
 
   return (
     <div className="publier">
-      <form id="form-annonce" action={envoyer} className="formulaire" noValidate>
+      <form id="form-annonce" onSubmit={soumettre} className="formulaire" noValidate>
         {etat.message && <Message>{etat.message}</Message>}
 
         <fieldset className="choix-type" aria-describedby={e.type ? "type-erreur" : undefined}>
@@ -64,6 +73,14 @@ export default function FormAnnonce({ action, annonce, signature, boutonTexte = 
           onChange={changer("description")}
           erreur={e.description}
         />
+        <ChampPhoto
+          id="photo"
+          label="Photo (facultatif)"
+          photoActuelle={photo}
+          onApercu={setApercuPhoto}
+          erreur={e.photo}
+          aide="JPG, PNG ou WebP. Réduite automatiquement."
+        />
         <div className="champs-duo">
           <Champ
             id="quand"
@@ -97,6 +114,8 @@ export default function FormAnnonce({ action, annonce, signature, boutonTexte = 
           titre={v.titre || "Ton titre ici"}
           extrait={v.description || "Ta description apparaîtra ici."}
           auteur={signature}
+          avatar={auteur}
+          photo={apercuPhoto}
           date="à l'instant"
         />
         <p className="champ__aide">Ton nom de famille et ton e-mail ne sont jamais affichés.</p>

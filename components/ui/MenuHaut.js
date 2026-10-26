@@ -10,7 +10,7 @@ const ONGLETS = [
 ];
 
 // Menu des écrans connectés sur ordinateur (le téléphone garde le menu du bas).
-export default function MenuHaut({ actif, prenom }) {
+export default function MenuHaut({ actif, prenom, photo }) {
   return (
     <header className="menu-haut">
       <Link href="/annonces" className="logo">
@@ -32,7 +32,7 @@ export default function MenuHaut({ actif, prenom }) {
         <IconePlus width={18} height={18} /> Publier
       </Link>
       <Link href="/profil" aria-label="Mon profil" className="menu-haut__profil">
-        <Initiale prenom={prenom} />
+        <Initiale prenom={prenom} photo={photo} />
       </Link>
     </header>
   );
