@@ -21,6 +21,7 @@ import { deconnecter } from "../../lib/actions/compte";
 import { remettreEnLigne, basculerFavori } from "../../lib/actions/annonces";
 import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib/donnees-annonces";
 import { chargerMesCoordonnees } from "../../lib/donnees-demandes";
+import { compterSignalementsOuverts } from "../../lib/donnees-signalements";
 import { chargerCompetences, chargerAvis, chargerCv } from "../../lib/donnees-competences";
 import { etatAnnonce, dateRelative, estEnLigne, expireBientot, MAX_EN_LIGNE, CATEGORIES, TYPES } from "../../lib/annonces";
 
@@ -62,6 +63,7 @@ export default async function Profil({ searchParams }) {
     chargerCv(profil.id),
   ]);
   const enLigne = mesAnnonces.filter(estEnLigne).length;
+  const signalementsOuverts = profil.est_admin ? await compterSignalementsOuverts() : 0;
   const message = MESSAGES[retour.annonce];
   const un = (v) => (Array.isArray(v) ? v[0] : v) ?? "";
   const f = {
@@ -92,6 +94,17 @@ export default async function Profil({ searchParams }) {
               Voir mon profil public →
             </Link>
           </div>
+          {profil.est_admin && (
+            <div className="fiche-profil__admin">
+              <Link href="/admin/signalements" className="bouton bouton--secondaire">
+                Signalements
+                {signalementsOuverts > 0 && <span className="pastille pastille--puce">{signalementsOuverts}</span>}
+              </Link>
+              <Link href="/admin/meteo" className="bouton bouton--secondaire">
+                Relecture météo
+              </Link>
+            </div>
+          )}
           <form action={deconnecter} className="seulement-ordi">
             <button type="submit" className="bouton bouton--danger" style={{ width: "100%" }}>
               Me déconnecter

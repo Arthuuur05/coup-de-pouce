@@ -1,3 +1,4 @@
+import Signaler from "../signalements/Signaler";
 import Link from "next/link";
 import Etiquette from "../ui/Etiquette";
 import Initiale from "../ui/Initiale";
@@ -121,6 +122,7 @@ export default function FicheAnnonce({ annonce, moi, favori = false, maDemande =
             <CopierLien />
           </div>
         )}
+        {!moi && <Signaler cible="annonce" id={annonce.id} />}
         <Bouton href="/annonces" variante="secondaire">
           ← Toutes les annonces
         </Bouton>
