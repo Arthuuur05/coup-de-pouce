@@ -8,7 +8,7 @@ import { MESSAGE_MAX } from "../../lib/demandes";
 
 // « Demander le contact » sur une annonce, avec un petit message facultatif.
 // action : demanderContact.bind(null, idAnnonce). sansCoordonnees : je n'ai encore rien rempli.
-export default function FormDemande({ action, prenom, sansCoordonnees }) {
+export default function FormDemande({ action, prenom, sansCoordonnees, bouton = "Demander le contact" }) {
   const [etat, envoyer, enCours] = useActionState(action, {});
   const [message, setMessage] = useState(etat.message ?? "");
   return (
@@ -33,7 +33,7 @@ export default function FormDemande({ action, prenom, sansCoordonnees }) {
         </Message>
       )}
       <button type="submit" className="bouton bouton--accent" disabled={enCours}>
-        {enCours ? "Envoi…" : "Demander le contact"}
+        {enCours ? "Envoi…" : bouton}
       </button>
     </form>
   );

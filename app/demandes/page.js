@@ -66,7 +66,7 @@ export default async function Demandes({ searchParams }) {
           </EtatVide>
         ) : (
           <EtatVide titre="Aucune demande envoyée">
-            <p style={{ margin: "0 0 12px" }}>Trouve une annonce qui te plaît et touche « Demander le contact ».</p>
+            <p style={{ margin: "0 0 12px" }}>Trouve une annonce qui te plaît et touche « Demander le contact » ou « Je peux t'aider ».</p>
             <Bouton href="/annonces" variante="accent">
               Voir les annonces
             </Bouton>
