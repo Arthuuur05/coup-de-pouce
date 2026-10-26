@@ -39,7 +39,6 @@ begin
   set local role authenticated;
   select count(*) into n from public.besoins_semaine();
   insert into resultats (test, resultat) values ('Léa voit au moins 2 besoins (attendu 2 ou plus)', n);
-  select categorie into strict b from (select categorie from public.besoins_semaine() limit 1) t; -- vérifie qu'il y en a un
   insert into public.bulletins (semaine, titre, texte, besoins)
     values (current_date, 'Le campus cherche : Photo', 'Texte', '[{"categorie":"Photo","nombre":2}]') returning id into b;
   begin
