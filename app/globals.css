@@ -1137,6 +1137,7 @@ a.demande__titre:hover { color: var(--rouge); }
 @media (min-width: 960px) {
   .chiffres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .deux-barres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; align-items: start; }
+}
 
 /* ——— Lot 13 : alertes ——— */
 .alerte { justify-content: space-between; }
