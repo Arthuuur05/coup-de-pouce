@@ -27,7 +27,7 @@ export default function MenuHaut({ actif, prenom, photo, enAttente = 0, nonLues 
           >
             {label}
             {nom === "demandes" && enAttente > 0 && (
-              <span className="pastille" aria-label={`${enAttente} en attente`}>
+              <span className="pastille" aria-label={`${enAttente} à voir`}>
                 {enAttente}
               </span>
             )}

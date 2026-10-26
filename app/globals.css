@@ -1104,3 +1104,13 @@ a.demande__titre:hover { color: var(--rouge); }
 .signaler summary:focus-visible { outline: 3px solid var(--rouge); outline-offset: 2px; }
 .signaler__formulaire { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-width: 480px; }
 .fiche-profil__admin { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+
+/* ——— Lot 11 : messagerie ——— */
+.messagerie { display: flex; flex-direction: column; gap: 10px; max-width: 720px; }
+.messagerie__profil { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+.messagerie__ecrire { display: flex; flex-direction: column; gap: 8px; max-width: 720px; }
+.bulle { align-self: flex-start; max-width: 85%; padding: 10px 14px; background: var(--blanc); border: 2px solid var(--noir); }
+.bulle--moi { align-self: flex-end; background: var(--noir); color: var(--blanc); }
+.bulle--moi .carte__date { color: var(--rouge-clair); }
+.bulle__texte { margin: 0 0 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.notification .pastille { margin-left: auto; flex-shrink: 0; }
