@@ -103,6 +103,9 @@ export default async function Profil({ searchParams }) {
               <Link href="/admin/meteo" className="bouton bouton--secondaire">
                 Relecture météo
               </Link>
+              <Link href="/admin/stats" className="bouton bouton--secondaire">
+                Statistiques
+              </Link>
             </div>
           )}
           <form action={deconnecter} className="seulement-ordi">
