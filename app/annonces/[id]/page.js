@@ -8,7 +8,10 @@ import { chargerMaDemande, chargerMesCoordonnees, compterDemandesAnnonce } from 
 import { aDesCoordonnees } from "../../../lib/demandes";
 import { TYPES, MAX_EN_LIGNE } from "../../../lib/annonces";
 
-export const metadata = { title: "Annonce · Coup de Pouce" };
+export async function generateMetadata({ params }) {
+  const annonce = await chargerAnnonce((await params).id);
+  return { title: `${annonce?.titre ?? "Annonce"} · Coup de Pouce` };
+}
 
 const MESSAGES = {
   publiee: "Ton annonce est en ligne pour 30 jours.",

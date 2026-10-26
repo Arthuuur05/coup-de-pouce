@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Etiquette from "../ui/Etiquette";
+import BoutonAction from "../ui/BoutonAction";
 import Initiale from "../ui/Initiale";
 import Coordonnees from "./Coordonnees";
 import FormAvis from "../competences/FormAvis";
@@ -70,14 +71,14 @@ export default function CarteDemande({ demande: d, avisDonne = false, competence
       {recue && d.statut === "en_attente" && (
         <div className="demande__boutons">
           <form action={repondreDemande.bind(null, d.id, "acceptee")}>
-            <button type="submit" className="bouton bouton--accent">
+            <BoutonAction className="bouton bouton--accent" enCours="Envoi…">
               Accepter
-            </button>
+            </BoutonAction>
           </form>
           <form action={repondreDemande.bind(null, d.id, "refusee")}>
-            <button type="submit" className="bouton bouton--secondaire">
+            <BoutonAction className="bouton bouton--secondaire" confirmer="Refuser cette demande ? Cette personne ne verra pas tes coordonnées.">
               Refuser
-            </button>
+            </BoutonAction>
           </form>
         </div>
       )}
@@ -88,23 +89,23 @@ export default function CarteDemande({ demande: d, avisDonne = false, competence
       )}
       {recue && d.statut === "acceptee" && (
         <form action={repondreDemande.bind(null, d.id, "retiree")}>
-          <button type="submit" className="bouton bouton--danger demande__petit">
+          <BoutonAction className="bouton bouton--danger demande__petit" confirmer="Retirer ton accord ? Vos coordonnées seront de nouveau cachées.">
             Retirer mon accord
-          </button>
+          </BoutonAction>
         </form>
       )}
       {!recue && d.statut === "acceptee" && (
         <form action={repondreDemande.bind(null, d.id, "retiree", true)}>
-          <button type="submit" className="bouton bouton--danger demande__petit">
+          <BoutonAction className="bouton bouton--danger demande__petit" confirmer="Ne plus partager tes coordonnées avec cette personne ?">
             Ne plus partager mes coordonnées
-          </button>
+          </BoutonAction>
         </form>
       )}
       {!recue && d.statut === "en_attente" && (
         <form action={annulerDemande.bind(null, d.id, "/demandes?onglet=envoyees&annulee=1")}>
-          <button type="submit" className="bouton bouton--secondaire demande__petit">
+          <BoutonAction className="bouton bouton--secondaire demande__petit" confirmer="Annuler ta demande ?">
             Annuler ma demande
-          </button>
+          </BoutonAction>
         </form>
       )}
       {!recue && d.statut === "refusee" && (

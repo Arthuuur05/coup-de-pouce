@@ -7,6 +7,7 @@ import CarteAnnonce from "../../components/ui/CarteAnnonce";
 import Bouton from "../../components/ui/Bouton";
 import Message from "../../components/ui/Message";
 import PucesFiltre from "../../components/ui/PucesFiltre";
+import BoutonAction from "../../components/ui/BoutonAction";
 import FormProfil from "../../components/compte/FormProfil";
 import FormPhotoProfil from "../../components/compte/FormPhotoProfil";
 import { FormMotDePasse, FormEmail } from "../../components/compte/FormSecurite";
@@ -159,9 +160,9 @@ export default async function Profil({ searchParams }) {
                   />
                   {expireBientot(a) && (
                     <form action={remettreEnLigne.bind(null, a.id, "profil")}>
-                      <button type="submit" className="bouton bouton--accent fil__prolonger">
+                      <BoutonAction className="bouton bouton--accent fil__prolonger" enCours="Prolongation…">
                         Prolonger de 30 jours
-                      </button>
+                      </BoutonAction>
                     </form>
                   )}
                 </div>

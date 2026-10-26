@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import EcranConnecte from "../../components/ui/EcranConnecte";
 import EtatVide from "../../components/ui/EtatVide";
+import BoutonAction from "../../components/ui/BoutonAction";
 import PucesFiltre from "../../components/ui/PucesFiltre";
 import Initiale from "../../components/ui/Initiale";
 import { profilConnecte } from "../../lib/profil";
@@ -39,11 +40,11 @@ export default async function Notifications({ searchParams }) {
           <div className="rangee">
             {nonLues > 0 && (
               <form action={toutMarquerLu}>
-                <button className="bouton">Tout marquer comme lu</button>
+                <BoutonAction className="bouton" enCours="…">Tout marquer comme lu</BoutonAction>
               </form>
             )}
             <form action={toutEffacer}>
-              <button className="bouton">Tout effacer</button>
+              <BoutonAction className="bouton" confirmer="Effacer toutes tes notifications ?">Tout effacer</BoutonAction>
             </form>
           </div>
           {affichees.length === 0 && <EtatVide titre="Tout est lu">Aucune notification non lue.</EtatVide>}
