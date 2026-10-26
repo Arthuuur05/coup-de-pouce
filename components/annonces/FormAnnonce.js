@@ -5,14 +5,16 @@ import Champ from "../ui/Champ";
 import Message from "../ui/Message";
 import CarteAnnonce from "../ui/CarteAnnonce";
 import ChampPhoto from "../ui/ChampPhoto";
+import AideRedaction from "./AideRedaction";
 import { TYPES, CATEGORIES, LIMITES } from "../../lib/annonces";
 
 const VIDE = { type: "", categorie: "", titre: "", description: "", contrepartie: "", quand: "" };
 
 // Publier ou modifier une annonce, avec l'aperçu de la carte qui se met à jour en direct.
 // action : publierAnnonce, ou modifierAnnonce.bind(null, id). signature : « Léa · Design M1 ».
+// aideRedaction : montre « Un coup de main pour rédiger » (à la publication seulement).
 // photo : adresse de la photo déjà enregistrée (modification). auteur : { prenom, photoUrl } pour l'aperçu.
-export default function FormAnnonce({ action, annonce, photo, auteur, signature, boutonTexte = "Publier mon annonce" }) {
+export default function FormAnnonce({ action, annonce, photo, auteur, signature, boutonTexte = "Publier mon annonce", aideRedaction = false, campusMoi = "" }) {
   const [etat, envoyer, enCours] = useActionState(action, { valeurs: { ...VIDE, ...annonce } });
   const [v, setV] = useState(etat.valeurs);
   const [apercuPhoto, setApercuPhoto] = useState(photo ?? null);
@@ -30,6 +32,8 @@ export default function FormAnnonce({ action, annonce, photo, auteur, signature,
     <div className="publier">
       <form id="form-annonce" onSubmit={soumettre} className="formulaire" noValidate>
         {etat.message && <Message>{etat.message}</Message>}
+
+        {aideRedaction && <AideRedaction valeurs={v} appliquer={(champs) => setV((avant) => ({ ...avant, ...champs }))} campusMoi={campusMoi} />}
 
         <fieldset className="choix-type" aria-describedby={e.type ? "type-erreur" : undefined}>
           <legend className="champ__label">Tu proposes ou tu cherches ?</legend>
