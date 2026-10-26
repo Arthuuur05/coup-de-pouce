@@ -18,6 +18,8 @@ L'appli doit ressembler à une affiche collée dans un couloir d'école : titres
 | Succès | `--vert` / `--vert-fond` | `#1F6B3A` / `#DCEFD9` | statut « Acceptée » |
 | Attente | `--ambre` / `--ambre-fond` | `#7A4D00` / `#FBE7C2` | statut « En attente » |
 
+Couleurs des catégories (`--cat-photo`, `--cat-video`…) : dix teintes douces « papier d'affiche » (pêche, mauve, bleu ciel, rose, jaune, vert tilleul, kraft, menthe, pervenche, gris). Elles ne servent **que** au fond de l'étiquette de catégorie et au liseré de 8 px en haut de la carte : jamais pour un texte, un bouton ou un fond de page.
+
 Règles : une seule couleur d'accent (le rouge). Pas de dégradé, pas de néon, pas de fond sombre plein écran.
 
 ## Typographie
@@ -43,8 +45,8 @@ Tailles : titre d'écran 54 px · titre de carte 26 px · texte 15 px · légend
 | Composant | Fichier | Variantes |
 | --- | --- | --- |
 | Bouton | `Bouton.js` | `principal` (noir), `secondaire` (blanc contouré), `accent` (rouge), `danger` |
-| Étiquette | `Etiquette.js` | `propose` (rouge), `cherche` (contour), `categorie`, `attente`, `acceptee`, `refusee` |
-| Carte d'annonce | `CarteAnnonce.js` | ombre noire ou rouge, inclinaison alternée ; `href` rend toute la carte cliquable, `extrait` ajoute le début de la description, `etat` remplace la date par « En ligne » (vert), « C'est réglé » (neutre) ou « Expirée » (rouge) |
+| Étiquette | `Etiquette.js` | `propose` (rouge), `cherche` (contour), `categorie`, `attente`, `acceptee`, `refusee` ; `couleur` donne le fond d'une catégorie |
+| Carte d'annonce | `CarteAnnonce.js` | ombre noire ou rouge, inclinaison alternée ; `href` rend toute la carte cliquable, `extrait` ajoute le début de la description, `etat` remplace la date par « En ligne » (vert), « Expire dans 2 j » (ambre), « C'est réglé » (neutre) ou « Expirée » (rouge) ; `photo` en haut de la carte ; `avatar` (photo ou initiale de 24 px) ; `favori` + `actionFavori` pour le cœur ; `eteinte` grise une annonce plus disponible |
 | Champ | `Champ.js` | texte, menu déroulant (`options`), zone de texte (`multiligne`), compteur « 12/60 » (`compteur`), avec aide ou erreur |
 | Bandeau météo | `BandeauMeteo.js` | fond noir, ombre rouge |
 | Menu du bas | `MenuBas.js` | téléphone : 5 onglets : Annonces, Météo, Publier (centre), Demandes, Profil |
@@ -54,7 +56,9 @@ Tailles : titre d'écran 54 px · titre de carte 26 px · texte 15 px · légend
 | Message | `Message.js` | `erreur` (contour et ombre rouges), `ok` (vert) |
 | Puce de filtre | classe `.puce` (dans `components/annonces/Filtres.js`) | blanche contourée, noire quand elle est active |
 | Choix du type | classe `.choix-type` (dans `FormAnnonce.js`) | deux gros boutons, le choisi passe en rouge avec une ombre noire |
-| Initiale | `Initiale.js` | carré noir 40 px (en-tête), grand 72 px avec ombre rouge (profil) |
+| Initiale | `Initiale.js` | photo de profil carrée, ou carré noir avec l'initiale ; 40 px (en-tête), grand 72 px avec ombre rouge (profil), petit 24 px (cartes) |
+| Choix de photo | `ChampPhoto.js` | aperçu, « Choisir / Changer / Retirer » ; réduit la photo dans le navigateur (1 600 px, ou carré 512 px pour le profil) |
+| Cœur | classe `.coeur` (dans `CarteAnnonce.js`) | contour noir, plein rouge quand l'annonce est en favori |
 
 La page `/design` montre tous les composants : c'est la référence visuelle.
 

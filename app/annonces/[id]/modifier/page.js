@@ -23,6 +23,8 @@ export default async function ModifierAnnonce({ params }) {
       <FormAnnonce
         action={modifierAnnonce.bind(null, id)}
         annonce={{ type, categorie, titre, description, contrepartie, quand }}
+        photo={annonce.photoUrl}
+        auteur={annonce.auteurProfil}
         signature={signature(profil)}
         boutonTexte="Enregistrer"
       />

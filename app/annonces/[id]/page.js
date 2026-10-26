@@ -3,7 +3,7 @@ import EcranConnecte from "../../../components/ui/EcranConnecte";
 import Message from "../../../components/ui/Message";
 import FicheAnnonce from "../../../components/annonces/FicheAnnonce";
 import { profilConnecte } from "../../../lib/profil";
-import { chargerAnnonce } from "../../../lib/donnees-annonces";
+import { chargerAnnonce, chargerIdsFavoris } from "../../../lib/donnees-annonces";
 import { TYPES, MAX_EN_LIGNE } from "../../../lib/annonces";
 
 export const metadata = { title: "Annonce · Coup de Pouce" };
@@ -24,6 +24,7 @@ export default async function DetailAnnonce({ params, searchParams }) {
   if (!annonce) notFound();
 
   const succes = Object.keys(MESSAGES).find((cle) => retour[cle]);
+  const favoris = await chargerIdsFavoris();
 
   return (
     <EcranConnecte titre={TYPES[annonce.type]} onglet="annonces">
@@ -33,7 +34,7 @@ export default async function DetailAnnonce({ params, searchParams }) {
           Tu as déjà {MAX_EN_LIGNE} annonces en ligne. Marque-en une « C'est réglé » avant de remettre celle-ci en ligne.
         </Message>
       )}
-      <FicheAnnonce annonce={annonce} moi={annonce.auteur === profil.id} />
+      <FicheAnnonce annonce={annonce} moi={annonce.auteur === profil.id} favori={favoris.has(annonce.id)} />
     </EcranConnecte>
   );
 }
