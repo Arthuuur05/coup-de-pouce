@@ -1123,3 +1123,84 @@ a.demande__titre:hover { color: var(--rouge); }
 
 /* ——— Lot 13 : alertes ——— */
 .alerte { justify-content: space-between; }
+
+/* ——— Animations fun, suite : messagerie, notifications, signalement, profil, filtres, champs ——— */
+@keyframes glisse-gauche {
+  from { opacity: 0; translate: -24px 0; scale: 0.96; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+@keyframes glisse-droite {
+  from { opacity: 0; translate: 24px 0; scale: 0.96; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+@keyframes sonne {
+  0%, 12%, 100% { rotate: 0deg; }
+  3% { rotate: 16deg; }
+  6% { rotate: -14deg; }
+  9% { rotate: 8deg; }
+}
+@keyframes brille {
+  0%, 100% { scale: 1; opacity: 1; }
+  50% { scale: 1.25; opacity: 0.7; }
+}
+@keyframes clignote {
+  0%, 100% { border-left-color: var(--rouge); }
+  50% { border-left-color: var(--rouge-clair); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Messagerie : les bulles arrivent de leur côté, les premières en cascade */
+  .bulle { animation: glisse-gauche 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .bulle--moi { animation-name: glisse-droite; }
+  .messagerie > :nth-child(2) { animation-delay: 0.05s; }
+  .messagerie > :nth-child(3) { animation-delay: 0.1s; }
+  .messagerie > :nth-child(n + 4) { animation-delay: 0.15s; }
+  .messagerie__ecrire { animation: monte 0.4s 0.2s ease-out both; }
+
+  /* Notifications : elles défilent une à une ; les nouvelles clignotent doucement, la cloche sonne */
+  .notification { animation: glisse-gauche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; transition: translate 0.12s ease, box-shadow 0.12s ease; }
+  .notification:nth-child(2) { animation-delay: 0.05s; }
+  .notification:nth-child(3) { animation-delay: 0.1s; }
+  .notification:nth-child(4) { animation-delay: 0.15s; }
+  .notification:nth-child(n + 5) { animation-delay: 0.2s; }
+  a.notification:hover { translate: 4px 0; box-shadow: 4px 4px 0 var(--noir); }
+  .notification--nouvelle { animation-name: glisse-gauche, clignote; animation-duration: 0.4s, 2.4s; animation-iteration-count: 1, 3; animation-delay: 0s, 0.6s; }
+  .cloche:has(.pastille) svg { transform-origin: 50% 10%; animation: sonne 5s 1s ease-in-out infinite; }
+
+  /* Signalement : le formulaire se déplie en tombant */
+  .signaler[open] .signaler__formulaire { animation: tombe 0.3s ease-out both; }
+
+  /* Filtres : la puce choisie fait un petit saut, le compteur respire */
+  .puce--active { animation: saute 0.4s ease-out; }
+  .puce:hover .puce__nombre { animation: brille 0.6s ease-in-out; }
+  .choix-type__option { transition: translate 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease; }
+  .choix-type__option:hover { translate: 0 -2px; }
+  .choix-type__option--choisi { animation: bat 0.35s ease-out; }
+
+  /* Profil : photo qui se penche, coups de pouce et note qui apparaissent, compétences qui se soulèvent */
+  .fiche-profil .initiale { transition: rotate 0.2s ease; }
+  .fiche-profil .initiale:hover { rotate: -6deg; }
+  .fiche-profil__coups { animation: colle 0.5s 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; transform-origin: left center; }
+  .fiche-profil__note .etoiles svg { animation: brille 1.2s ease-in-out 2; }
+  .fiche-profil__note .etoiles svg:nth-child(2) { animation-delay: 0.1s; }
+  .fiche-profil__note .etoiles svg:nth-child(3) { animation-delay: 0.2s; }
+  .fiche-profil__note .etoiles svg:nth-child(4) { animation-delay: 0.3s; }
+  .fiche-profil__note .etoiles svg:nth-child(5) { animation-delay: 0.4s; }
+  .competence { transition: translate 0.12s ease, box-shadow 0.12s ease; }
+  .competence:hover { translate: 0 -2px; box-shadow: 2px 2px 0 var(--noir); }
+  .competence--choisie { animation: colle 0.3s ease-out both; }
+  .avis__item { animation: affiche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .avis__item:nth-child(2) { animation-delay: 0.08s; }
+  .avis__item:nth-child(n + 3) { animation-delay: 0.16s; }
+
+  /* Champs : l'ombre se creuse quand on écrit */
+  .champ__input { transition: box-shadow 0.15s ease, translate 0.15s ease; }
+  .champ__input:focus { box-shadow: 4px 4px 0 var(--rouge); translate: -1px -1px; }
+
+  /* Coordonnées : un trait rouge se dessine sous les liens */
+  .coordonnees__liste a { background: linear-gradient(var(--rouge), var(--rouge)) left bottom / 0 3px no-repeat; transition: background-size 0.25s ease; text-decoration: none; }
+  .coordonnees__liste a:hover, .coordonnees__liste a:focus-visible { background-size: 100% 3px; }
+
+  /* Bandeau du haut : il glisse comme une banderole */
+  .bandeau-haut { animation: tombe 0.4s ease-out both; }
+}
