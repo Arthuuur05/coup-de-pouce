@@ -6,11 +6,18 @@ import FormAnnonce from "../../components/annonces/FormAnnonce";
 import { profilConnecte } from "../../lib/profil";
 import { chargerMesAnnonces, adresseMaPhoto } from "../../lib/donnees-annonces";
 import { publierAnnonce } from "../../lib/actions/annonces";
-import { estEnLigne, signature, MAX_EN_LIGNE } from "../../lib/annonces";
+import { estEnLigne, signature, MAX_EN_LIGNE, TYPES, CATEGORIES } from "../../lib/annonces";
 
 export const metadata = { title: "Publier · Coup de Pouce" };
 
-export default async function Publier() {
+// « Je peux aider » arrive ici avec le type et la catégorie déjà choisis.
+const prereglage = ({ type, categorie }) => ({
+  ...(TYPES[type] && { type }),
+  ...(CATEGORIES.includes(categorie) && { categorie }),
+});
+
+export default async function Publier({ searchParams }) {
+  const reglages = await searchParams;
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/publier");
   const enLigne = (await chargerMesAnnonces(profil.id)).filter(estEnLigne).length;
@@ -24,7 +31,7 @@ export default async function Publier() {
           <Link href="/profil#mes-annonces">ton profil</Link>.
         </Message>
       ) : (
-        <FormAnnonce action={publierAnnonce} signature={signature(profil)} auteur={{ prenom: profil.prenom, photoUrl: photo }} />
+        <FormAnnonce action={publierAnnonce} annonce={prereglage(reglages)} signature={signature(profil)} auteur={{ prenom: profil.prenom, photoUrl: photo }} />
       )}
     </EcranConnecte>
   );
