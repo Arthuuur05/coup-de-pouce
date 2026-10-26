@@ -1,8 +1,9 @@
 -- Clôture du lot 5 : le demandeur peut aussi retirer l'accord, et 10 demandes en attente au plus à la fois.
 
--- Le demandeur peut lui aussi modifier sa demande… mais le déclencheur ne lui laisse que « retirer l'accord ».
+-- Le demandeur peut lui aussi modifier sa demande une fois qu'elle a reçu une réponse… mais le déclencheur
+-- ne lui laisse que « retirer l'accord ». Tant qu'elle est en attente, il ne peut que l'annuler.
 alter policy "Répondre aux demandes reçues" on public.demandes
-  using (auteur = (select auth.uid()) or demandeur = (select auth.uid()))
+  using (auteur = (select auth.uid()) or (demandeur = (select auth.uid()) and statut <> 'en_attente'))
   with check (auteur = (select auth.uid()) or demandeur = (select auth.uid()));
 alter policy "Répondre aux demandes reçues" on public.demandes rename to "Répondre à une demande reçue ou retirer son accord";
 
