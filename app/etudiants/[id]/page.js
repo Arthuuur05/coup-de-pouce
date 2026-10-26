@@ -10,24 +10,27 @@ import Signaler from "../../../components/signalements/Signaler";
 import { profilConnecte } from "../../../lib/profil";
 import { chargerProfilPublic, chargerIdsFavoris } from "../../../lib/donnees-annonces";
 import { basculerFavori } from "../../../lib/actions/annonces";
-import { chargerCompetences, chargerAvis, chargerCv } from "../../../lib/donnees-competences";
+import { chargerCompetences, chargerAvis, chargerCv, chargerCoupsDePouce } from "../../../lib/donnees-competences";
 import { dateRelative } from "../../../lib/annonces";
 
 export const metadata = { title: "Profil · Coup de Pouce" };
 
 // Ce que les autres étudiants voient de quelqu'un : photo, prénom, filière, année, campus et annonces en ligne.
 // Jamais le nom de famille, l'e-mail ni les annonces réglées ou expirées.
-export default async function ProfilPublic({ params }) {
+export default async function ProfilPublic({ params, searchParams }) {
   const { id } = await params;
+  const retour = await searchParams;
   const moi = await profilConnecte();
   if (!moi) redirect(`/connexion?suite=/etudiants/${id}`);
-  const [donnees, favoris, competences, avis, cv] = await Promise.all([
+  const [donnees, favoris, competences, coups, cv] = await Promise.all([
     chargerProfilPublic(id),
     chargerIdsFavoris(),
     chargerCompetences(id),
-    chargerAvis(id),
+    chargerCoupsDePouce(id),
     chargerCv(id),
   ]);
+  const competenceChoisie = competences.find((c) => c.id === retour.competence);
+  const [avis, tousLesAvis] = await Promise.all([chargerAvis(id, competenceChoisie?.id), competenceChoisie ? chargerAvis(id) : null]);
   if (!donnees) notFound();
   const { profil, annonces } = donnees;
   const cEstMoi = id === moi.id;
@@ -46,9 +49,14 @@ export default async function ProfilPublic({ params }) {
             )}
             {profil.campus && <div style={{ fontSize: 14 }}>Campus {profil.campus}</div>}
             {!cEstMoi && <Signaler cible="profil" id={id} />}
-            {avis.total > 0 && (
+            {(tousLesAvis ?? avis).total > 0 && (
               <div className="fiche-profil__note">
-                <Etoiles note={avis.moyenne} taille={16} /> {String(avis.moyenne).replace(".", ",")} ({avis.total})
+                <Etoiles note={(tousLesAvis ?? avis).moyenne} taille={16} /> {String((tousLesAvis ?? avis).moyenne).replace(".", ",")} ({(tousLesAvis ?? avis).total})
+              </div>
+            )}
+            {coups > 0 && (
+              <div className="fiche-profil__coups">
+                🤝 {coups} coup{coups > 1 ? "s" : ""} de pouce rendu{coups > 1 ? "s" : ""}
               </div>
             )}
           </div>
@@ -58,7 +66,13 @@ export default async function ProfilPublic({ params }) {
           <div className="titre-section">
             <h2>{cEstMoi ? "Mes compétences" : "Ses compétences"}</h2>
           </div>
-          <ListeCompetences competences={competences} vide={cEstMoi ? "Ajoute tes compétences depuis ton profil." : "Aucune compétence indiquée."} />
+          <ListeCompetences
+            competences={competences}
+            vide={cEstMoi ? "Ajoute tes compétences depuis ton profil." : "Aucune compétence indiquée."}
+            lien={(c) => (competenceChoisie?.id === c.id ? `/etudiants/${id}#avis` : `/etudiants/${id}?competence=${c.id}#avis`)}
+            actif={competenceChoisie?.id}
+          />
+          {competences.length > 0 && <p className="champ__aide" style={{ margin: 0 }}>Touche une compétence pour voir les avis qui la confirment.</p>}
           {cv && (
             <a href={cv.adresse} target="_blank" rel="noreferrer" className="bouton bouton--secondaire" style={{ alignSelf: "flex-start" }}>
               {cEstMoi ? "Mon CV" : `Télécharger son CV`} (PDF)
@@ -96,15 +110,20 @@ export default async function ProfilPublic({ params }) {
             </div>
           )}
 
-          <div className="titre-section">
-            <h2>Avis</h2>
+          <div className="titre-section" id="avis">
+            <h2>{competenceChoisie ? `Avis · ${competenceChoisie.nom}` : "Avis"}</h2>
             {avis.total > 0 && <span className="carte__date">{avis.total}</span>}
+            {competenceChoisie && (
+              <Link href={`/etudiants/${id}#avis`} className="filtres__effacer">
+                Voir tous les avis
+              </Link>
+            )}
           </div>
           <ListeAvis
             resume={avis}
             moiId={moi.id}
             suite={`/etudiants/${id}`}
-            vide={cEstMoi ? "Pas encore d'avis." : "Pas encore d'avis. Après un coup de main, tu pourras laisser le premier depuis tes demandes."}
+            vide={competenceChoisie ? "Aucun avis ne confirme cette compétence pour l'instant." : cEstMoi ? "Pas encore d'avis." : "Pas encore d'avis. Après un coup de main, tu pourras laisser le premier depuis tes demandes."}
           />
         </div>
       </div>
