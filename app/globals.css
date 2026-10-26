@@ -1028,7 +1028,6 @@ a.demande__titre:hover { color: var(--rouge); }
   0% { opacity: 0.8; scale: 0.4; }
   100% { opacity: 0; scale: 2.2; }
 }
-}
 
 @media (prefers-reduced-motion: no-preference) {
   /* Demande acceptée : confettis qui retombent, tampon vert, coordonnées qui sautent aux yeux */
