@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Initiale from "./Initiale";
 import { IconePlus } from "./Icones";
+import LienCloche from "./LienCloche";
 
 const ONGLETS = [
   ["annonces", "/annonces", "Annonces"],
@@ -10,7 +11,7 @@ const ONGLETS = [
 ];
 
 // Menu des écrans connectés sur ordinateur (le téléphone garde le menu du bas).
-export default function MenuHaut({ actif, prenom, photo, enAttente = 0 }) {
+export default function MenuHaut({ actif, prenom, photo, enAttente = 0, nonLues = 0 }) {
   return (
     <header className="menu-haut">
       <Link href="/annonces" className="logo">
@@ -36,6 +37,7 @@ export default function MenuHaut({ actif, prenom, photo, enAttente = 0 }) {
       <Link href="/publier" className="bouton bouton--accent">
         <IconePlus width={18} height={18} /> Publier
       </Link>
+      <LienCloche nonLues={nonLues} actif={actif === "notifications"} />
       <Link href="/profil" aria-label="Mon profil" className="menu-haut__profil">
         <Initiale prenom={prenom} photo={photo} />
       </Link>
