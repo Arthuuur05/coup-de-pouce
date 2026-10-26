@@ -1,3 +1,4 @@
+import Link from "next/link";
 import EcranConnecte from "../../components/ui/EcranConnecte";
 import EtatVide from "../../components/ui/EtatVide";
 import Bouton from "../../components/ui/Bouton";
@@ -64,6 +65,9 @@ export default async function Annonces({ searchParams }) {
     <EcranConnecte titre="Annonces" sousTitre="Ce que le campus propose et cherche." onglet="annonces">
       {alerte && <Message type={alerte[0]}>{alerte[1]}</Message>}
       <Filtres filtres={filtres} />
+      <p className="champ__aide" style={{ margin: 0 }}>
+        Pas sûr de ce que tu cherches ? <Link href="/assistant">Demande à l'assistant</Link>.
+      </p>
       {erreur && <Message>Les annonces n'ont pas pu être chargées. Recharge la page dans un instant.</Message>}
       {!erreur && annonces.length > 0 && (
         <p className="fil__compte">

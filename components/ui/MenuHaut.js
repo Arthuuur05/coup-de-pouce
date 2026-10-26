@@ -7,6 +7,7 @@ const ONGLETS = [
   ["annonces", "/annonces", "Annonces"],
   ["meteo", "/meteo", "Météo du campus"],
   ["demandes", "/demandes", "Demandes"],
+  ["assistant", "/assistant", "Assistant"],
   ["profil", "/profil", "Profil"],
 ];
 
