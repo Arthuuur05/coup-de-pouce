@@ -23,7 +23,7 @@ export default function EcranAffiche({ bandeau, titre, manuscrit, sousTitre, chi
             <CarteAnnonce index={1} type="cherche" categorie="Covoit" titre="Trajet vers Lyon vendredi soir" auteur="Léa · L3" date="hier" />
           </div>
         </aside>
-        <main className="ecran-affiche__contenu">{children}</main>
+        <main id="contenu" className="ecran-affiche__contenu">{children}</main>
       </div>
     </>
   );

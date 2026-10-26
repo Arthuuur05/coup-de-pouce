@@ -15,7 +15,7 @@ export default async function EcranConnecte({ titre, sousTitre, onglet, children
   return (
     <>
       <MenuHaut actif={onglet} prenom={profil?.prenom} photo={photo} enAttente={enAttente} nonLues={nonLues} />
-      <main className="page">
+      <main id="contenu" className="page">
         <div className="entete seulement-telephone">
           <Link href="/annonces" className="logo">
             Coup de Pouce<span>.</span>
