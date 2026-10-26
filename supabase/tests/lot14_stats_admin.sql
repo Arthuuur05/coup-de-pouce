@@ -26,6 +26,8 @@ begin
 
   -- Arthur (admin) lit, publie, relit
   reset role;
+  -- Libère la limite de 5 annonces en ligne : les annonces existantes d'Arthur sont retirées, mais tout est annulé à la fin.
+  delete from public.annonces where auteur = arthur;
   perform set_config('request.jwt.claims', json_build_object('sub', arthur, 'role', 'authenticated')::text, true);
   set local role authenticated;
   avant := public.stats_admin();
