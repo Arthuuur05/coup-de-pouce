@@ -44,6 +44,8 @@ begin
 
   -- Arthur publie : une annonce qui correspond (Photo + portrait), une qui ne correspond pas
   reset role;
+  -- Libère la limite de 5 annonces en ligne : les annonces existantes d'Arthur sont retirées, mais tout est annulé à la fin.
+  delete from public.annonces where auteur = arthur;
   perform set_config('request.jwt.claims', json_build_object('sub', arthur, 'role', 'authenticated')::text, true);
   set local role authenticated;
   insert into public.alertes (categorie) values ('Photo'); -- l'alerte d'Arthur ne doit pas le prévenir de sa propre annonce
@@ -52,15 +54,15 @@ begin
   insert into public.annonces (type, categorie, titre, description)
     values ('propose', 'Photo', 'Séance portrait au campus', 'Je fais des portraits en extérieur.');
   insert into public.annonces (type, categorie, titre, description)
-    values ('propose', 'Logement', 'Chambre à louer', 'Une chambre meublée près du campus.');
+    values ('cherche', 'Cours et soutien', 'Cherche cours de maths', 'Un coup de main en analyse svp.');
 
   reset role;
   perform set_config('request.jwt.claims', json_build_object('sub', sirown, 'role', 'authenticated')::text, true);
   set local role authenticated;
   select count(*) into n from public.notifications where type = 'alerte' and titre = 'Séance portrait au campus';
   insert into resultats (test, resultat) values ('Sirown prévenu de l''annonce qui correspond, une seule fois malgré 2 alertes ? (attendu 1)', n);
-  select count(*) into n from public.notifications where type = 'alerte' and titre = 'Chambre à louer';
-  insert into resultats (test, resultat) values ('Sirown prévenu de l''annonce qui ne correspond pas (attendu 0, il n''a pas d''alerte Logement)', n);
+  select count(*) into n from public.notifications where type = 'alerte' and titre = 'Cherche cours de maths';
+  insert into resultats (test, resultat) values ('Sirown prévenu de l''annonce qui ne correspond pas (attendu 0, aucune de ses alertes ne correspond)', n);
   reset role;
   perform set_config('request.jwt.claims', json_build_object('sub', arthur, 'role', 'authenticated')::text, true);
   set local role authenticated;
