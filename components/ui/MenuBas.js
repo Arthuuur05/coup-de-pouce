@@ -20,7 +20,7 @@ export default function MenuBas({ actif = "annonces", enAttente = 0 }) {
         href="/demandes"
         className={`${lien("demandes")} menu-bas__demandes`}
         aria-current={courant("demandes")}
-        aria-label={enAttente ? `Demandes, ${enAttente} en attente` : "Demandes"}
+        aria-label={enAttente ? `Demandes, ${enAttente} à voir` : "Demandes"}
       >
         <IconeBulle />
         {enAttente > 0 && <span className="pastille" aria-hidden="true">{enAttente}</span>}

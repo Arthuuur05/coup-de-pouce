@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 // Écrans réservés aux personnes connectées.
-const PROTEGES = ["/annonces", "/etudiants", "/publier", "/demandes", "/notifications", "/meteo", "/profil", "/admin", "/nouveau-mot-de-passe"];
+const PROTEGES = ["/annonces", "/etudiants", "/publier", "/demandes", "/notifications", "/messages", "/meteo", "/profil", "/admin", "/nouveau-mot-de-passe"];
 // Écrans inutiles quand on est déjà connecté (l'accueil compris).
 const INVITES = ["/connexion", "/inscription", "/mot-de-passe-oublie"];
 
