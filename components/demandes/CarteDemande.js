@@ -3,7 +3,7 @@ import Etiquette from "../ui/Etiquette";
 import Initiale from "../ui/Initiale";
 import Coordonnees from "./Coordonnees";
 import { repondreDemande, annulerDemande } from "../../lib/actions/demandes";
-import { STATUTS } from "../../lib/demandes";
+import { statutAffiche } from "../../lib/demandes";
 import { TYPES, CLASSE_CATEGORIE, dateRelative } from "../../lib/annonces";
 
 // Une demande, reçue ou envoyée. Les boutons dépendent du sens et du statut ;
@@ -12,7 +12,7 @@ export default function CarteDemande({ demande: d }) {
   const recue = d.sens === "recue";
   const autre = d.autreProfil ?? {};
   const prenom = autre.prenom || "Un étudiant";
-  const statut = STATUTS[d.statut] ?? STATUTS.en_attente;
+  const statut = statutAffiche(d.statut, d.sens);
   const couleur = CLASSE_CATEGORIE[d.categorie] ?? "autre";
   const detail = [autre.filiere, autre.annee].filter(Boolean).join(" · ");
   return (
@@ -83,6 +83,13 @@ export default function CarteDemande({ demande: d }) {
           </button>
         </form>
       )}
+      {!recue && d.statut === "acceptee" && (
+        <form action={repondreDemande.bind(null, d.id, "retiree", true)}>
+          <button type="submit" className="bouton bouton--danger demande__petit">
+            Ne plus partager mes coordonnées
+          </button>
+        </form>
+      )}
       {!recue && d.statut === "en_attente" && (
         <form action={annulerDemande.bind(null, d.id, "/demandes?onglet=envoyees&annulee=1")}>
           <button type="submit" className="bouton bouton--secondaire demande__petit">
@@ -90,12 +97,17 @@ export default function CarteDemande({ demande: d }) {
           </button>
         </form>
       )}
-      {!recue && (d.statut === "refusee" || d.statut === "retiree") && (
+      {!recue && d.statut === "refusee" && (
         <p style={{ margin: 0 }}>{prenom} n'a pas donné suite. Il y a plein d'autres annonces sur le fil !</p>
       )}
-      {recue && (d.statut === "refusee" || d.statut === "retiree") && (
-        <p className="carte__date" style={{ margin: 0 }}>
+      {recue && d.statut === "refusee" && (
+        <p className="champ__aide" style={{ margin: 0 }}>
           {prenom} ne voit pas tes coordonnées.
+        </p>
+      )}
+      {d.statut === "retiree" && (
+        <p className="champ__aide" style={{ margin: 0 }}>
+          L'accord a été retiré : vos coordonnées sont de nouveau cachées.
         </p>
       )}
     </article>

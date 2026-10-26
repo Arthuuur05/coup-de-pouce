@@ -8,7 +8,8 @@ import CopierLien from "./CopierLien";
 import FormDemande from "../demandes/FormDemande";
 import Coordonnees from "../demandes/Coordonnees";
 import { marquerReglee, remettreEnLigne, supprimerAnnonce, basculerFavori } from "../../lib/actions/annonces";
-import { demanderContact, annulerDemande } from "../../lib/actions/demandes";
+import { demanderContact, annulerDemande, repondreDemande } from "../../lib/actions/demandes";
+import { texteBoutonContact } from "../../lib/demandes";
 import { TYPES, CLASSE_CATEGORIE, estEnLigne, etatAnnonce, dateRelative, joursRestants } from "../../lib/annonces";
 
 // La fiche d'une annonce : le texte à gauche, l'auteur et les actions à droite (en dessous sur téléphone).
@@ -135,15 +136,31 @@ function Contact({ annonce, prenom, maDemande, sansCoordonnees }) {
   if (!demande) {
     return (
       <div className="carte carte--ombre-noire demande-bloc">
-        <div className="demande-bloc__titre">Ça t'intéresse ?</div>
+        <div className="demande-bloc__titre">{annonce.type === "cherche" ? "Tu peux aider ?" : "Ça t'intéresse ?"}</div>
         <p style={{ margin: 0 }}>
           {nom} reçoit ta demande avec ton message. En cas d'accord, vous verrez chacun les coordonnées de l'autre.
         </p>
-        <FormDemande action={demanderContact.bind(null, annonce.id)} prenom={prenom} sansCoordonnees={sansCoordonnees} />
+        <FormDemande
+          action={demanderContact.bind(null, annonce.id)}
+          prenom={prenom}
+          sansCoordonnees={sansCoordonnees}
+          bouton={texteBoutonContact(annonce.type)}
+        />
       </div>
     );
   }
-  if (demande.statut === "acceptee") return <Coordonnees prenom={prenom} coordonnees={coordonnees} />;
+  if (demande.statut === "acceptee") {
+    return (
+      <>
+        <Coordonnees prenom={prenom} coordonnees={coordonnees} />
+        <form action={repondreDemande.bind(null, demande.id, "retiree", true)}>
+          <button type="submit" className="bouton bouton--danger">
+            Ne plus partager mes coordonnées
+          </button>
+        </form>
+      </>
+    );
+  }
   if (demande.statut === "en_attente") {
     return (
       <div className="carte carte--ombre-noire demande-bloc">
@@ -163,7 +180,11 @@ function Contact({ annonce, prenom, maDemande, sansCoordonnees }) {
   }
   return (
     <div className="carte carte--ombre-noire demande-bloc">
-      <p style={{ margin: 0 }}>{nom} n'a pas donné suite à ta demande pour cette annonce.</p>
+      <p style={{ margin: 0 }}>
+        {demande.statut === "retiree"
+          ? "L'accord a été retiré : vos coordonnées sont de nouveau cachées."
+          : `${nom} n'a pas donné suite à ta demande pour cette annonce.`}
+      </p>
     </div>
   );
 }
