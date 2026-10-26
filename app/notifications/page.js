@@ -7,9 +7,12 @@ import PucesFiltre from "../../components/ui/PucesFiltre";
 import Initiale from "../../components/ui/Initiale";
 import { profilConnecte } from "../../lib/profil";
 import { chargerMesNotifications } from "../../lib/donnees-notifications";
+import { chargerMesAlertes } from "../../lib/donnees-alertes";
+import { libelleAlerte, ALERTES_MAX } from "../../lib/alertes";
 import { NOTIFICATIONS } from "../../lib/notifications";
 import { dateRelative } from "../../lib/annonces";
 import { toutMarquerLu, toutEffacer } from "../../lib/actions/notifications";
+import { supprimerAlerte } from "../../lib/actions/alertes";
 
 export const metadata = { title: "Notifications · Coup de Pouce" };
 
@@ -17,7 +20,7 @@ export default async function Notifications({ searchParams }) {
   const retour = await searchParams;
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/notifications");
-  const notifications = await chargerMesNotifications();
+  const [notifications, alertes] = await Promise.all([chargerMesNotifications(), chargerMesAlertes()]);
   const nonLues = notifications.filter((n) => !n.lue_le).length;
   const seulementNonLues = retour.vue === "non-lues";
   const affichees = seulementNonLues ? notifications.filter((n) => !n.lue_le) : notifications;
@@ -66,6 +69,33 @@ export default async function Notifications({ searchParams }) {
             })}
           </ul>
         </>
+      )}
+      <div className="titre-section" id="mes-alertes">
+        <h2>Mes alertes</h2>
+        <span className="carte__date">
+          {alertes.length}/{ALERTES_MAX}
+        </span>
+      </div>
+      {alertes.length === 0 ? (
+        <EtatVide titre="Pas d'alerte">
+          <p style={{ margin: "0 0 12px" }}>Cherche quelque chose sur le fil, puis touche « Me prévenir » : tu seras notifié des nouvelles annonces qui correspondent.</p>
+          <Link href="/annonces" className="bouton bouton--secondaire">
+            Aller au fil
+          </Link>
+        </EtatVide>
+      ) : (
+        <ul className="notifications">
+          {alertes.map((a) => (
+            <li key={a.id} className="notification alerte">
+              <span className="notification__texte">{libelleAlerte(a)}</span>
+              <form action={supprimerAlerte.bind(null, a.id)}>
+                <BoutonAction className="bouton bouton--secondaire demande__petit" confirmer="Supprimer cette alerte ?">
+                  Supprimer
+                </BoutonAction>
+              </form>
+            </li>
+          ))}
+        </ul>
       )}
     </EcranConnecte>
   );
