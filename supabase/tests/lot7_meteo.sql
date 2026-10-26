@@ -19,7 +19,7 @@ begin
   insert into public.annonces (type, categorie, titre, description) values
     ('cherche', 'Photo', 'Photographe pour un gala', 'Je cherche quelqu''un pour mon gala.'),
     ('cherche', 'Photo', 'Photos de classe', 'Une photo de classe svp, merci.'),
-    ('cherche', 'Dev', 'Aide en Python', 'Bloqué sur un exercice de Python.');
+    ('cherche', 'Développement', 'Aide en Python', 'Bloqué sur un exercice de Python.');
   begin
     insert into public.bulletins (semaine, titre) values (current_date, 'Pirate');
     insert into resultats (test, resultat) values ('Sam (non admin) crée un bulletin (attendu : refusé)', 'ACCEPTÉ (problème)');
