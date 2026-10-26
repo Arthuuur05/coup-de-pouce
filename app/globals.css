@@ -1221,3 +1221,26 @@ a.demande__titre:hover { color: var(--rouge); }
   /* Bandeau du haut : il glisse comme une banderole */
   .bandeau-haut { animation: tombe 0.4s ease-out both; }
 }
+
+/* ——— Lot 18 : classement amical du campus ——— */
+.case { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; cursor: pointer; }
+.case input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--rouge); flex: none; }
+
+.classement { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.classement__ligne { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: var(--blanc); border: var(--contour); }
+.classement__ligne--podium { box-shadow: 4px 4px 0 var(--noir); }
+.classement__ligne--moi { background: var(--ambre-fond); }
+.classement__rang { min-width: 34px; text-align: center; font-size: 24px; font-weight: 800; }
+.classement__nom { flex: 1; min-width: 0; font-weight: 800; color: var(--noir); text-decoration: none; overflow-wrap: anywhere; }
+.classement__nom:hover { text-decoration: underline; }
+.classement__coups { font-weight: 800; text-align: right; white-space: nowrap; }
+.classement__ma-place { margin: 0; padding: 10px 12px; border: var(--contour); background: var(--ambre-fond); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .classement__ligne { animation: glisse-gauche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; transition: translate 0.12s ease; }
+  .classement__ligne:nth-child(2) { animation-delay: 0.06s; }
+  .classement__ligne:nth-child(3) { animation-delay: 0.12s; }
+  .classement__ligne:nth-child(n + 4) { animation-delay: 0.18s; }
+  .classement__ligne:hover { translate: 4px 0; }
+  .classement__ligne--podium .classement__rang { display: inline-block; animation: saute 0.7s 0.4s ease-out both; }
+}
