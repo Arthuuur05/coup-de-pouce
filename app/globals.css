@@ -1005,3 +1005,9 @@ a.demande__titre:hover { color: var(--rouge); }
 }
 .notification--nouvelle { border-left: 8px solid var(--rouge); }
 .notification__texte { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+/* ——— Lot 9 : filtres partout ——— */
+.puce__nombre { margin-left: 8px; font-family: var(--font-texte), system-ui, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0; opacity: 0.7; }
+.filtres--compact { gap: 8px; }
+.filtres__ligne { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filtres__etiquette { font-size: 13px; font-weight: 700; color: var(--gris); }
