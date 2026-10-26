@@ -6,6 +6,7 @@ import CarteAnnonce from "../../../components/ui/CarteAnnonce";
 import Etoiles from "../../../components/competences/Etoiles";
 import ListeCompetences from "../../../components/competences/ListeCompetences";
 import ListeAvis from "../../../components/competences/ListeAvis";
+import Signaler from "../../../components/signalements/Signaler";
 import { profilConnecte } from "../../../lib/profil";
 import { chargerProfilPublic, chargerIdsFavoris } from "../../../lib/donnees-annonces";
 import { basculerFavori } from "../../../lib/actions/annonces";
@@ -44,6 +45,7 @@ export default async function ProfilPublic({ params }) {
               <div style={{ fontWeight: 700, fontSize: 14 }}>{[profil.filiere, profil.annee].filter(Boolean).join(" · ")}</div>
             )}
             {profil.campus && <div style={{ fontSize: 14 }}>Campus {profil.campus}</div>}
+            {!cEstMoi && <Signaler cible="profil" id={id} />}
             {avis.total > 0 && (
               <div className="fiche-profil__note">
                 <Etoiles note={avis.moyenne} taille={16} /> {String(avis.moyenne).replace(".", ",")} ({avis.total})
