@@ -1120,3 +1120,21 @@ a.demande__titre:hover { color: var(--rouge); }
 .bulle--moi .carte__date { color: var(--rouge-clair); }
 .bulle__texte { margin: 0 0 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .notification .pastille { margin-left: auto; flex-shrink: 0; }
+
+/* ——— Lot 14 : statistiques admin ——— */
+.chiffres { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.chiffre { padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+.chiffre__valeur { font-family: var(--font-titre), sans-serif; font-weight: 800; font-size: 40px; line-height: 1; }
+.chiffre__label { font-weight: 700; }
+.deux-barres { display: flex; flex-direction: column; gap: 24px; }
+.barres h2 { margin: 0 0 8px; }
+.barres ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.barres li { display: grid; grid-template-columns: minmax(90px, 160px) 1fr 32px; gap: 10px; align-items: center; }
+.barres__nom { font-weight: 700; overflow-wrap: anywhere; }
+.barres__barre { height: 14px; background: var(--blanc); border: 2px solid var(--noir); }
+.barres__barre span { display: block; height: 100%; background: var(--rouge); }
+.barres__nombre { font-weight: 800; text-align: right; }
+@media (min-width: 960px) {
+  .chiffres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .deux-barres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; align-items: start; }
+}
