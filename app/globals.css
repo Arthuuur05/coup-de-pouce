@@ -1223,6 +1223,31 @@ a.demande__titre:hover { color: var(--rouge); }
   .bandeau-haut { animation: tombe 0.4s ease-out both; }
 }
 
+/* ——— Lot 19 : calendrier et rendez-vous ——— */
+.rdv { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: var(--contour); background: var(--creme); }
+.rdv__titre { margin: 0; font-size: 16px; }
+.rdv__quand, .rdv__lieu { margin: 0; }
+.rdv__champs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.rdv__changer summary { cursor: pointer; font-weight: 700; }
+.rdv__changer[open] summary { margin-bottom: 8px; }
+
+.agenda { display: flex; flex-direction: column; gap: 20px; }
+.agenda__titre { margin: 0 0 8px; font-size: 18px; text-transform: capitalize; }
+.agenda__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.agenda__rdv { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 12px; background: var(--blanc); border: var(--contour); box-shadow: 3px 3px 0 var(--noir); }
+.agenda__heure { font-weight: 800; min-width: 62px; }
+.agenda__texte { flex: 1; min-width: 160px; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.agenda__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rdv { animation: affiche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .agenda__jour { animation: affiche 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+  .agenda__jour:nth-child(2) { animation-delay: 0.06s; }
+  .agenda__jour:nth-child(n + 3) { animation-delay: 0.12s; }
+  .agenda__rdv { transition: translate 0.12s ease, box-shadow 0.12s ease; }
+  .agenda__rdv:hover { translate: 0 -2px; box-shadow: 4px 4px 0 var(--noir); }
+}
+
 /* ——— Lot 18 : classement amical du campus ——— */
 .case { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; cursor: pointer; }
 .case input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--rouge); flex: none; }
