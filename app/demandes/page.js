@@ -68,6 +68,9 @@ export default async function Demandes({ searchParams }) {
         <Link href="/messages" className="puce">
           Messages
         </Link>
+        <Link href="/calendrier" className="puce">
+          Calendrier
+        </Link>
       </nav>
 
       {parOnglet.length > 0 && (
