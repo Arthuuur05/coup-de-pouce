@@ -4,14 +4,15 @@ import MenuHaut from "./MenuHaut";
 import Initiale from "./Initiale";
 import { profilConnecte } from "../../lib/profil";
 import { adresseMaPhoto } from "../../lib/donnees-annonces";
+import { compterEnAttente } from "../../lib/donnees-demandes";
 
 // Gabarit commun aux écrans connectés. Téléphone : en-tête + menu du bas. Ordinateur : menu en haut.
 export default async function EcranConnecte({ titre, sousTitre, onglet, children }) {
   const profil = await profilConnecte();
-  const photo = await adresseMaPhoto(profil?.photo);
+  const [photo, enAttente] = await Promise.all([adresseMaPhoto(profil?.photo), compterEnAttente()]);
   return (
     <>
-      <MenuHaut actif={onglet} prenom={profil?.prenom} photo={photo} />
+      <MenuHaut actif={onglet} prenom={profil?.prenom} photo={photo} enAttente={enAttente} />
       <main className="page">
         <div className="entete seulement-telephone">
           <Link href="/annonces" className="logo">
@@ -27,7 +28,7 @@ export default async function EcranConnecte({ titre, sousTitre, onglet, children
         </div>
         {children}
       </main>
-      <MenuBas actif={onglet} />
+      <MenuBas actif={onglet} enAttente={enAttente} />
     </>
   );
 }

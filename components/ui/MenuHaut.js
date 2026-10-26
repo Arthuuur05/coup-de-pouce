@@ -10,7 +10,7 @@ const ONGLETS = [
 ];
 
 // Menu des écrans connectés sur ordinateur (le téléphone garde le menu du bas).
-export default function MenuHaut({ actif, prenom, photo }) {
+export default function MenuHaut({ actif, prenom, photo, enAttente = 0 }) {
   return (
     <header className="menu-haut">
       <Link href="/annonces" className="logo">
@@ -25,6 +25,11 @@ export default function MenuHaut({ actif, prenom, photo }) {
             aria-current={actif === nom ? "page" : undefined}
           >
             {label}
+            {nom === "demandes" && enAttente > 0 && (
+              <span className="pastille" aria-label={`${enAttente} en attente`}>
+                {enAttente}
+              </span>
+            )}
           </Link>
         ))}
       </nav>

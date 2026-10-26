@@ -1,12 +1,84 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import EcranConnecte from "../../components/ui/EcranConnecte";
 import EtatVide from "../../components/ui/EtatVide";
+import Message from "../../components/ui/Message";
+import Bouton from "../../components/ui/Bouton";
+import CarteDemande from "../../components/demandes/CarteDemande";
+import { profilConnecte } from "../../lib/profil";
+import { chargerMesDemandes, chargerMesCoordonnees } from "../../lib/donnees-demandes";
+import { aDesCoordonnees } from "../../lib/demandes";
 
 export const metadata = { title: "Demandes · Coup de Pouce" };
 
-export default function Demandes() {
+const MESSAGES = {
+  acceptee: ["ok", "C'est fait ! Vous voyez maintenant les coordonnées l'un de l'autre."],
+  refusee: ["ok", "Demande refusée. Cette personne ne verra pas tes coordonnées."],
+  retiree: ["ok", "Accord retiré : vos coordonnées sont de nouveau cachées."],
+};
+
+// Les en attente d'abord, puis les plus récentes.
+const ordre = (a, b) =>
+  (a.statut === "en_attente" ? 0 : 1) - (b.statut === "en_attente" ? 0 : 1) || b.cree_le.localeCompare(a.cree_le);
+
+export default async function Demandes({ searchParams }) {
+  const retour = await searchParams;
+  const profil = await profilConnecte();
+  if (!profil) redirect("/connexion?suite=/demandes");
+  const [demandes, mesCoordonnees] = await Promise.all([chargerMesDemandes(), chargerMesCoordonnees(profil.id)]);
+
+  const onglet = retour.onglet === "envoyees" ? "envoyees" : "recues";
+  const recues = demandes.filter((d) => d.sens === "recue").sort(ordre);
+  const envoyees = demandes.filter((d) => d.sens === "envoyee").sort(ordre);
+  const liste = onglet === "recues" ? recues : envoyees;
+  const enAttente = recues.filter((d) => d.statut === "en_attente").length;
+  const message = MESSAGES[retour.reponse];
+
   return (
-    <EcranConnecte titre="Demandes" sousTitre="Reçues et envoyées." onglet="demandes">
-      <EtatVide titre="Bientôt ici">Accepter ou refuser une demande, voir les coordonnées après accord (lot 5).</EtatVide>
+    <EcranConnecte titre="Demandes" sousTitre="Qui veut ton contact, et à qui tu as demandé le sien." onglet="demandes">
+      <nav className="filtres__puces" aria-label="Demandes reçues ou envoyées">
+        <Link href="/demandes" className={`puce${onglet === "recues" ? " puce--active" : ""}`} aria-current={onglet === "recues" ? "page" : undefined}>
+          Reçues ({recues.length}){enAttente > 0 && <span className="pastille pastille--puce" aria-label={`dont ${enAttente} en attente`}>{enAttente}</span>}
+        </Link>
+        <Link
+          href="/demandes?onglet=envoyees"
+          className={`puce${onglet === "envoyees" ? " puce--active" : ""}`}
+          aria-current={onglet === "envoyees" ? "page" : undefined}
+        >
+          Envoyées ({envoyees.length})
+        </Link>
+      </nav>
+
+      {message && <Message type={message[0]}>{message[1]}</Message>}
+      {retour.erreur && <Message>Cette demande a déjà reçu une réponse ou n'existe plus.</Message>}
+      {retour.annulee && <Message type="ok">Ta demande est annulée.</Message>}
+      {!aDesCoordonnees(mesCoordonnees) && demandes.length > 0 && (
+        <Message type="ok">
+          Tu n'as pas encore rempli tes coordonnées : après un accord, l'autre n'aura aucun moyen de te joindre.{" "}
+          <Link href="/profil#mes-coordonnees">Les remplir</Link>
+        </Message>
+      )}
+
+      {liste.length === 0 ? (
+        onglet === "recues" ? (
+          <EtatVide titre="Aucune demande reçue">
+            Quand quelqu'un demandera ton contact sur une de tes annonces, ça arrivera ici.
+          </EtatVide>
+        ) : (
+          <EtatVide titre="Aucune demande envoyée">
+            <p style={{ margin: "0 0 12px" }}>Trouve une annonce qui te plaît et touche « Demander le contact ».</p>
+            <Bouton href="/annonces" variante="accent">
+              Voir les annonces
+            </Bouton>
+          </EtatVide>
+        )
+      ) : (
+        <div className="demandes">
+          {liste.map((d) => (
+            <CarteDemande key={d.id} demande={d} />
+          ))}
+        </div>
+      )}
     </EcranConnecte>
   );
 }

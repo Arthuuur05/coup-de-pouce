@@ -5,12 +5,16 @@ import Bouton from "../ui/Bouton";
 import { IconeCoeur } from "../ui/Icones";
 import SupprimerAnnonce from "./SupprimerAnnonce";
 import CopierLien from "./CopierLien";
+import FormDemande from "../demandes/FormDemande";
+import Coordonnees from "../demandes/Coordonnees";
 import { marquerReglee, remettreEnLigne, supprimerAnnonce, basculerFavori } from "../../lib/actions/annonces";
+import { demanderContact, annulerDemande } from "../../lib/actions/demandes";
 import { TYPES, CLASSE_CATEGORIE, estEnLigne, etatAnnonce, dateRelative, joursRestants } from "../../lib/annonces";
 
 // La fiche d'une annonce : le texte à gauche, l'auteur et les actions à droite (en dessous sur téléphone).
-// moi : la personne connectée est l'auteur → Modifier, C'est réglé, Supprimer. Sinon : favori et contact.
-export default function FicheAnnonce({ annonce, moi, favori = false }) {
+// moi : la personne connectée est l'auteur → Modifier, C'est réglé, Supprimer, et les demandes reçues.
+// Sinon : demander le contact (ou l'état de ma demande), favori.
+export default function FicheAnnonce({ annonce, moi, favori = false, maDemande = {}, sansCoordonnees, demandesRecues }) {
   const enLigne = estEnLigne(annonce);
   const etat = etatAnnonce(annonce);
   const auteur = annonce.auteurProfil ?? {};
@@ -73,6 +77,17 @@ export default function FicheAnnonce({ annonce, moi, favori = false }) {
           </Link>
         )}
 
+        {moi && demandesRecues?.total > 0 && (
+          <Link href="/demandes" className="carte demande-compte">
+            <span className="demande-compte__nombre">{demandesRecues.total}</span>
+            <span>
+              {demandesRecues.total > 1 ? "demandes de contact" : "demande de contact"}
+              {demandesRecues.enAttente > 0 && <strong> · {demandesRecues.enAttente} en attente</strong>}
+              <span className="fiche-auteur__voir">Y répondre →</span>
+            </span>
+          </Link>
+        )}
+
         {moi ? (
           <div className="fiche-annonce__actions">
             <Bouton href={`/annonces/${annonce.id}/modifier`} variante="principal">
@@ -96,12 +111,7 @@ export default function FicheAnnonce({ annonce, moi, favori = false }) {
           </div>
         ) : (
           <div className="fiche-annonce__actions">
-            <button type="button" className="bouton bouton--accent" disabled aria-describedby="contact-bientot">
-              Demander le contact
-            </button>
-            <p id="contact-bientot" className="champ__aide" style={{ margin: 0 }}>
-              Bientôt : {auteur.prenom || "l'auteur"} recevra ta demande et choisira de te montrer ses coordonnées.
-            </p>
+            <Contact annonce={annonce} prenom={auteur.prenom} maDemande={maDemande} sansCoordonnees={sansCoordonnees} />
             <form action={basculerFavori.bind(null, annonce.id, favori)}>
               <button type="submit" className={`bouton bouton--secondaire${favori ? " bouton--favori" : ""}`} aria-pressed={favori}>
                 <IconeCoeur plein={favori} width={18} height={18} /> {favori ? "Dans mes favoris" : "Ajouter aux favoris"}
@@ -114,6 +124,46 @@ export default function FicheAnnonce({ annonce, moi, favori = false }) {
           ← Toutes les annonces
         </Bouton>
       </aside>
+    </div>
+  );
+}
+
+// Le bloc « contact » d'une annonce qui n'est pas à moi, selon l'état de ma demande.
+function Contact({ annonce, prenom, maDemande, sansCoordonnees }) {
+  const { demande, coordonnees } = maDemande;
+  const nom = prenom || "L'auteur";
+  if (!demande) {
+    return (
+      <div className="carte carte--ombre-noire demande-bloc">
+        <div className="demande-bloc__titre">Ça t'intéresse ?</div>
+        <p style={{ margin: 0 }}>
+          {nom} reçoit ta demande avec ton message. En cas d'accord, vous verrez chacun les coordonnées de l'autre.
+        </p>
+        <FormDemande action={demanderContact.bind(null, annonce.id)} prenom={prenom} sansCoordonnees={sansCoordonnees} />
+      </div>
+    );
+  }
+  if (demande.statut === "acceptee") return <Coordonnees prenom={prenom} coordonnees={coordonnees} />;
+  if (demande.statut === "en_attente") {
+    return (
+      <div className="carte carte--ombre-noire demande-bloc">
+        <div className="rangee">
+          <Etiquette variante="attente">Demande envoyée</Etiquette>
+          <span className="carte__date">{dateRelative(demande.cree_le)}</span>
+        </div>
+        <p style={{ margin: 0 }}>{nom} va te répondre. Tu retrouves ta demande dans l'onglet Demandes.</p>
+        {demande.message && <blockquote className="demande__message">{demande.message}</blockquote>}
+        <form action={annulerDemande.bind(null, demande.id, `/annonces/${annonce.id}?demande=annulee`)}>
+          <button type="submit" className="bouton bouton--secondaire">
+            Annuler ma demande
+          </button>
+        </form>
+      </div>
+    );
+  }
+  return (
+    <div className="carte carte--ombre-noire demande-bloc">
+      <p style={{ margin: 0 }}>{nom} n'a pas donné suite à ta demande pour cette annonce.</p>
     </div>
   );
 }

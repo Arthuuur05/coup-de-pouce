@@ -723,3 +723,121 @@ select.champ__input {
   .fiche-annonce__photo { width: calc(100% + 64px); margin: -32px -32px 0; }
 }
 .etiquette { white-space: nowrap; }
+
+/* ——— Lot 5 : mise en relation ——— */
+/* Pastille : nombre de demandes reçues en attente */
+.pastille {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--rouge);
+  color: var(--blanc);
+  font-family: var(--font-texte), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.menu-bas__demandes { position: relative; }
+.menu-bas__demandes .pastille { position: absolute; top: 0; right: -4px; border: 2px solid var(--noir); height: 22px; }
+.menu-bas__lien--actif.menu-bas__demandes .pastille { background: var(--blanc); color: var(--rouge); }
+.menu-haut__lien { gap: 8px; }
+.menu-haut__lien--actif .pastille { background: var(--blanc); color: var(--rouge); }
+.pastille--puce { margin-left: 8px; }
+.puce--active .pastille { background: var(--blanc); color: var(--rouge); }
+
+/* Liste des demandes */
+.demandes { display: flex; flex-direction: column; gap: 20px; }
+.demande { gap: 12px; padding: 16px; }
+.demande--en_attente { box-shadow: var(--ombre-rouge); }
+.demande--refusee,
+.demande--retiree { box-shadow: none; }
+.demande__haut { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.demande__personne { text-decoration: none; color: inherit; }
+.demande__prenom {
+  display: block;
+  font-family: var(--font-titre), sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.demande__personne:hover .demande__prenom { color: var(--rouge); }
+.demande__detail { display: block; white-space: normal; }
+.demande__annonce { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1.5px dashed var(--noir); }
+.demande__titre { font-weight: 800; color: inherit; overflow-wrap: anywhere; }
+a.demande__titre:hover { color: var(--rouge); }
+.demande__message {
+  margin: 0;
+  padding: 10px 14px;
+  border-left: 4px solid var(--rouge);
+  background: var(--creme);
+  font-style: italic;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.demande__boutons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.demande__boutons .bouton { width: 100%; }
+.demande__petit { width: 100%; }
+
+/* Coordonnées révélées après accord */
+.coordonnees {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: var(--contour);
+  border-color: var(--vert);
+  background: var(--vert-fond);
+  color: var(--noir);
+}
+.coordonnees__titre {
+  font-family: var(--font-titre), sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--vert);
+}
+.coordonnees__liste { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.coordonnees__liste > div { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.coordonnees__liste dt { min-width: 80px; font-size: 13px; color: var(--gris); }
+.coordonnees__liste dd { margin: 0; font-weight: 800; overflow-wrap: anywhere; }
+.coordonnees__liste a { color: inherit; }
+
+/* Fiche d'une annonce : demander le contact */
+.demande-bloc { gap: 12px; padding: 16px; }
+.demande-bloc__titre {
+  font-family: var(--font-titre), sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.demande-bloc .formulaire .bouton { width: 100%; padding: 0 16px; }
+.demande-compte { flex-direction: row; align-items: center; gap: 14px; padding: 14px; text-decoration: none; color: inherit; box-shadow: var(--ombre-noire); }
+.demande-compte:hover { transform: translate(-2px, -2px); }
+.demande-compte__nombre {
+  font-family: var(--font-titre), sans-serif;
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--rouge);
+}
+
+/* Profil : coordonnées privées */
+.carte-privee { padding: 16px; border: 2px dashed var(--noir); background: var(--blanc); }
+.carte-privee__note { margin: 0; font-size: 14px; color: var(--gris); }
+
+@media (min-width: 960px) {
+  .demandes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-items: start; }
+  .demande__boutons .bouton,
+  .demande__petit { width: auto; padding: 0 28px; }
+  .demande__boutons { display: flex; }
+  .demande__petit { align-self: flex-start; }
+}
