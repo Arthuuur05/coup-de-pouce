@@ -58,6 +58,11 @@ export default function CarteDemande({ demande: d, avisDonne = false, competence
       </p>
 
       {d.statut === "acceptee" && <Coordonnees prenom={autre.prenom} coordonnees={d.coordonnees} />}
+      {d.statut === "acceptee" && (
+        <Link href={`/messages/${d.id}`} className="bouton bouton--secondaire demande__petit">
+          Écrire un message
+        </Link>
+      )}
 
       {["acceptee", "retiree"].includes(d.statut) &&
         (avisDonne ? (

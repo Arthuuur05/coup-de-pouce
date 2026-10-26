@@ -6,12 +6,19 @@ import { profilConnecte } from "../../lib/profil";
 import { adresseMaPhoto } from "../../lib/donnees-annonces";
 import { compterEnAttente } from "../../lib/donnees-demandes";
 import { compterNonLues } from "../../lib/donnees-notifications";
+import { compterMessagesNonLus } from "../../lib/donnees-messages";
 import LienCloche from "./LienCloche";
 
 // Gabarit commun aux écrans connectés. Téléphone : en-tête + menu du bas. Ordinateur : menu en haut.
 export default async function EcranConnecte({ titre, sousTitre, onglet, children }) {
   const profil = await profilConnecte();
-  const [photo, enAttente, nonLues] = await Promise.all([adresseMaPhoto(profil?.photo), compterEnAttente(), compterNonLues()]);
+  const [photo, demandesEnAttente, nonLues, messagesNonLus] = await Promise.all([
+    adresseMaPhoto(profil?.photo),
+    compterEnAttente(),
+    compterNonLues(),
+    compterMessagesNonLus(),
+  ]);
+  const enAttente = demandesEnAttente + messagesNonLus; // pastille de « Demandes » : à traiter + messages à lire
   return (
     <>
       <MenuHaut actif={onglet} prenom={profil?.prenom} photo={photo} enAttente={enAttente} nonLues={nonLues} />
