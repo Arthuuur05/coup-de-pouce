@@ -114,6 +114,7 @@ export default async function Annonces({ searchParams }) {
               key={a.id}
               index={i}
               echange={a.echange}
+              prise={a.prise}
               type={a.type}
               categorie={a.categorie}
               titre={a.titre}
