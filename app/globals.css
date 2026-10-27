@@ -144,6 +144,7 @@ h3 {
   border-radius: var(--arrondi);
   background: var(--blanc);
   font: inherit;
+  font-size: 16px; /* moins de 16 px : le téléphone zoome sur la page au toucher du champ */
   color: var(--noir);
 }
 .champ__input:focus { outline: 3px solid var(--rouge); outline-offset: 1px; }
@@ -514,7 +515,7 @@ select.champ__input {
 .puce {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 14px;
   border: var(--contour);
   border-radius: var(--arrondi);
