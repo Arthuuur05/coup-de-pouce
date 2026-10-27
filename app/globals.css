@@ -685,6 +685,8 @@ select.champ__input {
 .carte--echange-acceptee .carte__bandeau { background: var(--vert-fond); color: var(--vert); }
 .carte--echange-attente { border-style: dashed; }
 .carte--echange-attente .carte__bandeau { background: var(--ambre-fond); color: var(--ambre); }
+.carte--prise { opacity: 0.8; box-shadow: none; }
+.carte--prise .carte__bandeau { background: var(--creme); color: var(--gris); }
 .carte--echange-close { opacity: 0.7; box-shadow: none; }
 .carte--echange-close .carte__bandeau { color: var(--gris); }
 .fil__groupe { display: flex; flex-direction: column; gap: 14px; }

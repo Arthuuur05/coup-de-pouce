@@ -10,6 +10,7 @@ const ICONES_ECHANGE = { traiter: "!", acceptee: "✓", attente: "…", close: "
 // href : toute la carte devient cliquable. extrait : début de la description. photo : adresse de la photo.
 // avatar : { prenom, photoUrl } de l'auteur. etat : { texte, variante } à la place de la date (mes annonces).
 // echange : { cle, texte, variante } où j'en suis avec l'annonce (demande envoyée, acceptée…), en bandeau sur la carte.
+// prise : une demande a été acceptée sur l'annonce (visible par tous, sans dire qui) : badge « Prise ».
 // favori + actionFavori : le cœur (formulaire relié à une action serveur). eteinte : annonce plus disponible.
 export default function CarteAnnonce({
   type,
@@ -21,6 +22,7 @@ export default function CarteAnnonce({
   extrait,
   etat,
   echange,
+  prise = false,
   photo,
   avatar,
   favori,
@@ -35,12 +37,21 @@ export default function CarteAnnonce({
     `carte--categorie carte--${CLASSE_CATEGORIE[categorie] ?? "autre"}`,
     href && "carte--lien",
     echange && `carte--echange carte--echange-${echange.cle}`,
+    prise && !echange && "carte--prise",
     eteinte && "carte--eteinte",
   ]
     .filter(Boolean)
     .join(" ");
   return (
     <article className={classe}>
+      {prise && !echange && (
+        <p className="carte__bandeau">
+          <span className="carte__bandeau-icone" aria-hidden="true">
+            ✓
+          </span>
+          Prise · quelqu'un a déjà dit oui
+        </p>
+      )}
       {echange && (
         <p className="carte__bandeau">
           <span className="carte__bandeau-icone" aria-hidden="true">
