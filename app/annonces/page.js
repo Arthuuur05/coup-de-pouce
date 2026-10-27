@@ -61,6 +61,16 @@ export default async function Annonces({ searchParams }) {
     ? ["Rien ne correspond", "Essaie un autre mot ou enlève un filtre."]
     : VIDES[filtres.vue] ?? ["Aucune annonce pour l'instant", "Lance-toi : la première annonce du campus, c'est peut-être la tienne."];
 
+  // Mes échanges (à traiter, acceptés, en attente) d'abord, puis le reste à découvrir. Seulement s'il y a les deux.
+  const echanges = annonces.filter((a) => a.echange && a.echange.cle !== "close").sort((a, b) => a.echange.ordre - b.echange.ordre);
+  const autres = annonces.filter((a) => !echanges.includes(a));
+  const groupes = echanges.length && autres.length
+    ? [
+        { titre: "Tes échanges en cours", liste: echanges, debut: 0 },
+        { titre: "À découvrir", liste: autres, debut: echanges.length },
+      ]
+    : [{ titre: null, liste: annonces, debut: 0 }];
+
   return (
     <EcranConnecte titre="Annonces" sousTitre="Ce que le campus propose et cherche." onglet="annonces">
       {alerte && <Message type={alerte[0]}>{alerte[1]}</Message>}
@@ -91,14 +101,19 @@ export default async function Annonces({ searchParams }) {
           )}
         </EtatVide>
       )}
+      {groupes.map(({ titre, liste, debut }) => (
+      <section key={titre ?? "tout"} className="fil__groupe">
+        {titre && <h2 className="fil__groupe-titre">{titre}</h2>}
       <div className="fil">
-        {annonces.map((a, i) => {
+        {liste.map((a, j) => {
+          const i = debut + j;
           const moi = a.auteur === profil?.id;
           const favori = idsFavoris.has(a.id);
           return (
             <CarteAnnonce
               key={a.id}
               index={i}
+              echange={a.echange}
               type={a.type}
               categorie={a.categorie}
               titre={a.titre}
@@ -114,6 +129,8 @@ export default async function Annonces({ searchParams }) {
           );
         })}
       </div>
+      </section>
+      ))}
       {encore && (
         <Bouton href={lienFil(filtres, { page: filtres.page + 1 })} variante="secondaire" scroll={false}>
           Voir plus

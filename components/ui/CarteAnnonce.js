@@ -4,9 +4,12 @@ import Initiale from "./Initiale";
 import { IconeCoeur } from "./Icones";
 import { CLASSE_CATEGORIE } from "../../lib/annonces";
 
+const ICONES_ECHANGE = { traiter: "!", acceptee: "✓", attente: "…", close: "–" };
+
 // type : "propose" ou "cherche". index alterne l'inclinaison et l'ombre. La catégorie donne la couleur du liseré.
 // href : toute la carte devient cliquable. extrait : début de la description. photo : adresse de la photo.
 // avatar : { prenom, photoUrl } de l'auteur. etat : { texte, variante } à la place de la date (mes annonces).
+// echange : { cle, texte, variante } où j'en suis avec l'annonce (demande envoyée, acceptée…), en bandeau sur la carte.
 // favori + actionFavori : le cœur (formulaire relié à une action serveur). eteinte : annonce plus disponible.
 export default function CarteAnnonce({
   type,
@@ -17,6 +20,7 @@ export default function CarteAnnonce({
   href,
   extrait,
   etat,
+  echange,
   photo,
   avatar,
   favori,
@@ -30,12 +34,21 @@ export default function CarteAnnonce({
     pair ? "carte--ombre-noire carte--gauche" : "carte--ombre-rouge carte--droite",
     `carte--categorie carte--${CLASSE_CATEGORIE[categorie] ?? "autre"}`,
     href && "carte--lien",
+    echange && `carte--echange carte--echange-${echange.cle}`,
     eteinte && "carte--eteinte",
   ]
     .filter(Boolean)
     .join(" ");
   return (
     <article className={classe}>
+      {echange && (
+        <p className="carte__bandeau">
+          <span className="carte__bandeau-icone" aria-hidden="true">
+            {ICONES_ECHANGE[echange.cle]}
+          </span>
+          {echange.texte}
+        </p>
+      )}
       {photo && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={photo} alt="" className="carte__photo" loading="lazy" />

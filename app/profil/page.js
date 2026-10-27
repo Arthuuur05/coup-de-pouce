@@ -185,6 +185,7 @@ export default async function Profil({ searchParams }) {
                     titre={a.titre}
                     auteur={`Publiée ${dateRelative(a.cree_le)}`}
                     etat={etatAnnonce(a)}
+                    echange={estEnLigne(a) ? a.echange : null}
                     href={`/annonces/${a.id}`}
                   />
                   {expireBientot(a) && (

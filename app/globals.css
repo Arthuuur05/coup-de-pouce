@@ -662,6 +662,32 @@ select.champ__input {
 .coeur--plein { color: var(--rouge); }
 .coeur:hover { color: var(--rouge); }
 .coeur:focus-visible { outline: 3px solid var(--rouge); outline-offset: -4px; }
+/* État d'un échange sur une carte du fil : bandeau coloré, liseré et ombre assortis */
+.carte__bandeau {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -14px -14px 4px;
+  padding: 6px 14px;
+  font-family: var(--font-titre), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--creme);
+}
+.carte__bandeau + .carte__photo { margin-top: -4px; }
+.carte__bandeau-icone { flex: none; font-size: 16px; line-height: 1; }
+.carte--echange-traiter { border-color: var(--ambre); box-shadow: 5px 5px 0 var(--ambre); }
+.carte--echange-traiter .carte__bandeau { background: var(--ambre-fond); color: var(--ambre); }
+.carte--echange-acceptee { border-color: var(--vert); box-shadow: 5px 5px 0 var(--vert); }
+.carte--echange-acceptee .carte__bandeau { background: var(--vert-fond); color: var(--vert); }
+.carte--echange-attente { border-style: dashed; }
+.carte--echange-attente .carte__bandeau { background: var(--ambre-fond); color: var(--ambre); }
+.carte--echange-close { opacity: 0.7; box-shadow: none; }
+.carte--echange-close .carte__bandeau { color: var(--gris); }
+.fil__groupe { display: flex; flex-direction: column; gap: 14px; }
+.fil__groupe-titre { margin: 8px 0 0; font-size: 22px; }
 .carte--eteinte { opacity: 0.55; filter: grayscale(1); transform: none; }
 .bouton--favori { color: var(--rouge); border-color: var(--rouge); }
 
@@ -754,8 +780,9 @@ select.champ__input {
 .demandes { display: flex; flex-direction: column; gap: 20px; }
 .demande { gap: 12px; padding: 16px; }
 .demande--en_attente { box-shadow: var(--ombre-rouge); }
+.demande--acceptee { box-shadow: 5px 5px 0 var(--vert); border-color: var(--vert); }
 .demande--refusee,
-.demande--retiree { box-shadow: none; }
+.demande--retiree { box-shadow: none; opacity: 0.75; border-style: dashed; }
 .demande__haut { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .demande__personne { text-decoration: none; color: inherit; }
 .demande__prenom {
