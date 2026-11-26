@@ -24,7 +24,9 @@ import { profilConnecte } from "../../lib/profil";
 import { deconnecter } from "../../lib/actions/compte";
 import { remettreEnLigne, basculerFavori } from "../../lib/actions/annonces";
 import { chargerMesAnnonces, chargerMesFavoris, adresseMaPhoto } from "../../lib/donnees-annonces";
-import { chargerMesCoordonnees } from "../../lib/donnees-demandes";
+import { chargerMesCoordonnees, compterEnAttente } from "../../lib/donnees-demandes";
+import { compterNonLues } from "../../lib/donnees-notifications";
+import { compterMessagesNonLus } from "../../lib/donnees-messages";
 import { compterSignalementsOuverts } from "../../lib/donnees-signalements";
 import { chargerCompetences, chargerAvis, chargerCv } from "../../lib/donnees-competences";
 import { chargerReglageClassement } from "../../lib/donnees-classement";
@@ -59,7 +61,7 @@ export default async function Profil({ searchParams }) {
   const profil = await profilConnecte();
   if (!profil) redirect("/connexion?suite=/profil");
   const { prenom, nom, filiere, annee, campus, email } = profil;
-  const [mesAnnonces, mesFavoris, photo, mesCoordonnees, mesCompetences, mesAvis, monCv, reglageClassement, mesBadges] = await Promise.all([
+  const [mesAnnonces, mesFavoris, photo, mesCoordonnees, mesCompetences, mesAvis, monCv, reglageClassement, mesBadges, demandesEnAttente, nonLues, messagesNonLus] = await Promise.all([
     chargerMesAnnonces(profil.id),
     chargerMesFavoris(),
     adresseMaPhoto(profil.photo),
@@ -69,6 +71,9 @@ export default async function Profil({ searchParams }) {
     chargerCv(profil.id),
     chargerReglageClassement(profil.id),
     chargerBadges(profil.id),
+    compterEnAttente(),
+    compterNonLues(),
+    compterMessagesNonLus(),
   ]);
   const badgesAFeter = mesBadges ? await chargerBadgesAFeter(mesBadges.gagnes) : [];
   const enLigne = mesAnnonces.filter(estEnLigne).length;
@@ -86,7 +91,7 @@ export default async function Profil({ searchParams }) {
   const categoriesPresentes = CATEGORIES.filter((c) => mesAnnonces.some((a) => a.categorie === c));
 
   return (
-    <EcranConnecte titre="Mon profil" onglet="profil">
+    <EcranConnecte titre="Mon espace" sousTitre="Ton profil, tes annonces et ce qui t'attend." onglet="profil">
       <div className="deux-colonnes">
         <aside className="carte carte--ombre-rouge fiche-profil">
           <Initiale prenom={prenom} photo={photo} grande />
@@ -95,6 +100,7 @@ export default async function Profil({ searchParams }) {
             <div className="carte__date" style={{ overflowWrap: "anywhere" }}>
               {email}
             </div>
+            {profil.role === "intervenant" && <div className="fiche-profil__role">Intervenant·e</div>}
             {(filiere || annee) && (
               <div style={{ fontWeight: 700, fontSize: 14 }}>{[filiere, annee].filter(Boolean).join(" · ")}</div>
             )}
@@ -129,6 +135,25 @@ export default async function Profil({ searchParams }) {
 
         <div className="profil__contenu">
           {mesBadges && <FeteBadges nouveaux={badgesAFeter} niveau={mesBadges.niveau} />}
+          <section className="apercu" aria-label="Vue d'ensemble">
+            <Link href="/notifications" className="apercu__tuile">
+              <span className="apercu__nombre">{nonLues}</span>
+              <span className="apercu__texte">Notification{nonLues > 1 ? "s" : ""} non lue{nonLues > 1 ? "s" : ""}</span>
+            </Link>
+            <Link href="/demandes" className="apercu__tuile">
+              <span className="apercu__nombre">{demandesEnAttente}</span>
+              <span className="apercu__texte">Demande{demandesEnAttente > 1 ? "s" : ""} à traiter</span>
+            </Link>
+            <Link href="/messages" className="apercu__tuile">
+              <span className="apercu__nombre">{messagesNonLus}</span>
+              <span className="apercu__texte">Message{messagesNonLus > 1 ? "s" : ""} à lire</span>
+            </Link>
+            <a href="#mes-annonces" className="apercu__tuile">
+              <span className="apercu__nombre">{enLigne}</span>
+              <span className="apercu__texte">Annonce{enLigne > 1 ? "s" : ""} en ligne</span>
+            </a>
+          </section>
+
           <div className="titre-section" id="mes-annonces">
             <h2>Mes annonces</h2>
             <span className="carte__date">
@@ -201,6 +226,42 @@ export default async function Profil({ searchParams }) {
             </>
           )}
 
+          <div className="titre-section" id="mes-competences">
+            <h2>Mes compétences</h2>
+            <span className="carte__date">Visibles par les étudiants</span>
+          </div>
+          <FormCompetences competences={mesCompetences} />
+
+          <div className="titre-section" id="mon-cv">
+            <h2>Mon CV</h2>
+            <span className="carte__date">Après accord seulement</span>
+          </div>
+          <FormCv cv={monCv} />
+
+          <div className="titre-section" id="mes-avis">
+            <h2>Mes avis reçus</h2>
+            {mesAvis.total > 0 && <span className="carte__date">{mesAvis.total}</span>}
+          </div>
+          <ListeAvis
+            resume={mesAvis}
+            moiId={profil.id}
+            suite="/profil#mes-avis"
+            vide="Pas encore d'avis. Après un coup de main accepté, l'autre personne pourra en laisser un."
+          />
+
+          {mesBadges && (
+            <>
+              <div className="titre-section" id="mes-badges">
+                <h2>Mes badges</h2>
+                <span className="carte__date">
+                  {mesBadges.gagnes.length}/{mesBadges.gagnes.length + mesBadges.restants.length}
+                </span>
+              </div>
+              <Niveau niveau={mesBadges.niveau} />
+              <ListeBadges gagnes={mesBadges.gagnes} montrerRestants />
+            </>
+          )}
+
           <div className="titre-section" id="mes-favoris">
             <h2>Mes favoris</h2>
             {mesFavoris.length > 0 && <span className="carte__date">{mesFavoris.length}</span>}
@@ -226,23 +287,11 @@ export default async function Profil({ searchParams }) {
             </div>
           )}
 
-          {mesBadges && (
-            <>
-              <div className="titre-section" id="mes-badges">
-                <h2>Mes badges</h2>
-                <span className="carte__date">
-                  {mesBadges.gagnes.length}/{mesBadges.gagnes.length + mesBadges.restants.length}
-                </span>
-              </div>
-              <Niveau niveau={mesBadges.niveau} />
-              <ListeBadges gagnes={mesBadges.gagnes} montrerRestants />
-            </>
-          )}
-
-          <h2 className="profil__titre" id="mes-infos">
-            Mes infos
-          </h2>
-          <FormProfil profil={{ prenom, nom, filiere, annee, campus }} />
+          <details className="reglages" id="reglages">
+            <summary className="reglages__resume">Réglages du compte</summary>
+            <div className="reglages__contenu">
+          <h3 className="profil__sous-titre" id="mes-infos">Mes infos</h3>
+          <FormProfil profil={{ prenom, nom, filiere, annee, campus }} intervenant={profil.role === "intervenant"} />
           <FormPhotoProfil photo={photo} />
           {reglageClassement !== null && <FormClassement visible={reglageClassement} />}
 
@@ -252,30 +301,7 @@ export default async function Profil({ searchParams }) {
           </div>
           <FormCoordonnees coordonnees={mesCoordonnees} />
 
-          <div className="titre-section" id="mes-competences">
-            <h2>Mes compétences</h2>
-            <span className="carte__date">Visibles par les étudiants</span>
-          </div>
-          <FormCompetences competences={mesCompetences} />
-
-          <div className="titre-section" id="mon-cv">
-            <h2>Mon CV</h2>
-            <span className="carte__date">Après accord seulement</span>
-          </div>
-          <FormCv cv={monCv} />
-
-          <div className="titre-section" id="mes-avis">
-            <h2>Mes avis reçus</h2>
-            {mesAvis.total > 0 && <span className="carte__date">{mesAvis.total}</span>}
-          </div>
-          <ListeAvis
-            resume={mesAvis}
-            moiId={profil.id}
-            suite="/profil#mes-avis"
-            vide="Pas encore d'avis. Après un coup de main accepté, l'autre personne pourra en laisser un."
-          />
-
-          <h2 className="profil__titre">Sécurité</h2>
+          <h3 className="profil__sous-titre">Sécurité</h3>
           <FormMotDePasse />
           <FormEmail emailActuel={email} />
 
@@ -289,6 +315,8 @@ export default async function Profil({ searchParams }) {
           <p className="champ__aide" style={{ margin: 0 }}>
             <Link href="/donnees-personnelles">Ce qu'on fait de tes données personnelles</Link>
           </p>
+            </div>
+          </details>
         </div>
       </div>
     </EcranConnecte>

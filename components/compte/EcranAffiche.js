@@ -1,6 +1,7 @@
 import Link from "next/link";
 import BandeauHaut from "../ui/BandeauHaut";
 import MotManuscrit from "../ui/MotManuscrit";
+import Logo from "../ui/Logo";
 import CarteAnnonce from "../ui/CarteAnnonce";
 
 // Écrans Inscription / Connexion. Téléphone : une colonne. Ordinateur : affiche noire à gauche, formulaire à droite.
@@ -10,8 +11,8 @@ export default function EcranAffiche({ bandeau, titre, manuscrit, sousTitre, chi
       <BandeauHaut>{bandeau}</BandeauHaut>
       <div className="ecran-affiche">
         <aside className="ecran-affiche__affiche">
-          <Link href="/" className="logo">
-            Coup de Pouce<span>.</span>
+          <Link href="/" aria-label="Coup de Pouce, accueil" style={{ textDecoration: "none" }}>
+            <Logo grand />
           </Link>
           <div className="ecran-affiche__titre">
             <h1>{titre}</h1>

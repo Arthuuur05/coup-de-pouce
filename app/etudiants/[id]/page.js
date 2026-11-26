@@ -12,6 +12,7 @@ import Signaler from "../../../components/signalements/Signaler";
 import { profilConnecte } from "../../../lib/profil";
 import { chargerProfilPublic, chargerIdsFavoris } from "../../../lib/donnees-annonces";
 import { basculerFavori } from "../../../lib/actions/annonces";
+import { creerClient } from "../../../lib/supabase/server";
 import { chargerCompetences, chargerAvis, chargerCv, chargerCoupsDePouce } from "../../../lib/donnees-competences";
 import { chargerBadges } from "../../../lib/donnees-badges";
 import { dateRelative } from "../../../lib/annonces";
@@ -38,6 +39,9 @@ export default async function ProfilPublic({ params, searchParams }) {
   if (!donnees) notFound();
   const { profil, annonces } = donnees;
   const cEstMoi = id === moi.id;
+  // Le rôle (étudiant ou intervenant) ; sans effet tant que la migration n'est pas appliquée.
+  const { data: roles } = await (await creerClient()).rpc("roles_profils", { ids: [id] });
+  const intervenant = roles?.[0]?.role === "intervenant";
   const extrait = (t) => (t.length > 120 ? `${t.slice(0, 117).trimEnd()}…` : t);
 
   return (
@@ -47,6 +51,7 @@ export default async function ProfilPublic({ params, searchParams }) {
         <aside className="carte carte--ombre-rouge fiche-profil">
           <Initiale prenom={profil.prenom} photo={profil.photoUrl} grande />
           <div style={{ minWidth: 0 }}>
+            {intervenant && <div className="fiche-profil__role">Intervenant·e</div>}
             <h3>{profil.prenom || "Un étudiant"}</h3>
             {(profil.filiere || profil.annee) && (
               <div style={{ fontWeight: 700, fontSize: 14 }}>{[profil.filiere, profil.annee].filter(Boolean).join(" · ")}</div>
@@ -77,6 +82,11 @@ export default async function ProfilPublic({ params, searchParams }) {
             actif={competenceChoisie?.id}
           />
           {competences.length > 0 && <p className="champ__aide" style={{ margin: 0 }}>Touche une compétence pour voir les avis qui la confirment.</p>}
+          {cv && (
+            <a href={cv.adresse} target="_blank" rel="noreferrer" className="bouton bouton--accent" style={{ alignSelf: "flex-start" }}>
+              {cEstMoi ? "Mon CV" : "Télécharger son CV"} (PDF)
+            </a>
+          )}
           {badges && badges.gagnes.length > 0 && (
             <>
               <div className="titre-section">
@@ -85,11 +95,6 @@ export default async function ProfilPublic({ params, searchParams }) {
               <Niveau niveau={badges.niveau} />
               <ListeBadges gagnes={badges.gagnes} />
             </>
-          )}
-          {cv && (
-            <a href={cv.adresse} target="_blank" rel="noreferrer" className="bouton bouton--secondaire" style={{ alignSelf: "flex-start" }}>
-              {cEstMoi ? "Mon CV" : `Télécharger son CV`} (PDF)
-            </a>
           )}
 
           <div className="titre-section">

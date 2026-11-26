@@ -1413,3 +1413,74 @@ a.demande__titre:hover { color: var(--rouge); }
 .progression__etape { flex: 1; height: 8px; background: var(--blanc); border: 2px solid var(--noir); }
 .progression__etape--faite { background: var(--rouge); }
 @media (prefers-reduced-motion: no-preference) { .progression__etape { transition: background-color 0.4s ease; } }
+
+/* ——— Badges revus, dans l'esprit Airbnb : cartes arrondies, médailles hexagonales, ombres douces ——— */
+.medaille { --m: var(--rouge); --m2: #e55a5a; position: relative; display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 80px; flex: none; }
+.medaille--noir { --m: #222; --m2: #555; }
+.medaille--vert { --m: var(--vert); --m2: #3c9a5e; }
+.medaille--verrouillee { --m: #cfc9bd; --m2: #e4e0d6; }
+.medaille--grande { width: 84px; height: 94px; }
+.medaille__forme { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.18)); }
+.medaille__forme path { fill: var(--m); stroke: var(--m2); stroke-width: 3; stroke-linejoin: round; }
+.medaille__emoji { position: relative; font-size: 32px; line-height: 1; font-family: var(--font-titre), sans-serif; font-weight: 800; color: var(--blanc); }
+.medaille--verrouillee .medaille__emoji { font-size: 24px; opacity: 0.8; }
+.medaille--grande .medaille__emoji { font-size: 42px; }
+
+.badges { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.badge {
+  flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 18px 12px 16px;
+  border: 1px solid #e3ddd0; border-radius: 20px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+.badge__titre { font-size: 16px; line-height: 1.2; }
+.badge__texte { font-size: 13px; line-height: 1.35; }
+.badge--verrouille { background: var(--creme); border: 1px dashed #cfc9bd; box-shadow: none; }
+
+.niveau { flex-direction: row; align-items: center; gap: 18px; padding: 16px 18px; background: var(--blanc); border: 1px solid #e3ddd0; border-radius: 20px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
+.niveau__corps { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+.niveau__nom { font-size: 19px; }
+.niveau__barre { height: 10px; border: 0; border-radius: 6px; background: #ece6da; }
+.niveau__rempli { border-radius: 6px; background: linear-gradient(90deg, var(--rouge), #e55a5a); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .badge:not(.badge--verrouille) { transition: translate 0.15s ease, box-shadow 0.15s ease; }
+  .badge:not(.badge--verrouille):hover { translate: 0 -4px; box-shadow: 0 12px 24px rgba(0, 0, 0, 0.14); }
+  .niveau__rempli { animation: remplit 0.9s 0.2s ease-out both; transform-origin: left; }
+}
+@keyframes remplit { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ——— Mon espace : vue d'ensemble et réglages repliés ——— */
+.apercu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.apercu__tuile { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; background: var(--blanc); border: var(--contour); box-shadow: 4px 4px 0 var(--noir); text-decoration: none; color: inherit; }
+.apercu__tuile:nth-child(even) { box-shadow: 4px 4px 0 var(--rouge); }
+.apercu__nombre { font-family: var(--font-titre), sans-serif; font-size: 44px; font-weight: 800; line-height: 1; color: var(--rouge); }
+.apercu__texte { font-size: 14px; font-weight: 700; }
+.apercu__tuile:focus-visible { outline: 3px solid var(--rouge); outline-offset: 3px; }
+@media (min-width: 960px) { .apercu { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.reglages { border: var(--contour); background: var(--blanc); }
+.reglages__resume { padding: 14px 16px; font-family: var(--font-titre), sans-serif; font-size: 26px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+.reglages__contenu { display: flex; flex-direction: column; gap: 16px; padding: 4px 16px 20px; }
+.profil__sous-titre { margin-top: 8px; }
+.fiche-profil__role { display: inline-block; margin-bottom: 4px; padding: 1px 8px; background: var(--noir); color: var(--blanc); font-family: var(--font-titre), sans-serif; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+@media (prefers-reduced-motion: no-preference) {
+  .apercu__tuile { transition: translate 0.12s ease, box-shadow 0.12s ease; }
+  .apercu__tuile:hover { translate: -2px -2px; box-shadow: 7px 7px 0 var(--noir); }
+  .apercu__tuile:nth-child(even):hover { box-shadow: 7px 7px 0 var(--rouge); }
+}
+
+/* ——— Accueil : un message à la fois, et le logo ——— */
+.logo-complet { display: inline-flex; align-items: center; gap: 10px; }
+.logo-complet .logo { text-decoration: none; }
+.logo-complet--grand .logo { font-size: 32px; }
+.messages { display: flex; flex-direction: column; gap: 24px; min-height: 52vh; justify-content: center; }
+.messages__scene { display: flex; flex-direction: column; gap: 22px; min-height: 300px; }
+.messages__ligne { display: block; }
+.messages__texte { margin: 0; font-size: 19px; max-width: 520px; }
+.messages__points { display: flex; gap: 8px; }
+.messages__point { width: 28px; height: 8px; background: var(--blanc); border: 2px solid var(--noir); }
+.messages__point--actif { background: var(--rouge); }
+@media (min-width: 960px) { .messages__scene h1 { font-size: 96px; } }
+@media (prefers-reduced-motion: no-preference) {
+  .messages__ligne { animation: monte 0.5s ease-out both; animation-delay: calc(var(--n) * 90ms); }
+  .messages__texte { animation: monte 0.5s 0.3s ease-out both; }
+  .messages__point { transition: background-color 0.3s ease; }
+}
