@@ -25,7 +25,7 @@ export default async function Accueil({ searchParams }) {
       </main>
       <footer className="pied">
         <span className="pied__esp">
-          Un projet des étudiants <img src="/esp.png" alt="ESP" width="56" height="56" />
+          <img src="/esp.png" alt="ESP" width="56" height="56" />
         </span>
         <br />
         Coup de Pouce · <Link href="/donnees-personnelles">données personnelles</Link>
