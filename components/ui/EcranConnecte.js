@@ -8,6 +8,7 @@ import { compterEnAttente } from "../../lib/donnees-demandes";
 import { compterNonLues } from "../../lib/donnees-notifications";
 import { compterMessagesNonLus } from "../../lib/donnees-messages";
 import LienCloche from "./LienCloche";
+import ChatFlottant from "../assistant/ChatFlottant";
 
 // Gabarit commun aux écrans connectés. Téléphone : en-tête + menu du bas. Ordinateur : menu en haut.
 export default async function EcranConnecte({ titre, sousTitre, onglet, children }) {
@@ -41,6 +42,7 @@ export default async function EcranConnecte({ titre, sousTitre, onglet, children
         {children}
       </main>
       <MenuBas actif={onglet} enAttente={enAttente} />
+      <ChatFlottant />
     </>
   );
 }
