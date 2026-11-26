@@ -30,13 +30,13 @@ export default function FormCompetences({ competences }) {
         <Champ
           id="competence"
           name="nom"
-          label="Ajouter une compétence"
-          placeholder="ex. Montage vidéo, Python, Maths L1…"
-          maxLength={NOM_COMPETENCE_MAX}
+          label="Ajouter des compétences"
+          placeholder="ex. Montage vidéo, Python, Maths L1"
+          maxLength={MAX_COMPETENCES * (NOM_COMPETENCE_MAX + 2)}
           defaultValue={etat.nom}
           erreur={etat.erreur}
           disabled={complet}
-          aide={complet ? `${MAX_COMPETENCES} compétences au maximum.` : `${competences.length}/${MAX_COMPETENCES}. Une coche apparaît quand des étudiants la confirment.`}
+          aide={complet ? `${MAX_COMPETENCES} compétences au maximum.` : `Sépare-les par des virgules. ${competences.length}/${MAX_COMPETENCES}. Une coche apparaît quand des étudiants les confirment.`}
         />
         <button type="submit" className="bouton bouton--principal" disabled={enCours || complet}>
           {enCours ? "Ajout…" : "Ajouter"}

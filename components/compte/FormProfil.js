@@ -6,7 +6,7 @@ import Message from "../ui/Message";
 import { modifierProfil } from "../../lib/actions/compte";
 import { ANNEES, CAMPUS } from "../../lib/compte";
 
-export default function FormProfil({ profil }) {
+export default function FormProfil({ profil, intervenant = false }) {
   const [etat, action, enCours] = useActionState(modifierProfil, { valeurs: profil });
   const v = etat.valeurs ?? {};
   const e = etat.erreurs ?? {};
@@ -28,8 +28,15 @@ export default function FormProfil({ profil }) {
         />
       </div>
       <div className="champs-duo">
-        <Champ id="filiere" name="filiere" label="Filière" placeholder="ex. Communication digitale" defaultValue={v.filiere} erreur={e.filiere} />
-        <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />
+        <Champ
+          id="filiere"
+          name="filiere"
+          label={intervenant ? "Métier ou organisation" : "Filière"}
+          placeholder={intervenant ? "ex. Photographe indépendant" : "ex. Communication digitale"}
+          defaultValue={v.filiere}
+          erreur={e.filiere}
+        />
+        {!intervenant && <Champ id="annee" name="annee" label="Année" options={ANNEES} defaultValue={v.annee ?? ""} erreur={e.annee} />}
       </div>
       <Champ id="campus" name="campus" label="Campus" options={CAMPUS} defaultValue={v.campus ?? ""} erreur={e.campus} />
       <button type="submit" className="bouton bouton--principal" disabled={enCours}>

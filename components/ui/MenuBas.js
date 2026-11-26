@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { IconeSoleil, IconeBulle, IconeProfil, IconePlus, IconeMaison } from "./Icones";
+import { IconeSoleil, IconeBulle, IconePlus, IconeMaison } from "./Icones";
 
-// actif : "annonces" | "meteo" | "publier" | "demandes" | "profil". enAttente : pastille sur Demandes.
+// actif : "annonces" | "meteo" | "publier" | "demandes". enAttente : pastille sur Demandes.
 export default function MenuBas({ actif = "annonces", enAttente = 0 }) {
   const lien = (nom) => `menu-bas__lien${actif === nom ? " menu-bas__lien--actif" : ""}`;
   const courant = (nom) => (actif === nom ? "page" : undefined);
@@ -24,9 +24,6 @@ export default function MenuBas({ actif = "annonces", enAttente = 0 }) {
       >
         <IconeBulle />
         {enAttente > 0 && <span className="pastille" aria-hidden="true">{enAttente}</span>}
-      </Link>
-      <Link href="/profil" className={lien("profil")} aria-current={courant("profil")} aria-label="Mon profil">
-        <IconeProfil />
       </Link>
     </nav>
   );
