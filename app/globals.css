@@ -1484,3 +1484,42 @@ a.demande__titre:hover { color: var(--rouge); }
   .messages__texte { animation: monte 0.5s 0.3s ease-out both; }
   .messages__point { transition: background-color 0.3s ease; }
 }
+
+/* ——— Super Coup de Pouce : un seul statut, comme le Superhost d'Airbnb ——— */
+.super { display: flex; flex-direction: column; gap: 16px; padding: 20px; background: var(--blanc); border: 1px solid #e3ddd0; border-radius: 20px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
+.super--gagne { background: linear-gradient(135deg, #fff5f3, var(--blanc)); border-color: #f1b9b4; }
+.super__tete { display: flex; align-items: center; gap: 16px; }
+.super__medaille { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 94px; flex: none; font-size: 38px; }
+.super__medaille svg { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2)); }
+.super__medaille path { fill: #cfc9bd; stroke: #e4e0d6; stroke-width: 3; stroke-linejoin: round; }
+.super--gagne .super__medaille path { fill: var(--rouge); stroke: #e55a5a; }
+.super__medaille span { position: relative; }
+.super__titre { font-size: 30px; }
+.super__texte { margin: 4px 0 0; font-size: 15px; color: var(--gris); }
+.super__criteres { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.critere { display: flex; gap: 12px; align-items: flex-start; }
+.critere__coche { flex: none; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #cfc9bd; border-radius: 50%; color: var(--blanc); font-weight: 800; }
+.critere--ok .critere__coche { background: var(--vert); border-color: var(--vert); }
+.critere__corps { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+.critere__texte { font-weight: 700; }
+.critere__barre { display: block; height: 6px; border-radius: 4px; background: #ece6da; overflow: hidden; }
+.critere__barre span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--rouge), #e55a5a); }
+.fiche-profil__super { display: inline-block; margin-bottom: 4px; padding: 3px 12px; border-radius: 999px; background: var(--rouge); color: var(--blanc); font-size: 13px; font-weight: 800; }
+@media (prefers-reduced-motion: no-preference) {
+  .super--gagne .super__medaille { animation: tampon 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+  .critere__barre span { animation: remplit 0.9s 0.2s ease-out both; transform-origin: left; }
+}
+.pied__esp { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 8px; }
+.pied__esp img { mix-blend-mode: multiply; height: 40px; width: auto; object-fit: contain; }
+
+/* ——— Super admin ——— */
+.en-ligne { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.en-ligne li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--blanc); border: var(--contour); }
+.en-ligne li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--vert); }
+.journal { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.journal__ligne { padding: 10px 14px; background: var(--blanc); border: var(--contour); border-left-width: 8px; }
+.journal__ligne--erreur { border-left-color: var(--rouge); }
+.journal__ligne--alerte { border-left-color: #c98a00; }
+.journal__ligne--info { border-left-color: #888; }
+.journal__haut { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.journal__message { margin: 4px 0 0; font-family: ui-monospace, Menlo, monospace; font-size: 13px; overflow-wrap: anywhere; }

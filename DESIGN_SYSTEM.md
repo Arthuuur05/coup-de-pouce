@@ -1,6 +1,7 @@
 # Coup de Pouce — design system
 
 Direction artistique validée le 22 octobre 2026 : **« Affiche de campus, rouge et noir »** (proposition A3).
+Le logo de l’école (ESP) figure sur l’accueil à la demande de l’équipe, en plus du logo Coup de Pouce.
 L'appli doit ressembler à une affiche collée dans un couloir d'école : titres énormes en majuscules, contrastes francs, un mot manuscrit rouge posé en biais. Inspirée des codes de l'école, sans reprendre son nom ni son logo.
 
 À relire avant de créer ou modifier un écran. Toute valeur vient de `app/globals.css` : on n'écrit jamais une couleur, une police ou un arrondi « en dur » dans un composant.

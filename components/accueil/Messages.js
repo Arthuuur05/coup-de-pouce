@@ -5,9 +5,8 @@ import Link from "next/link";
 import MotManuscrit from "../ui/MotManuscrit";
 
 const MESSAGES = [
-  { titre: ["Qui peut", "t'aider", "aujourd'hui ?"], mot: ["donner,", "recevoir"], texte: "L'entraide entre étudiants de ton campus." },
-  { titre: ["Tu proposes", "ce que tu", "sais faire."], texte: "Photo, vidéo, code, cours, coloc, covoiturage : fais-toi connaître en une annonce." },
-  { titre: ["Tu trouves", "ce dont tu", "as besoin."], texte: "Quelqu'un du campus sait déjà faire. Il suffit de demander." },
+  { titre: ["Qui peut", "t'aider", "aujourd'hui ?"], mot: ["donner,", "recevoir"], texte: "L'entraide entre étudiants de ton campus : tu proposes ce que tu sais faire, tu trouves ce dont tu as besoin." },
+  { titre: ["Un coup", "de pouce,", "en une annonce."], texte: "Photo, vidéo, code, cours, coloc, covoiturage : quelqu'un du campus sait déjà faire. Il suffit de demander." },
   { titre: ["Tes contacts", "restent", "à toi."], texte: "Tes coordonnées ne s'affichent qu'après ton accord. Jamais avant." },
 ];
 

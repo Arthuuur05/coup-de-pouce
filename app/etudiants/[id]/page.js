@@ -6,8 +6,7 @@ import CarteAnnonce from "../../../components/ui/CarteAnnonce";
 import Etoiles from "../../../components/competences/Etoiles";
 import ListeCompetences from "../../../components/competences/ListeCompetences";
 import ListeAvis from "../../../components/competences/ListeAvis";
-import Niveau from "../../../components/badges/Niveau";
-import ListeBadges from "../../../components/badges/ListeBadges";
+import StatutSuper from "../../../components/badges/StatutSuper";
 import Signaler from "../../../components/signalements/Signaler";
 import { profilConnecte } from "../../../lib/profil";
 import { chargerProfilPublic, chargerIdsFavoris } from "../../../lib/donnees-annonces";
@@ -52,6 +51,7 @@ export default async function ProfilPublic({ params, searchParams }) {
           <Initiale prenom={profil.prenom} photo={profil.photoUrl} grande />
           <div style={{ minWidth: 0 }}>
             {intervenant && <div className="fiche-profil__role">Intervenant·e</div>}
+            {badges?.super && <div className="fiche-profil__super">🏅 Super Coup de Pouce</div>}
             <h3>{profil.prenom || "Un étudiant"}</h3>
             {(profil.filiere || profil.annee) && (
               <div style={{ fontWeight: 700, fontSize: 14 }}>{[profil.filiere, profil.annee].filter(Boolean).join(" · ")}</div>
@@ -87,15 +87,7 @@ export default async function ProfilPublic({ params, searchParams }) {
               {cEstMoi ? "Mon CV" : "Télécharger son CV"} (PDF)
             </a>
           )}
-          {badges && badges.gagnes.length > 0 && (
-            <>
-              <div className="titre-section">
-                <h2>{cEstMoi ? "Mes badges" : "Ses badges"}</h2>
-              </div>
-              <Niveau niveau={badges.niveau} />
-              <ListeBadges gagnes={badges.gagnes} />
-            </>
-          )}
+          {badges && (badges.super || cEstMoi) && <StatutSuper badges={badges} moi={cEstMoi} />}
 
           <div className="titre-section">
             <h2>{cEstMoi ? "Mes annonces en ligne" : "Ses annonces"}</h2>

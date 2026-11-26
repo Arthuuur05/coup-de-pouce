@@ -1,9 +1,14 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { signalerErreur } from "../lib/actions/journal";
 
 // Si un écran plante : un message clair et deux façons de s'en sortir, pas la page d'erreur par défaut.
-export default function Erreur({ reset }) {
+export default function Erreur({ error, reset }) {
+  useEffect(() => {
+    signalerErreur(error?.message || error?.digest, window.location.pathname).catch(() => {});
+  }, [error]);
   return (
     <main id="contenu" className="page page--texte">
       <h1>Oups</h1>

@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 // Écrans réservés aux personnes connectées.
-const PROTEGES = ["/annonces", "/etudiants", "/publier", "/demandes", "/notifications", "/messages", "/meteo", "/assistant", "/calendrier", "/classement", "/profil", "/admin", "/nouveau-mot-de-passe", "/bienvenue"];
+const PROTEGES = ["/annonces", "/etudiants", "/publier", "/demandes", "/notifications", "/messages", "/meteo", "/assistant", "/calendrier", "/classement", "/profil", "/admin", "/super-admin", "/nouveau-mot-de-passe", "/bienvenue"];
 // Écrans inutiles quand on est déjà connecté (l'accueil compris).
 const INVITES = ["/connexion", "/inscription", "/mot-de-passe-oublie"];
 
@@ -40,6 +40,12 @@ export async function proxy(request) {
     reponse.cookies.getAll().forEach((c) => redirection.cookies.set(c));
     return redirection;
   };
+
+  // Activité : on note « vu » au plus toutes les 5 minutes (cookie), pour compter les personnes connectées.
+  if (connecte && !request.cookies.get("vu") && !pathname.startsWith("/_next")) {
+    await supabase.rpc("marquer_activite");
+    reponse.cookies.set("vu", "1", { maxAge: 300, httpOnly: true, sameSite: "lax", path: "/" });
+  }
 
   if (!connecte && commencePar(pathname, PROTEGES)) return versAutrePage("/connexion");
   if (connecte && (pathname === "/" || commencePar(pathname, INVITES))) return versAutrePage("/annonces");

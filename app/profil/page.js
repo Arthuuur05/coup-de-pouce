@@ -17,8 +17,7 @@ import FormClassement from "../../components/compte/FormClassement";
 import FormCompetences from "../../components/competences/FormCompetences";
 import FormCv from "../../components/competences/FormCv";
 import ListeAvis from "../../components/competences/ListeAvis";
-import Niveau from "../../components/badges/Niveau";
-import ListeBadges from "../../components/badges/ListeBadges";
+import StatutSuper from "../../components/badges/StatutSuper";
 import FeteBadges from "../../components/badges/FeteBadges";
 import { profilConnecte } from "../../lib/profil";
 import { deconnecter } from "../../lib/actions/compte";
@@ -112,8 +111,13 @@ export default async function Profil({ searchParams }) {
               Classement du campus →
             </Link>
           </div>
-          {profil.est_admin && (
+          {(profil.est_admin || profil.role === "super_admin") && (
             <div className="fiche-profil__admin">
+              {profil.role === "super_admin" && (
+                <Link href="/super-admin" className="bouton bouton--accent">
+                  Super admin
+                </Link>
+              )}
               <Link href="/admin/signalements" className="bouton bouton--secondaire">
                 Signalements
                 {signalementsOuverts > 0 && <span className="pastille pastille--puce">{signalementsOuverts}</span>}
@@ -134,7 +138,7 @@ export default async function Profil({ searchParams }) {
         </aside>
 
         <div className="profil__contenu">
-          {mesBadges && <FeteBadges nouveaux={badgesAFeter} niveau={mesBadges.niveau} />}
+          {mesBadges && <FeteBadges nouveaux={badgesAFeter} />}
           <section className="apercu" aria-label="Vue d'ensemble">
             <Link href="/notifications" className="apercu__tuile">
               <span className="apercu__nombre">{nonLues}</span>
@@ -252,13 +256,9 @@ export default async function Profil({ searchParams }) {
           {mesBadges && (
             <>
               <div className="titre-section" id="mes-badges">
-                <h2>Mes badges</h2>
-                <span className="carte__date">
-                  {mesBadges.gagnes.length}/{mesBadges.gagnes.length + mesBadges.restants.length}
-                </span>
+                <h2>Mon statut</h2>
               </div>
-              <Niveau niveau={mesBadges.niveau} />
-              <ListeBadges gagnes={mesBadges.gagnes} montrerRestants />
+              <StatutSuper badges={mesBadges} />
             </>
           )}
 
