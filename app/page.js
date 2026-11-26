@@ -3,6 +3,7 @@ import BandeauHaut from "../components/ui/BandeauHaut";
 import Logo from "../components/ui/Logo";
 import Message from "../components/ui/Message";
 import Messages from "../components/accueil/Messages";
+import CarteAnnonce from "../components/ui/CarteAnnonce";
 
 export default async function Accueil({ searchParams }) {
   const { compte } = await searchParams;
@@ -21,7 +22,14 @@ export default async function Accueil({ searchParams }) {
 
         {compte === "supprime" && <Message type="ok">Ton compte a bien été supprimé. À bientôt peut-être !</Message>}
 
-        <Messages />
+        <div className="accueil-hero">
+          <Messages />
+          <div className="accueil-exemples seulement-ordi" aria-hidden="true">
+            <CarteAnnonce index={0} type="propose" categorie="Photo" titre="Photos pour vos événements" auteur="Sam · M1" date="il y a 2 h" />
+            <CarteAnnonce index={1} type="cherche" categorie="Covoit" titre="Trajet vers Lyon vendredi soir" auteur="Inès · L2" date="hier" />
+            <CarteAnnonce index={2} type="propose" categorie="Cours et soutien" titre="Aide en stats avant les partiels" auteur="Léa · L3" date="lundi" />
+          </div>
+        </div>
       </main>
       <footer className="pied">
         <span className="pied__esp">
